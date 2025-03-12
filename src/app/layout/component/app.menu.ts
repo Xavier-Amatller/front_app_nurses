@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
@@ -21,8 +21,12 @@ export class AppMenu {
     ngOnInit() {
         this.model = [
             {
-                label: 'Home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
+                label: 'Patients',
+                items: [
+                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                    { label: 'Rooms', icon: 'pi pi-fw pi-home', routerLink: ['/Rooms'] },
+                    { label: 'Diets', icon: 'pi pi-fw pi-home', routerLink: ['/Diets'] }
+                ]
             },
             {
                 label: 'UI Components',
