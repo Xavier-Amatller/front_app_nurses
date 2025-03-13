@@ -155,7 +155,8 @@ export class AppMenu {
             //             target: '_blank'
             //         }
             //     ]
-            // }
+            // }       
+           }
         ];
     }
 }
