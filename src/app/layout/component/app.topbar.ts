@@ -26,7 +26,7 @@ import { AppConfigurator } from './app.configurator';
                             <rect x="200" y="100" width="100" height="300" fill="white" />
                             <rect x="400" y="200" width="100" height="300" transform="rotate(90 400 200)" fill="white" />
                         </svg>
-                        <span>Stucom</span>
+                        <span>stucom</span>
                     </a>
                 </div>
 
