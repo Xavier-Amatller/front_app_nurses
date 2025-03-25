@@ -23,7 +23,7 @@ export class AuthService {
     }
 
     isAuthenticated(): boolean {
-        return this.getToken() !== null; // Si hay token, está autenticado
+        return this.getToken() !== null;
       }
 
     logout() {
