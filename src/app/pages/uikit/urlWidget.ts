@@ -8,8 +8,10 @@ import { filter } from 'rxjs/operators';
     selector: 'app-url-widget',
     imports: [CommonModule, RouterModule],
     template: ` <div>
-        <a *ngFor="let segment of urlArray; let i = index" [routerLink]="getRouterLink(i)" [class]="getStyle(i)">
-            {{ segment }}
+        <a *ngFor="let segment of urlArray; let i = index" 
+           [routerLink]="getRouterLink(i)" 
+           [class]="getStyle(i)">
+            {{ capitalize(segment) }}
         </a>
     </div>`
 })
@@ -28,8 +30,12 @@ export class UrlWidget {
         return index === this.urlArray.length - 1 ? 'url-widget-active' : 'url-widget';
     }
 
-    
     getRouterLink(index: number): string {
         return '/' + this.urlArray.slice(0, index + 1).join('/');
+    }
+
+    capitalize(segment: string): string {
+        if (!segment) return '';
+        return segment.charAt(0).toUpperCase() + segment.slice(1);
     }
 }
