@@ -8,7 +8,6 @@ export const appRoutes: Routes = [
     {
         path: '',
         component: AppLayout,
-        providers: [AuthGuard],
         canActivate: [AuthGuard],
         children: [
             { path: 'dashboard', component: Dashboard, },
