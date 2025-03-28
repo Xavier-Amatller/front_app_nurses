@@ -7,7 +7,7 @@ import { Notfound } from './app/pages/notfound/notfound';
 
 export const appRoutes: Routes = [
     {
-        path: 'dashboard',
+        path: '',
         component: AppLayout,
         canActivate: [AuthGuard],
         children: [

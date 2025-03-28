@@ -12,10 +12,13 @@ export class AuthService {
     ) {}
 
     login(aux_num_trabajador: string, aux_password: string): Observable<any> {
-        let data: FormData = new FormData();
-        data.append('aux_number',aux_num_trabajador);
-        data.append('password', aux_password);
-        return this.http.post('https://nurse/login', data);
+        let  data = {
+            'aux_num_trabajador': aux_num_trabajador,
+            'aux_password': aux_password
+        }
+        return this.http.post('http://127.0.0.1:8000/api/login', data,{headers:{
+            "Content-type":"application/json"
+        }});
     }
 
     getToken() : string | null {

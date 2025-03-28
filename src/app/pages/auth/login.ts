@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
@@ -8,12 +9,10 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { AuthService } from '../service/auth.service';
-
-
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, CommonModule],
     providers: [AuthService],
     template: `
         <app-floating-configurator />
@@ -40,6 +39,7 @@ import { AuthService } from '../service/auth.service';
                                 </div>
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">¿Has olvidado tu contraseña?</span>
                             </div>
+                            <div *ngIf="this.isLoginError" class="text-red-500 text-center mb-4">Credenciales incorrectas. Intente de nuevo.</div>
                             <p-button label="Iniciar sesion" styleClass="w-full" (onClick)="login()"></p-button>
                         </div>
                     </div>
@@ -48,23 +48,39 @@ import { AuthService } from '../service/auth.service';
         </div>
     `
 })
-export class Login {
+export class Login implements OnInit {
     aux_number: string = '';
 
     password: string = '';
 
     checked: boolean = false;
-    constructor(private readonly AuthService: AuthService) {}
+    isLoginError: boolean = false;
+
+    ngOnInit(): void {
+        if(this.AuthService.isAuthenticated()){
+            this.router.navigate(['/dashboard']);
+        }
+    }
+
+    constructor(
+        private readonly AuthService: AuthService,
+        private readonly router: Router
+    ) {}
 
     login() {
         this.AuthService.login(this.aux_number, this.password).subscribe({
             next: (response) => {
-                console.log('Login successful:', response);
-                // Handle successful login, e.g., navigate to another page
+                if (!response) {
+                    this.isLoginError = true;
+                }else{
+                    localStorage.setItem("authToken",response["token"])
+                    console.log(localStorage.getItem("authToken"))
+                    this.router.navigate(['/dashboard']);
+                }
             },
             error: (error) => {
-                console.error('Login failed:', error);
-                // Handle login error, e.g., show an error message to the user
+                console.log(error);
+                this.isLoginError = true;
             }
         });
     }
