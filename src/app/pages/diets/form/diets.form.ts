@@ -29,8 +29,8 @@ interface SelectOption {
                                 <label for="numRoom" class="sr-only"></label>
                                 <input [(ngModel)]="id" pInputText id="numRoom" type="text" placeholder="Num habitació" />
                             </div>
-                            <p-button (onClick)="searchDiet()" label="Trobar dieta" [fluid]="false"></p-button>
-                            <p-button label="Aplicar nova dieta" [fluid]="false"></p-button>
+                            <p-button (onClick)="searchDiet()" [loading]="loading" label="Trobar dieta" [fluid]="false"></p-button>
+                            <p-button (onClick)="newDiet()" [disabled]="loading" label="Aplicar nova dieta" [fluid]="false"></p-button>
                         </div>
                     </div>
                     <div class="card flex flex-col gap-4">
@@ -44,7 +44,7 @@ interface SelectOption {
                             <label for="dietType">Tipus de dieta</label>
                             <p-multiSelect
                                 id="dietType"
-                                [(ngModel)]="selectedPreferences"
+                                [(ngModel)]="selectedDietType"
                                 [options]="dietTypes"
                                 [loading]="loading"
                                 optionLabel="name"
@@ -69,6 +69,7 @@ interface SelectOption {
                         </div>
                     </div>
                 </div>
+                <!-- last Diet  -->
                 <div class="md:w-1/2">
                     <div class="card flex flex-col gap-10">
                         <div class="font-semibold text-xl">Dieta actual</div>
@@ -105,23 +106,32 @@ interface SelectOption {
 export class DietsFormComponent implements OnInit {
     constructor(private readonly dietsService: DietsService) {}
 
-    firstname: string = '';
+    //Info New Data
     selectedTexture: string | null = null;
-    selectedDietType: string | null = null;
+    selectedDietType: string[] = [];
     selectedAutonomy: string | null = null;
     hasProsthesis: boolean = false;
-    selectedPreferences: string[] = [];
 
+    //Info lasT DIet
     lastDietText: string = '';
     lastDietType: string = '';
     lastDietHelp: string = '';
     lastDietProte: string = '';
 
+    // Aditional data
     id: string = '';
-
+    pac_id: string = '';
     loading = true;
 
     response: any = null;
+
+    // New Diet to be created
+    newDietData: { [key: string]: any } = {
+        Texture: this.selectedTexture,
+        DietType: this.selectedDietType,
+        Autonomy: this.selectedAutonomy,
+        Prosthesis: this.hasProsthesis
+    };
 
     ngOnInit(): void {
         this.dietsService.getOptions().subscribe({
@@ -153,20 +163,51 @@ export class DietsFormComponent implements OnInit {
     }
 
     searchDiet() {
+        this.loading = true;
         this.dietsService.getDiet(this.id).subscribe({
             next: (response) => {
                 this.response = response;
+                console.log(response);
+                this.pac_id = this.response.data.pac_id;
+                console.log(this.response.data.pac_id);
                 this.lastDietText = this.response.data.Die_TText.descripcion;
                 this.lastDietType = this.response.data.Tipos_Dietas.map((TDieta: any) => TDieta.descripcion);
-                this.lastDietHelp = this.response.data.Die_Autonomo == 1 ? 'Sí' : 'No';
+                this.lastDietHelp = this.response.data.Die_Autonomo == 1 ? 'Autònom' : 'Ajuda';
                 this.lastDietProte = this.response.data.Die_Protesi == 1 ? 'Sí' : 'No';
             },
             error: (error) => {
                 console.error(error);
+                this.loading = false;
+            },
+            complete: () => {
+                this.loading = false;
             }
         });
     }
 
+    newDiet() {
+        this.loading = true;
+        if (this.pac_id && this.selectedTexture && this.selectedDietType.length > 0 && this.selectedAutonomy && this.hasProsthesis !== null) {
+            const sanitizedTexture = this.selectedTexture?.trim();
+            const sanitizedDietType = this.selectedDietType.map((type) => type.trim());
+            const sanitizedAutonomy = this.selectedAutonomy == 'AUTO';
+            const sanitizedProsthesis = this.hasProsthesis;
+
+            this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis).subscribe({
+                next: (response) => {
+                    console.log(response);
+                },
+                error: (error) => {
+                    console.log(error);
+                    this.loading = false;
+                },
+                complete: () => {
+                    this.searchDiet();
+                    this.loading = false;
+                }
+            });
+        }
+    }
     dietTextures: SelectOption[] = [{ name: '', code: '' }];
 
     dietTypes: SelectOption[] = [];

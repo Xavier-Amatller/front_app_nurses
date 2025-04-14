@@ -9,10 +9,22 @@ export class DietsService {
     ) {}
 
     getOptions() {
-        return this.http.get('http://127.0.0.1:8000/api/dieta/options',{"headers": {"Authorization": "Bearer " + localStorage.getItem("authToken")}});
+        return this.http.get('http://127.0.0.1:8000/api/dieta/options', { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } });
     }
     getDiet(dietId: string) {
-        return this.http.get('http://127.0.0.1:8000/api/dieta/'+dietId,{"headers": {"Authorization": "Bearer " + localStorage.getItem("authToken")}});
+        return this.http.get('http://127.0.0.1:8000/api/dieta/' + dietId, { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } });
     }
-    insertDiet() {}
+    insertDiet(pac_id:string,textureId: string, dietTypes: Array<string>, autonomy: boolean, prosthesis: boolean) {
+        return this.http.post(
+            'http://127.0.0.1:8000/api/dieta/new',
+            {
+                pac_id,
+                textureId,
+                dietTypes,
+                autonomy,
+                prosthesis
+            },
+            { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }
+        );
+    }
 }
