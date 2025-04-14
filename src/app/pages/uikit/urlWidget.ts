@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
     standalone: true,
     selector: 'app-url-widget',
     imports: [CommonModule, RouterModule],
-    template: ` <div>
+    template: ` <div class="card !mb-8">
         <a *ngFor="let segment of urlArray; let i = index" 
            [routerLink]="getRouterLink(i)" 
            [class]="getStyle(i)">
