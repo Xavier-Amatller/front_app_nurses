@@ -11,7 +11,7 @@ export class DietsService {
     getOptions() {
         return this.http.get('http://127.0.0.1:8000/api/dieta/options',{"headers": {"Authorization": "Bearer " + localStorage.getItem("authToken")}});
     }
-    getDiet(dietId: number) {
+    getDiet(dietId: string) {
         return this.http.get('http://127.0.0.1:8000/api/dieta/'+dietId,{"headers": {"Authorization": "Bearer " + localStorage.getItem("authToken")}});
     }
     insertDiet() {}

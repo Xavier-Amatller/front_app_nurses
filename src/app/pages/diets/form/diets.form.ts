@@ -8,7 +8,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { DietsService } from '../../service/diets.service';
-
 interface SelectOption {
     name: string;
     code: string;
@@ -17,7 +16,7 @@ interface SelectOption {
 @Component({
     selector: 'app-diets-form',
     standalone: true,
-    
+
     imports: [InputTextModule, FluidModule, ButtonModule, SelectModule, FormsModule, TextareaModule, CheckboxModule, MultiSelectModule],
     template: `
         <p-fluid>
@@ -27,10 +26,10 @@ interface SelectOption {
                         <div class="font-semibold text-xl">Introdueix un num d'habitació</div>
                         <div class="flex flex-wrap items-start gap-6">
                             <div class="field">
-                                <label for="firstname1" class="sr-only">Firstname</label>
-                                <input pInputText id="firstname1" type="text" placeholder="Firstname" />
+                                <label for="numRoom" class="sr-only"></label>
+                                <input [(ngModel)]="id" pInputText id="numRoom" type="text" placeholder="Num habitació" />
                             </div>
-                            <p-button label="Trobar dieta" [fluid]="false"></p-button>
+                            <p-button (onClick)="searchDiet()" label="Trobar dieta" [fluid]="false"></p-button>
                             <p-button label="Aplicar nova dieta" [fluid]="false"></p-button>
                         </div>
                     </div>
@@ -44,6 +43,7 @@ interface SelectOption {
                         <div class="flex flex-col gap-2">
                             <label for="dietType">Tipus de dieta</label>
                             <p-multiSelect
+                                id="dietType"
                                 [(ngModel)]="selectedPreferences"
                                 [options]="dietTypes"
                                 [loading]="loading"
@@ -68,48 +68,36 @@ interface SelectOption {
                             <p-checkbox id="prosthesis" [(ngModel)]="hasProsthesis" [binary]="true"></p-checkbox>
                         </div>
                     </div>
-                    
                 </div>
                 <div class="md:w-1/2">
-                <div class="card flex flex-col gap-4">
-                    <div class="font-semibold text-xl">Horizontal</div>
-                    <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
-                        <label for="name3" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Name</label>
-                        <div class="col-span-12 md:col-span-10">
-                            <input pInputText id="name3" type="text" />
+                    <div class="card flex flex-col gap-10">
+                        <div class="font-semibold text-xl">Dieta actual</div>
+                        <div class="grid grid-cols-12 gap-4">
+                            <label for="lastDietText" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Textures:</label>
+                            <div class="col-span-12 md:col-span-10">
+                                <input pInputText [disabled]="true" id="lastDietText" type="text" [(ngModel)]="lastDietText" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
-                        <label for="email3" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Email</label>
-                        <div class="col-span-12 md:col-span-10">
-                            <input pInputText id="email3" type="text" />
+                        <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                            <label for="lastDietType" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Tipus de dieta:</label>
+                            <div class="col-span-12 md:col-span-10">
+                                <input pInputText [disabled]="true" id="lastDietType" type="text" [(ngModel)]="lastDietType" />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                            <label for="lastDietHelp" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Autònom o ajuda:</label>
+                            <div class="col-span-12 md:col-span-10">
+                                <input pInputText [disabled]="true" id="lastDietHelp" type="text" [(ngModel)]="lastDietHelp" />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                            <label for="lastDietProte" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Portador de pròtesi:</label>
+                            <div class="col-span-12 md:col-span-10">
+                                <input pInputText [disabled]="true" id="lastDietProte" type="text" [(ngModel)]="lastDietProte" />
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="card flex flex-col gap-4">
-                    <div class="font-semibold text-xl">Inline</div>
-                    <div class="flex flex-wrap items-start gap-6">
-                        <div class="field">
-                            <label for="firstname1" class="sr-only">Firstname</label>
-                            <input pInputText id="firstname1" type="text" placeholder="Firstname" />
-                        </div>
-                        <div class="field">
-                            <label for="lastname1" class="sr-only">Lastname</label>
-                            <input pInputText id="lastname1" type="text" placeholder="Lastname" />
-                        </div>
-                        <p-button label="Submit" [fluid]="false"></p-button>
-                    </div>
-                </div>
-                <div class="card flex flex-col gap-4">
-                    <div class="font-semibold text-xl">Help Text</div>
-                    <div class="flex flex-wrap gap-2">
-                        <label for="username">Username</label>
-                        <input pInputText id="username" type="text" />
-                        <small>Enter your username to reset your password.</small>
-                    </div>
-                </div>
-            </div>
             </div>
         </p-fluid>
     `
@@ -117,13 +105,19 @@ interface SelectOption {
 export class DietsFormComponent implements OnInit {
     constructor(private readonly dietsService: DietsService) {}
 
+    firstname: string = '';
     selectedTexture: string | null = null;
     selectedDietType: string | null = null;
     selectedAutonomy: string | null = null;
     hasProsthesis: boolean = false;
     selectedPreferences: string[] = [];
 
-    id: number = 1; 
+    lastDietText: string = '';
+    lastDietType: string = '';
+    lastDietHelp: string = '';
+    lastDietProte: string = '';
+
+    id: string = '';
 
     loading = true;
 
@@ -148,18 +142,24 @@ export class DietsFormComponent implements OnInit {
                 });
             },
             complete: () => {
-                this.dietTextures.shift(); // Remove the first element because it's needed to show the selected option properly
+                this.dietTextures.shift();
                 this.loading = false;
             }
         });
+
+        if (this.id) {
+            this.searchDiet();
+        }
+    }
+
+    searchDiet() {
         this.dietsService.getDiet(this.id).subscribe({
             next: (response) => {
                 this.response = response;
-                this.selectedTexture = this.response.data.id_textura
-                this.selectedDietType = this.response.data.id_tipo_dieta
-                this.selectedAutonomy = this.response.data.autonomia.toString();
-                this.hasProsthesis = this.response.data.portador_protesi == 1;
-                this.selectedPreferences = this.response.data.preferencies.map((item: any) => item.id.toString());
+                this.lastDietText = this.response.data.Die_TText.descripcion;
+                this.lastDietType = this.response.data.Tipos_Dietas.map((TDieta: any) => TDieta.descripcion);
+                this.lastDietHelp = this.response.data.Die_Autonomo == 1 ? 'Sí' : 'No';
+                this.lastDietProte = this.response.data.Die_Protesi == 1 ? 'Sí' : 'No';
             },
             error: (error) => {
                 console.error(error);
@@ -172,7 +172,6 @@ export class DietsFormComponent implements OnInit {
     dietTypes: SelectOption[] = [];
 
     autonomyOptions: SelectOption[] = [
-        // Changed to use SelectOption interface
         { name: 'Autònom', code: 'AUTO' },
         { name: 'Ajuda', code: 'HELP' }
     ];
