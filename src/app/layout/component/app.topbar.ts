@@ -71,7 +71,7 @@ import { AppConfigurator } from './app.configurator';
                                 <span>Profile</span>
                             </button>
                         </div>
-                        <p-menu #menu [popup]="true" [model]="overlayMenuItems"></p-menu>
+                        <p-menu #menu  [popup]="true" [model]="overlayMenuItems"></p-menu>
                     </div>
                 </div>
             </div>
