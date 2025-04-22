@@ -7,6 +7,7 @@ import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
 import { AuthGuard } from './app/pages/auth/guards/auth.guard';
 import { AuthService } from './app/pages/service/auth.service';
+import { DietsService } from './app/pages/service/diets.service';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
         provideAnimationsAsync(),
         providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
         AuthGuard,
-        AuthService
+        AuthService,
+        DietsService,
     ]
 };

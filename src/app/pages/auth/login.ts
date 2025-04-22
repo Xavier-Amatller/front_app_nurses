@@ -40,7 +40,7 @@ import { AuthService } from '../service/auth.service';
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">¿Has olvidado tu contraseña?</span>
                             </div>
                             <div *ngIf="this.isLoginError" class="text-red-500 text-center mb-4">Credenciales incorrectas. Intente de nuevo.</div>
-                            <p-button label="Iniciar sesion" styleClass="w-full" (onClick)="login()"></p-button>
+                            <p-button [loading]="loading" label="Iniciar sesion" styleClass="w-full" (onClick)="login()"></p-button>
                         </div>
                     </div>
                 </div>
@@ -55,9 +55,9 @@ export class Login implements OnInit {
 
     checked: boolean = false;
     isLoginError: boolean = false;
-
+    loading: boolean = false;
     ngOnInit(): void {
-        if(this.AuthService.isAuthenticated()){
+        if (this.AuthService.isAuthenticated()) {
             this.router.navigate(['/dashboard']);
         }
     }
@@ -68,19 +68,23 @@ export class Login implements OnInit {
     ) {}
 
     login() {
+        this.loading = true;
         this.AuthService.login(this.aux_number, this.password).subscribe({
             next: (response) => {
                 if (!response) {
                     this.isLoginError = true;
-                }else{
-                    localStorage.setItem("authToken",response["token"])
-                    console.log(localStorage.getItem("authToken"))
+                } else {
+                    localStorage.setItem('aux_id', response['aux_id']);
+                    localStorage.setItem('authToken', response['token']);
+                    console.log(localStorage.getItem('authToken'));
                     this.router.navigate(['/dashboard']);
                 }
+                this.loading = false;
             },
             error: (error) => {
                 console.log(error);
                 this.isLoginError = true;
+                this.loading = false;
             }
         });
     }
