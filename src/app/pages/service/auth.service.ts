@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class AuthService {
     private token = 'authToken';
+    private auxIdKey = 'auxId';
 
     constructor(
         private readonly router: Router,
@@ -38,5 +39,13 @@ export class AuthService {
     logout() {
         localStorage.removeItem(this.token);
         this.router.navigate(['/login']);
+    }
+
+    setAuxiliarId(auxIdKey: string): void {
+        localStorage.setItem(this.auxIdKey, auxIdKey);
+    }
+
+    getAuxiliarId(): string | null {
+        return localStorage.getItem(this.auxIdKey);
     }
 }

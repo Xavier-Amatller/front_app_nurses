@@ -9,6 +9,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TextareaModule } from 'primeng/textarea';
 import { CheckboxModule } from 'primeng/checkbox';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-cares',
@@ -23,6 +24,7 @@ import { CheckboxModule } from 'primeng/checkbox';
     TextareaModule,
     CheckboxModule
   ],
+  providers: [AuthService],
   template: `
   <div class="flex flex-wrap md:flex-row gap-8">
     <div class="md:w-1/2">
@@ -189,7 +191,8 @@ export class Cares implements OnInit {
   constructor(
     private fb: FormBuilder,
     private registroService: RegistroService,
-    private router: Router
+    private router: Router,
+    private readonly AuthService: AuthService,
   ) {
     this.registroForm = this.fb.group({
       // Constantes Vitales
@@ -216,21 +219,19 @@ export class Cares implements OnInit {
 
   ngOnInit(): void {
     // Obtener el ID del auxiliar autenticado
-    this.auxiliarId = this.registroService.getAuxiliarId();
-    // if (!this.auxiliarId) {
-    //   console.error('No se encontró el ID del auxiliar. Redirigiendo al login...');
-    //   this.router.navigate(['/login']);
-    // }
+    this.auxiliarId = this.AuthService.getAuxiliarId();
+    if (!this.auxiliarId) {
+      console.error('No se encontró el ID del auxiliar. Redirigiendo al login...');
+      this.router.navigate(['/login']);
+    }
   }
 
   onSubmit(): void {
-    console.log("FUERA");
   
     if (this.registroForm.valid) {
-      console.log("DENTRO");
   
       const registroData = {
-        aux_id: "1",
+        aux_id: this.auxiliarId,
         pac_id: "1",
         reg_fecha: this.registroForm.value.Reg_Fecha.toISOString(),
         reg_obs: this.registroForm.value.Reg_Obs,
