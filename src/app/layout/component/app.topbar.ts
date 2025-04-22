@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { Menu } from 'primeng/menu';
 import { StyleClassModule } from 'primeng/styleclass';
 import { LayoutService } from '../service/layout.service';
 import { AppConfigurator } from './app.configurator';
@@ -9,7 +10,7 @@ import { AppConfigurator } from './app.configurator';
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
+    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator,Menu],
     template: `
         <div class="layout-topbar-blur">
             <div class="layout-topbar">
@@ -65,11 +66,12 @@ import { AppConfigurator } from './app.configurator';
                                 <i class="pi pi-inbox"></i>
                                 <span>Messages</span>
                             </button>
-                            <button type="button" class="layout-topbar-action">
+                            <button type="button" class="layout-topbar-action" (click)="menu.toggle($event)">
                                 <i class="pi pi-user"></i>
                                 <span>Profile</span>
                             </button>
                         </div>
+                        <p-menu #menu [popup]="true" [model]="overlayMenuItems"></p-menu>
                     </div>
                 </div>
             </div>
@@ -78,6 +80,20 @@ import { AppConfigurator } from './app.configurator';
 })
 export class AppTopbar {
     items!: MenuItem[];
+
+    overlayMenuItems = [
+        {
+            label: 'Tanca sessió',
+            icon: 'pi pi-sign-out',
+            command: () => this.onLogout()
+        },
+    ];
+
+    onLogout() {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('aux_id');
+        window.location.href = '/';
+    }
 
     constructor(public layoutService: LayoutService) {}
 

@@ -201,7 +201,7 @@ export class DietsFormComponent implements OnInit {
             }
             this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis, aux_id).subscribe({
                 next: (response) => {
-                    console.log(response);
+                    // console.log(response);
                 },
                 error: (error) => {
                     console.log(error);
