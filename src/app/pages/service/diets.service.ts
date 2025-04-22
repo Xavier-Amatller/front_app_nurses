@@ -14,7 +14,7 @@ export class DietsService {
     getDiet(dietId: string) {
         return this.http.get('http://127.0.0.1:8000/api/dieta/' + dietId, { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } });
     }
-    insertDiet(pac_id:string,textureId: string, dietTypes: Array<string>, autonomy: boolean, prosthesis: boolean) {
+    insertDiet(pac_id:string,textureId: string, dietTypes: Array<string>, autonomy: boolean, prosthesis: boolean, aux_number: number) {
         return this.http.post(
             'http://127.0.0.1:8000/api/dieta/new',
             {
@@ -22,7 +22,8 @@ export class DietsService {
                 textureId,
                 dietTypes,
                 autonomy,
-                prosthesis
+                prosthesis,
+                aux_number
             },
             { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }
         );

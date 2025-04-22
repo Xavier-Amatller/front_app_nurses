@@ -57,7 +57,7 @@ export class Login implements OnInit {
     isLoginError: boolean = false;
     loading: boolean = false;
     ngOnInit(): void {
-        if(this.AuthService.isAuthenticated()){
+        if (this.AuthService.isAuthenticated()) {
             this.router.navigate(['/dashboard']);
         }
     }
@@ -73,10 +73,10 @@ export class Login implements OnInit {
             next: (response) => {
                 if (!response) {
                     this.isLoginError = true;
-                    
-                }else{
-                    localStorage.setItem("authToken",response["token"])
-                    console.log(localStorage.getItem("authToken"))
+                } else {
+                    localStorage.setItem('aux_id', response['aux_id']);
+                    localStorage.setItem('authToken', response['token']);
+                    console.log(localStorage.getItem('authToken'));
                     this.router.navigate(['/dashboard']);
                 }
                 this.loading = false;
@@ -84,6 +84,7 @@ export class Login implements OnInit {
             error: (error) => {
                 console.log(error);
                 this.isLoginError = true;
+                this.loading = false;
             }
         });
     }

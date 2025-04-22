@@ -193,7 +193,13 @@ export class DietsFormComponent implements OnInit {
             const sanitizedAutonomy = this.selectedAutonomy == 'AUTO';
             const sanitizedProsthesis = this.hasProsthesis;
 
-            this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis).subscribe({
+            const aux_id = Number(localStorage.getItem("aux_id"));
+            if (!aux_id) {
+                console.error("Invalid auxId in localStorage");
+                this.loading = false;
+                return;
+            }
+            this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis, aux_id).subscribe({
                 next: (response) => {
                     console.log(response);
                 },
