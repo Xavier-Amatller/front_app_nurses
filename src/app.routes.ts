@@ -5,6 +5,7 @@ import { Login } from './app/pages/auth/login';
 import { Dashboard } from './app/pages/dashboard/dashboard';
 import { Diets } from './app/pages/diets/diets';
 import { Notfound } from './app/pages/notfound/notfound';
+import { Cares } from './app/pages/cares/cares';
 
 export const appRoutes: Routes = [
     {
@@ -14,17 +15,13 @@ export const appRoutes: Routes = [
         children: [
             { path: 'dashboard', component: Dashboard, },
             { path: 'rooms', loadChildren: () => import('./app/pages/rooms/rooms.routes') },
-            {path: 'diets', component: Diets} 
+            { path: 'diets', component: Diets },
+            { path: 'cares', component: Cares, },
+            { path: 'extras', loadChildren: () => import('./app/pages/pages.routes') },
         ]
     },
     { path: 'login', component: Login },
     { path: 'notfound', component: Notfound },
     { path: '**', redirectTo: '/notfound' },
-    { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') } 
+    { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') }
 ];
-
-
-
-
-/* { path: 'documentation', component: Documentation },
-            { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') } */

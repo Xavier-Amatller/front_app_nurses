@@ -50,9 +50,7 @@ import { AuthService } from '../service/auth.service';
 })
 export class Login implements OnInit {
     aux_number: string = '';
-
     password: string = '';
-
     checked: boolean = false;
     isLoginError: boolean = false;
     loading: boolean = false;
@@ -65,7 +63,7 @@ export class Login implements OnInit {
     constructor(
         private readonly AuthService: AuthService,
         private readonly router: Router
-    ) {}
+    ) { }
 
     login() {
         this.loading = true;
@@ -74,9 +72,8 @@ export class Login implements OnInit {
                 if (!response) {
                     this.isLoginError = true;
                 } else {
-                    localStorage.setItem('aux_id', response['aux_id']);
-                    localStorage.setItem('authToken', response['token']);
-                    console.log(localStorage.getItem('authToken'));
+                    localStorage.setItem('aux_id', response.aux_id);
+                    this.AuthService.setToken(response.token);
                     this.router.navigate(['/dashboard']);
                 }
                 this.loading = false;
