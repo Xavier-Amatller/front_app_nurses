@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
-import { DietsService } from '../../service/diets.service';
+import { DietsService } from '../../../service/diets.service';
 interface SelectOption {
     name: string;
     code: string;

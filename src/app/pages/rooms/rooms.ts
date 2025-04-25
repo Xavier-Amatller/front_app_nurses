@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
-import { RoomsService } from '../service/rooms.service';
+import { RoomsService } from '../../service/rooms.service';
 @Component({
     selector: 'app-rooms',
     standalone: true,
