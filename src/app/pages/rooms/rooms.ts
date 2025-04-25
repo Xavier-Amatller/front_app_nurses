@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
+import { RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
 import { RoomsService } from '../service/rooms.service';
-
 @Component({
     selector: 'app-rooms',
     standalone: true,
-    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule],
+    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, RouterLink],
     template: `
         <div>
-            <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center pb-10">
+            <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center px-10 py-10">
                 <p-card *ngFor="let room of rooms" name="rooms-data" class="border rounded-xl w-full [&_.p-card-body]:!p-0">
                     <section>
                         <div class="flex flex-row">
@@ -40,12 +40,12 @@ import { RoomsService } from '../service/rooms.service';
                                 </div>
                             </div>
                             <div *ngIf="room['paciente'] !== null" class="flex gap-5 max-h-[40px] min-h-[40px]">
-                                <button class="p-3 border rounded-xl bg-blue-700 text-white w-1/4 flex justify-between">
+                                <button [routerLink]="'rooms/' + room['hab_id']" class="p-3 border rounded-xl bg-blue-700 text-white w-1/4 flex justify-between">
                                     <b>Entrar</b>
                                     <i class="pi pi-arrow-right" style="font-size: 1rem"></i>
                                 </button>
-                                <div  class="p-3 border rounded-xl w-1/4 truncate"><b>Edat</b> | {{ room['paciente']['pac_edad'] }}</div>
-                                <div  class="p-3 border rounded-xl w-2/4 truncate"><b>Nom</b> | {{ room['paciente']['pac_nombre'] }} {{ room['paciente']['pac_apellidos'] }}</div>
+                                <div class="p-3 border rounded-xl w-1/4 truncate"><b>Edat</b> | {{ room['paciente']['pac_edad'] }}</div>
+                                <div class="p-3 border rounded-xl w-2/4 truncate"><b>Nom</b> | {{ room['paciente']['pac_nombre'] }} {{ room['paciente']['pac_apellidos'] }}</div>
                             </div>
                             <div *ngIf="room['paciente'] === null" class="flex gap-5 max-h-[40px] min-h-[40px]">
                                 <button class="p-3 border rounded-xl bg-gray-500 text-white w-1/4 flex justify-between cursor-not-allowed" disabled>
@@ -55,7 +55,6 @@ import { RoomsService } from '../service/rooms.service';
                                 <div class="p-3 border rounded-xl w-1/4 truncate"><b>Edat</b> |</div>
                                 <div class="p-3 border rounded-xl w-2/4 truncate"><b>Nom</b> |</div>
                             </div>
-
                         </div>
                     </section>
                 </p-card>
