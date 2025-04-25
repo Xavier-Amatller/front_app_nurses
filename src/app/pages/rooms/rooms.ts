@@ -12,7 +12,7 @@ import { RoomsService } from '../service/rooms.service';
     imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule],
     template: `
         <div>
-            <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center px-10 py-10">
+            <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center pb-10">
                 <p-card *ngFor="let room of rooms" name="rooms-data" class="border rounded-xl w-full [&_.p-card-body]:!p-0">
                     <section>
                         <div class="flex flex-row">
