@@ -167,17 +167,15 @@ export class DietsFormComponent implements OnInit {
         this.dietsService.getDiet(this.id).subscribe({
             next: (response) => {
                 this.response = response;
-                console.log(response);
                 this.pac_id = this.response.data.pac_id;
-                console.log(this.response.data.pac_id);
-                this.lastDietText = this.response.data.Die_TText.descripcion;
+
+                this.lastDietText = this.response.data.Die_TText?.descripcion || '';
                 this.lastDietType = this.response.data.Tipos_Dietas.map((TDieta: any) => TDieta.descripcion);
                 this.lastDietHelp = this.response.data.Die_Autonomo == 1 ? 'Autònom' : 'Ajuda';
                 this.lastDietProte = this.response.data.Die_Protesi == 1 ? 'Sí' : 'No';
             },
             error: (error) => {
                 console.error(error);
-                this.loading = false;
             },
             complete: () => {
                 this.loading = false;
@@ -187,7 +185,7 @@ export class DietsFormComponent implements OnInit {
 
     newDiet() {
         this.loading = true;
-        if (this.pac_id && this.selectedTexture && this.selectedDietType.length > 0 && this.selectedAutonomy && this.hasProsthesis !== null) {
+        if (this.pac_id && this.selectedTexture && this.selectedDietType.length > 0 && this.selectedAutonomy && this.hasProsthesis !== undefined) {
             const sanitizedTexture = this.selectedTexture?.trim();
             const sanitizedDietType = this.selectedDietType.map((type) => type.trim());
             const sanitizedAutonomy = this.selectedAutonomy == 'AUTO';
@@ -199,9 +197,11 @@ export class DietsFormComponent implements OnInit {
                 this.loading = false;
                 return;
             }
+            console.log('Diet created successfully!')
+
             this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis, aux_id).subscribe({
                 next: (response) => {
-                    // console.log(response);
+                    console.log(response);
                 },
                 error: (error) => {
                     console.log(error);
@@ -212,6 +212,10 @@ export class DietsFormComponent implements OnInit {
                     this.loading = false;
                 }
             });
+        }
+        else {
+            console.error('Missing required fields');
+            this.loading = false;
         }
     }
     dietTextures: SelectOption[] = [{ name: '', code: '' }];
