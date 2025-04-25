@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-
+import { Rooms } from './rooms';
 
 export default [
-    { path: ':id', /* component: */},
-    { path: ':id/addcures', /* component: */},
+    { path: '', component: Rooms },
+    /* { path: 'tools', component: UrlWidget }, */
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;
