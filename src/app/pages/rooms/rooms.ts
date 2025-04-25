@@ -12,7 +12,6 @@ import { RoomsService } from '../service/rooms.service';
     imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule],
     template: `
         <div>
-            <h2>Bienvenido a ROOMS</h2>
             <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center px-10 py-10">
                 <p-card *ngFor="let room of rooms" name="rooms-data" class="border rounded-xl w-full [&_.p-card-body]:!p-0">
                     <section>
