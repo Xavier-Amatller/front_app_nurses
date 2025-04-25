@@ -5,32 +5,47 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class AuthService {
     private token = 'authToken';
+    private auxIdKey = 'auxId';
 
     constructor(
         private readonly router: Router,
         private readonly http: HttpClient
-    ) {}
+    ) { }
 
     login(aux_num_trabajador: string, aux_password: string): Observable<any> {
-        let  data = {
+        let data = {
             'aux_num_trabajador': aux_num_trabajador,
             'aux_password': aux_password
         }
-        return this.http.post('http://127.0.0.1:8000/api/login', data,{headers:{
-            "Content-type":"application/json"
-        }});
+        return this.http.post('http://127.0.0.1:8000/api/login', data, {
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
     }
 
-    getToken() : string | null {
+    getToken(): string | null {
         return localStorage.getItem(this.token);
+    }
+
+    setToken(token: string) {
+        localStorage.setItem("authToken", token)
     }
 
     isAuthenticated(): boolean {
         return this.getToken() !== null;
-      }
+    }
 
     logout() {
         localStorage.removeItem(this.token);
         this.router.navigate(['/login']);
+    }
+
+    setAuxiliarId(auxIdKey: string): void {
+        localStorage.setItem(this.auxIdKey, auxIdKey);
+    }
+
+    getAuxiliarId(): string | null {
+        return localStorage.getItem(this.auxIdKey);
     }
 }
