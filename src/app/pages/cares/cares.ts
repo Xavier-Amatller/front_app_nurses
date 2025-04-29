@@ -11,7 +11,8 @@ import { TextareaModule } from 'primeng/textarea';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
 import { AuthService } from '../../service/auth.service';
-import { TipoDrenaje, RegistroResponse } from '../../models/interfaces';
+import { TipoDrenaje, RegistroResponse, TipoTextura, TipoDieta } from '../../models/interfaces';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-cares',
@@ -25,13 +26,15 @@ import { TipoDrenaje, RegistroResponse } from '../../models/interfaces';
     DatePickerModule,
     TextareaModule,
     CheckboxModule,
-    DropdownModule // Añadido
+    DropdownModule,
+    MultiSelectModule
   ],
   providers: [AuthService],
   template: `
-    <div class="flex flex-wrap md:flex-row gap-8">
-      <div class="md:w-1/2">
-        <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+    <div >
+        <form class="flex flex-col-2  gap-8" [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+        <div class="md:w-1/2">
+
           <!-- Constantes Vitales -->
           <div class="card flex flex-col gap-4">
             <div class="font-semibold text-xl">Constantes Vitales</div>
@@ -143,6 +146,8 @@ import { TipoDrenaje, RegistroResponse } from '../../models/interfaces';
               />
             </div>
           </div>
+</div>
+<div class="md:w-1/2">
 
           <!-- Diagnóstico -->
           <div class="card flex flex-col gap-4">
@@ -188,6 +193,49 @@ import { TipoDrenaje, RegistroResponse } from '../../models/interfaces';
               />
             </div>
           </div>
+            <!-- Dietas -->
+            <div class="card flex flex-col gap-4">
+              <div class="font-semibold text-xl">Dietas</div>
+              <div class="flex flex-col gap-2">
+                <label for="die_ttext">Textura de la Dieta</label>
+                <p-dropdown
+                  formControlName="die_ttext"
+                  [options]="tiposTexturas"
+                  optionLabel="ttex_desc"
+                  optionValue="id"
+                  placeholder="Selecciona una textura"
+                  [showClear]="true"
+                />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label for="tipos_dietas">Tipos de Dieta</label>
+                <p-multiSelect
+                  formControlName="tipos_dietas"
+                  [options]="tiposDietas"
+                  optionLabel="tdie_desc"
+                  optionValue="id"
+                  placeholder="Selecciona los tipos de dieta"
+                  [showClear]="true"
+                />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label for="die_autonomo">¿Es Autónomo?</label>
+                <p-checkbox
+                  formControlName="die_autonomo"
+                  [binary]="true"
+                  inputId="die_autonomo"
+                />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label for="die_protesi">¿Tiene Prótesis?</label>
+                <p-checkbox
+                  formControlName="die_protesi"
+                  [binary]="true"
+                  inputId="die_protesi"
+                />
+              </div>
+            </div>
+          
 
           <!-- Fecha del Registro -->
           <div class="card flex flex-col gap-4">
@@ -206,16 +254,17 @@ import { TipoDrenaje, RegistroResponse } from '../../models/interfaces';
           <div class="flex justify-end mt-4">
             <p-button label="Guardar" type="submit" [disabled]="registroForm.invalid" />
           </div>
+          </div>
         </form>
-      </div>
     </div>
   `
 })
-// Ajustar la propiedad tiposDrenajes y los métodos
 export class Cares implements OnInit {
   registroForm: FormGroup;
   auxiliarId: string | null = null;
-  tiposDrenajes: TipoDrenaje[] = []; // Ahora usamos el tipo importado del servicio
+  tiposDrenajes: TipoDrenaje[] = [];
+  tiposTexturas: TipoTextura[] = [];
+  tiposDietas: TipoDieta[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -239,9 +288,14 @@ export class Cares implements OnInit {
       dia_motivo: [''],
       dre_debito: [''],
       tdre_id: [null],
+      die_ttext: [null],
+      tipos_dietas: [[]],
+      die_autonomo: [null],
+      die_protesi: [null],
       Reg_Fecha: [new Date(), Validators.required],
       Reg_Obs: ['']
     });
+
 
     // Añadir validación condicional para tdre_id
     this.registroForm.get('dre_debito')?.valueChanges.subscribe(dreDebito => {
@@ -253,8 +307,29 @@ export class Cares implements OnInit {
       }
       tdreIdControl?.updateValueAndValidity();
     });
-  }
 
+    // Validación condicional para dietas
+    this.registroForm.get('die_ttext')?.valueChanges.subscribe(dieTText => {
+      const tiposDietasControl = this.registroForm.get('tipos_dietas');
+      const dieAutonomoControl = this.registroForm.get('die_autonomo');
+      const dieProtesiControl = this.registroForm.get('die_protesi');
+
+      if (dieTText) {
+        tiposDietasControl?.setValidators([Validators.required, Validators.minLength(1)]);
+        dieAutonomoControl?.setValidators(Validators.required);
+        dieProtesiControl?.setValidators(Validators.required);
+      } else {
+        tiposDietasControl?.clearValidators();
+        dieAutonomoControl?.clearValidators();
+        dieProtesiControl?.clearValidators();
+      }
+
+      tiposDietasControl?.updateValueAndValidity();
+      dieAutonomoControl?.updateValueAndValidity();
+      dieProtesiControl?.updateValueAndValidity();
+    });
+
+  }
   ngOnInit(): void {
     this.auxiliarId = this.AuthService.getAuxiliarId();
     if (!this.auxiliarId) {
@@ -262,7 +337,7 @@ export class Cares implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-
+    //Cargar tipos de drenajes
     this.registroService.getTiposDrenajes().subscribe({
       next: (tipos: TipoDrenaje[]) => {
         this.tiposDrenajes = tipos;
@@ -271,6 +346,27 @@ export class Cares implements OnInit {
         console.error('Error al cargar los tipos de drenajes', error);
       }
     });
+
+    // Cargar tipos de texturas
+    this.registroService.getTiposTexturas().subscribe({
+      next: (tipos: TipoTextura[]) => {
+        this.tiposTexturas = tipos;
+      },
+      error: (error) => {
+        console.error('Error al cargar los tipos de texturas', error);
+      }
+    });
+
+    // Cargar tipos de dietas
+    this.registroService.getTiposDietas().subscribe({
+      next: (tipos: TipoDieta[]) => {
+        this.tiposDietas = tipos;
+      },
+      error: (error) => {
+        console.error('Error al cargar los tipos de dietas', error);
+      }
+    });
+
   }
 
   onSubmit(): void {
@@ -302,6 +398,12 @@ export class Cares implements OnInit {
         drenaje: {
           dre_debito: this.registroForm.value.dre_debito,
           tdre_id: this.registroForm.value.tdre_id
+        },
+        dieta: {
+          die_ttext: this.registroForm.value.die_ttext,
+          tipos_dietas: this.registroForm.value.tipos_dietas,
+          die_autonomo: this.registroForm.value.die_autonomo,
+          die_protesi: this.registroForm.value.die_protesi
         }
       };
 

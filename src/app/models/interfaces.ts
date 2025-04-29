@@ -12,3 +12,13 @@ export interface RegistroResponse {
     reg_fecha: string;
   };
 }
+
+export interface TipoTextura {
+  id: number;
+  ttex_desc: string;
+}
+
+export interface TipoDieta {
+  id: number;
+  tdie_desc: string;
+}

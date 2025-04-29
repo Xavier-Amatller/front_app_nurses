@@ -26,7 +26,6 @@ export class AppMenu {
                     { label: 'Dashboard', icon: 'pi pi-fw pi-th-large', routerLink: ['/dashboard'] },
                     { label: 'Rooms', icon: 'pi pi-fw pi-building', routerLink: ['/rooms'] },
                     { label: 'Diets', icon: 'pi pi-fw pi-face-smile', routerLink: ['/diets'] },
-                    { label: 'cares', icon: 'pi pi-fw pi-face-smile', routerLink: ['/cares'] },
                 ]
             },
         ];
