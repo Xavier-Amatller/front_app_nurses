@@ -4,7 +4,7 @@ import { Rooms } from './rooms';
 
 export default [
     { path: '', component: Rooms },
-    {path: '?id', component: insideRooms},
+    { path: ':id?', component: insideRooms },
     /* { path: 'tools', component: UrlWidget }, */
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;

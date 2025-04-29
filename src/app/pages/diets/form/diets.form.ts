@@ -191,7 +191,9 @@ export class DietsFormComponent implements OnInit {
             const sanitizedAutonomy = this.selectedAutonomy == 'AUTO';
             const sanitizedProsthesis = this.hasProsthesis;
 
-            const aux_id = Number(localStorage.getItem("aux_id"));
+            const aux_id = Number(localStorage.getItem("auxId"));
+            console.log('aux_id', aux_id);
+            
             if (!aux_id) {
                 console.error("Invalid auxId in localStorage");
                 this.loading = false;
