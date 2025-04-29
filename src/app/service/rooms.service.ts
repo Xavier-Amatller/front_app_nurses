@@ -12,4 +12,8 @@ export class RoomsService {
     getRooms(page: number = 1, limit: number = 4) {
         return this.http.get(this.apiURL.concat(`?page=${page}&limit=${limit}`));
     }
+
+    getRoom(room_id: string) {
+        return this.http.get(this.apiURL.concat(`/show?id=${room_id}`));
+    }
 }

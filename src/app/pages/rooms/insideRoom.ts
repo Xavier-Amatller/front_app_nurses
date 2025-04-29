@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
+import { RoomsService } from '../../service/rooms.service';
 
 @Component({
     selector: 'app-inside-room',
@@ -19,13 +20,20 @@ import { SkeletonModule } from 'primeng/skeleton';
     `
 })
 export class insideRooms implements OnInit {
-
     room_id: string | null = null;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(
+        private rs: RoomsService,
+        private route: ActivatedRoute
+    ) {}
 
     ngOnInit(): void {
         this.room_id = this.route.snapshot.paramMap.get('id');
+        console.log(this.room_id);
+        if (this.room_id) {
+            this.rs.getRoom(this.room_id).subscribe((data: any) => {
+                console.log(data);
+            });
+        }
     }
-
 }
