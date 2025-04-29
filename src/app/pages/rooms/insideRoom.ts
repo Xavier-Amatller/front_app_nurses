@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
+import { RoomsService } from '../../service/rooms.service';
 
 @Component({
     selector: 'app-inside-room',
@@ -12,11 +14,26 @@ import { SkeletonModule } from 'primeng/skeleton';
     template: `
         <div>
             <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center pb-10">
-                <h1>Numero de room:</h1>
+                <h1>Numero de room: {{ room_id }}</h1>
             </div>
         </div>
     `
 })
-export class insideRooms {
+export class insideRooms implements OnInit {
+    room_id: string | null = null;
 
+    constructor(
+        private rs: RoomsService,
+        private route: ActivatedRoute
+    ) {}
+
+    ngOnInit(): void {
+        this.room_id = this.route.snapshot.paramMap.get('id');
+        console.log(this.room_id);
+        if (this.room_id) {
+            this.rs.getRoom(this.room_id).subscribe((data: any) => {
+                console.log(data);
+            });
+        }
+    }
 }

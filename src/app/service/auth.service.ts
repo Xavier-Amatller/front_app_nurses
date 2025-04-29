@@ -41,8 +41,9 @@ export class AuthService {
         this.router.navigate(['/login']);
     }
 
-    setAuxiliarId(auxIdKey: string): void {
-        localStorage.setItem(this.auxIdKey, auxIdKey);
+    setAuxiliarId(auxId: string): void {
+        localStorage.setItem(this.auxIdKey, auxId);
+        console.log(localStorage.getItem(this.auxIdKey));
     }
 
     getAuxiliarId(): string | null {
