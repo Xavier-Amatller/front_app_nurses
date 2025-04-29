@@ -43,7 +43,7 @@ export class AuthService {
 
     setAuxiliarId(auxId: string): void {
         localStorage.setItem(this.auxIdKey, auxId);
-        console.log('Auxiliar ID set:', auxId);
+        console.log(localStorage.getItem(this.auxIdKey));
     }
 
     getAuxiliarId(): string | null {

@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
+import { AuthService } from '../../service/auth.service';
 import { DietsService } from '../../service/diets.service';
 interface SelectOption {
     name: string;
@@ -104,14 +105,13 @@ interface SelectOption {
     `
 })
 export class DietsFormComponent implements OnInit {
-    constructor(private readonly dietsService: DietsService) {}
+    constructor(private readonly dietsService: DietsService,private readonly AuthService: AuthService) {}
 
     //Info New Data
     selectedTexture: string | null = null;
     selectedDietType: string[] = [];
     selectedAutonomy: string | null = null;
     hasProsthesis: boolean = false;
-
     //Info lasT DIet
     lastDietText: string = '';
     lastDietType: string = '';
@@ -191,7 +191,7 @@ export class DietsFormComponent implements OnInit {
             const sanitizedAutonomy = this.selectedAutonomy == 'AUTO';
             const sanitizedProsthesis = this.hasProsthesis;
 
-            const aux_id = Number(localStorage.getItem("auxId"));
+            const aux_id = Number(this.AuthService.getAuxiliarId());
             console.log('aux_id', aux_id);
             
             if (!aux_id) {

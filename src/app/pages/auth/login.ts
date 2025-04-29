@@ -73,7 +73,8 @@ export class Login implements OnInit {
                 if (!response) {
                     this.isLoginError = true;
                 } else {
-                    this.AuthService.setAuxiliarId(response.auxId);
+                    console.log(response);
+                    this.AuthService.setAuxiliarId(response.aux_id);
                     this.AuthService.setToken(response.token);
                     this.router.navigate(['/dashboard']);
                 }
