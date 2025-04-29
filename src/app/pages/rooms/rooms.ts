@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -9,7 +9,7 @@ import { RoomsService } from '../../service/rooms.service';
 @Component({
     selector: 'app-rooms',
     standalone: true,
-    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, RouterLink],
+    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule],
     template: `
         <div>
             <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center px-10 py-10">
@@ -40,7 +40,7 @@ import { RoomsService } from '../../service/rooms.service';
                                 </div>
                             </div>
                             <div *ngIf="room.paciente !== null" class="flex gap-5 max-h-[40px] min-h-[40px]">
-                                <button class="p-3 border rounded-xl bg-blue-700 text-white w-1/4 flex justify-between">
+                                <button class="p-3 border rounded-xl bg-blue-700 text-white w-1/4 flex justify-between" (click)="openRoom(room.hab_id)">
                                     <b>Entrar</b>
                                     <i class="pi pi-arrow-right" style="font-size: 1rem"></i>
                                 </button>
@@ -64,7 +64,10 @@ import { RoomsService } from '../../service/rooms.service';
     `
 })
 export class Rooms {
-    constructor(private rs: RoomsService) {}
+    constructor(
+        private rs: RoomsService,
+        private router: Router
+    ) {}
 
     totalRecords: number = 30;
     rows: number = 4;
@@ -82,9 +85,12 @@ export class Rooms {
 
     loadData(page: number, rows: number) {
         this.rs.getRooms(page, rows).subscribe((data: any) => {
-            console.log(data['rooms']);
             this.rooms = data['rooms'];
             this.totalRecords = data['totalItems'];
         });
+    }
+
+    openRoom(room_id: string) {
+        this.router.navigate(['/rooms/',room_id ]);
     }
 }
