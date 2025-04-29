@@ -6,8 +6,8 @@ import Aura from '@primeng/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
 import { AuthGuard } from './app/pages/auth/guards/auth.guard';
-import { AuthService } from './app/pages/service/auth.service';
-import { DietsService } from './app/pages/service/diets.service';
+import { AuthService } from './app/service/auth.service';
+import { DietsService } from './app/service/diets.service';
 
 export const appConfig: ApplicationConfig = {
     providers: [
