@@ -31,7 +31,7 @@ interface SelectOption {
                                 <input [(ngModel)]="id" pInputText id="numRoom" type="text" placeholder="Num habitació" />
                             </div>
                             <p-button (onClick)="searchDiet()" [loading]="loading" label="Trobar dieta" [fluid]="false"></p-button>
-                            <p-button (onClick)="newDiet()" [disabled]="loading" label="Aplicar nova dieta" [fluid]="false"></p-button>
+                            <p-button (onClick)="newDiet()" [loading]="loading" [disabled]="!pac_id" label="Aplicar nova dieta" [fluid]="false"></p-button>
                         </div>
                     </div>
                     <div class="card flex flex-col gap-4">
@@ -217,6 +217,11 @@ export class DietsFormComponent implements OnInit {
         }
         else {
             console.error('Missing required fields');
+            console.log('pac_id:', this.pac_id);
+            console.log('selectedTexture:', this.selectedTexture);
+            console.log('selectedDietType:', this.selectedDietType);
+            console.log('selectedAutonomy:', this.selectedAutonomy);
+            console.log('hasProsthesis:', this.hasProsthesis);
             this.loading = false;
         }
     }

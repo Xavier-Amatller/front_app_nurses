@@ -12,21 +12,35 @@ import { LayoutService } from '../../layout/service/layout.service';
 @Component({
     selector: 'app-inside-room',
     standalone: true,
-    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule,Fluid,ChartModule],
+    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, Fluid, ChartModule],
     template: `
-        <p-fluid class="grid grid-cols-12 gap-8">
-            <div class="col-span-12 xl:col-span-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- columna de la izquierda
+              -->
+            <div class="col-span-1">
                 <div class="card">
                     <div class="font-semibold text-xl mb-4">Linear</div>
                     <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
                 </div>
+                <div class="card">
+
+                </div>
             </div>
-        </p-fluid>
-        <div>
-            <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 justify-items-center pb-10"></div>
-            <div>
-                <!-- Implementar boton que te redirija a cares, mandando el id de el usuario a hacer la care. Tomar como ejemplo el realizado para acceder a dentro de la rooms, pasando el id de room -->
-                <button class="p-3 border rounded-xl bg-blue-700 text-white w-1/6" (click)="openCares(room[0].paciente.pac_id)">Cares</button>
+
+            <!-- Columna de la derecha  -->
+            <div class="col-span-1">
+                <div class="card">
+                    <div class="font-semibold text-xl mb-4">Room Information</div>
+                    <div *ngIf="room.length > 0">
+                        <p><strong>Room ID:</strong> {{ room_id }}</p>
+                        <p><strong>Patient Name:</strong> {{ room[0]?.paciente?.name || 'N/A' }}</p>
+                        <p><strong>Other Info:</strong> {{ room[0]?.otherInfo || 'N/A' }}</p>
+                    </div>
+                    <div *ngIf="room.length === 0">
+                        <p>No room information available.</p>
+                    </div>
+                    <button class="p-3 border rounded-xl bg-blue-700 text-white mt-4" (click)="openCares(room[0]?.paciente?.pac_id)">Cares</button>
+                </div>
             </div>
         </div>
     `
@@ -38,17 +52,17 @@ export class insideRooms implements OnInit {
     lineData: any;
     lineOptions: any;
 
-    
-        subscription: Subscription;
+    subscription: Subscription;
     constructor(
         private rs: RoomsService,
         private route: ActivatedRoute,
         private router: Router,
         private layoutService: LayoutService
-    ) { this.subscription = this.layoutService.configUpdate$.pipe(debounceTime(25)).subscribe(() => {
-        this.initCharts();
-    });}
-
+    ) {
+        this.subscription = this.layoutService.configUpdate$.pipe(debounceTime(25)).subscribe(() => {
+            this.initCharts();
+        });
+    }
 
     ngOnInit(): void {
         this.room_id = this.route.snapshot.paramMap.get('id');
@@ -124,8 +138,5 @@ export class insideRooms implements OnInit {
                 }
             }
         };
-
-        
     }
-
 }
