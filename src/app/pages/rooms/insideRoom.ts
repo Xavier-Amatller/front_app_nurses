@@ -39,6 +39,7 @@ export class insideRooms implements OnInit {
         if (this.room_id) {
             this.rs.getRoom(this.room_id).subscribe((data: any) => {
                 this.room = data;
+                console.log(this.room);
             });
         }
     }
