@@ -18,7 +18,7 @@ import { RoomsService } from '../../service/rooms.service';
             </div>
             <div>
                 <!-- Implementar boton que te redirija a cares, mandando el id de el usuario a hacer la care. Tomar como ejemplo el realizado para acceder a dentro de la rooms, pasando el id de room -->
-                <button class="p-3 border rounded-xl bg-blue-700 text-white w-1/4" (click)="openCares(room[0].paciente.pac_id)">Cares</button>
+                <button class="p-3 border rounded-xl bg-blue-700 text-white w-1/6" (click)="openCares(room[0].paciente.pac_id)">Cares</button>
             </div>
         </div>
     `
