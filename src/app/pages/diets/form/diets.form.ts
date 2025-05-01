@@ -9,6 +9,7 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { AuthService } from '../../../service/auth.service';
 import { DietsService } from '../../../service/diets.service';
+import { ActivatedRoute } from '@angular/router';
 interface SelectOption {
     name: string;
     code: string;
@@ -105,7 +106,7 @@ interface SelectOption {
     `
 })
 export class DietsFormComponent implements OnInit {
-    constructor(private readonly dietsService: DietsService,private readonly AuthService: AuthService) {}
+    constructor(private readonly dietsService: DietsService,private readonly AuthService: AuthService,private readonly route: ActivatedRoute) {}
 
     //Info New Data
     selectedTexture: string | null = null;
@@ -134,6 +135,9 @@ export class DietsFormComponent implements OnInit {
     };
 
     ngOnInit(): void {
+        this.route.params.subscribe((params) => {
+            this.id = params['id'] || '';
+        });
         this.dietsService.getOptions().subscribe({
             next: (response) => {
                 this.response = response;
@@ -176,6 +180,8 @@ export class DietsFormComponent implements OnInit {
             },
             error: (error) => {
                 console.error(error);
+                this.loading = false;
+
             },
             complete: () => {
                 this.loading = false;

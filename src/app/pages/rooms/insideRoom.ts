@@ -6,58 +6,251 @@ import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
 import { RoomsService } from '../../service/rooms.service';
-import { Fluid } from 'primeng/fluid';
 import { ChartModule } from 'primeng/chart';
 import { LayoutService } from '../../layout/service/layout.service';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { TabsModule } from 'primeng/tabs';
+import { KnobModule } from 'primeng/knob';
+import { CheckboxModule } from 'primeng/checkbox';
+import { Button } from 'primeng/button';
 @Component({
     selector: 'app-inside-room',
     standalone: true,
-    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, Fluid, ChartModule],
+    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button],
+
     template: `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- columna de la izquierda
-              -->
+            <!-- columna de la izquierda -->
             <div class="col-span-1">
-                <div class="card">
-                    <div class="font-semibold text-xl mb-4">Linear</div>
+                <div class="card ">
                     <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
-                </div>
-                <div class="card">
+                    <div class="font-semibold text-xl mt-12 mb-4 flex justify-between items-center">
+                        Ultimes dades registrades
+                        <div class="flex gap-4">
+                            <p-button (click)="openCares(room[0]?.paciente?.pac_id)">Afegir curas</p-button>
+                            <p-button (click)="openDiet()">Afegir dieta</p-button>
+                        </div>
+                    </div>
+                    <p-tabs value="0">
+                        <p-tablist>
+                            <p-tab value="0">Constants</p-tab>
+                            <p-tab value="1">Drenatges</p-tab>
+                            <p-tab value="2">Movilitzacions</p-tab>
+                        </p-tablist>
+                        <p-tabpanels>
+                            <p-tabpanel value="0" class="flex flex-wrap gap-12 mt-4">
+                                <div class="flex flex-col justify-center items-center gap-2 w-1/4">
+                                    <div class="font-semibold text-xl text-center">Puls</div>
+                                    <p-knob [(ngModel)]="constantes.pulso" [readonly]="false" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                </div>
+                                <div class="flex flex-col justify-center items-center gap-2 w-1/4">
+                                    <div class="font-semibold text-xl text-center">Temperatura</div>
+                                    <p-knob [(ngModel)]="constantes.temperatura" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}°C" />
+                                </div>
+                                <div class="flex flex-col justify-center items-center gap-2 w-1/4">
+                                    <div class="font-semibold text-xl text-center">Saturació d'oxigen</div>
+                                    <p-knob [(ngModel)]="constantes.saturacion_oxigeno" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}%" />
+                                </div>
+                                <div class="flex flex-col justify-center items-center gap-2 w-1/4">
+                                    <div class="font-semibold text-xl text-center">Frequencia respiratoria</div>
+                                    <p-knob [(ngModel)]="constantes.frequencia_respiratoria" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                </div>
+                                <div class="flex flex-col justify-center items-center gap-2 w-1/4">
+                                    <div class="font-semibold text-xl text-center">TA sistólica</div>
+                                    <p-knob [(ngModel)]="constantes.ta_sistolica" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                </div>
+                                <div class="flex flex-col justify-center items-center gap-2 w-1/4">
+                                    <div class="font-semibold text-xl text-center">TA diastólica</div>
+                                    <p-knob [(ngModel)]="constantes.ta_diastolica" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                </div>
+                            </p-tabpanel>
+                            <p-tabpanel value="1">
+                                <div class="card flex flex-col gap-4">
+                                    <div class="flex flex-col gap-2">
+                                        <label for="dre_debito">Débito del Drenaje</label>
+                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label for="tdre_id">Tipo de Drenaje</label>
+                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                    </div>
+                                </div>
+                            </p-tabpanel>
+                            <p-tabpanel value="2">
+                                <div class="card flex flex-col gap-4">
+                                    <div class="flex justify-evenly gap-2">
+                                        <div class="flex gap-2">
+                                            <label for="mov_sedestacion">Sedestación</label>
+                                            <p-checkbox [binary]="true" [disabled]="true" inputId="mov_sedestacion" />
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <label for="mov_ajuda_deambulacion">Ayuda para Deambulación</label>
+                                            <p-checkbox [binary]="true" [disabled]="true" inputId="mov_ajuda_deambulacion" />
+                                        </div>
+                                    </div>
 
+                                    <div class="flex flex-col gap-2">
+                                        <label for="mov_ajuda_descripcion">Descripción de la Ayuda</label>
+                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label for="mov_cambios">Cambios Posturales</label>
+                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label for="mov_decubitos">Decúbitos</label>
+                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                    </div>
+                                </div>
+                            </p-tabpanel>
+                        </p-tabpanels>
+                    </p-tabs>
                 </div>
             </div>
 
-            <!-- Columna de la derecha  -->
+            <!-- Columna de la derecha -->
             <div class="col-span-1">
+                <div class="card flex flex-col gap-5">
+                    <div class="font-semibold text-3xl">
+                        <h2 class=" mb-0">{{ paciente.pac_nombre + ' ' + paciente.pac_apellidos }}</h2>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-12 gap-4">
+                            <label for="pac_edad" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Edad: </label>
+                            <div class="col-span-12 md:col-span-9">
+                                <input pInputText [disabled]="true" id="pac_edad" type="number" [(ngModel)]="paciente.pac_edad" />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-12 gap-4">
+                            <label for="pac_lengua_materna" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Lengua Materna: </label>
+                            <div class="col-span-12 md:col-span-9">
+                                <input pInputText [disabled]="true" id="pac_lengua_materna" type="text" [(ngModel)]="paciente.pac_lengua_materna" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
-                    <div class="font-semibold text-xl mb-4">Room Information</div>
-                    <div *ngIf="room.length > 0">
-                        <p><strong>Room ID:</strong> {{ room_id }}</p>
-                        <p><strong>Patient Name:</strong> {{ room[0]?.paciente?.name || 'N/A' }}</p>
-                        <p><strong>Other Info:</strong> {{ room[0]?.otherInfo || 'N/A' }}</p>
+                    <div class="font-semibold text-xl mb-4">Informació del pacient</div>
+                    <label for="pac_motiu_ingrees" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Motiu d'ingrés:</label>
+                    <div class="col-span-12 md:col-span-9 md:mb-4">
+                        <input pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
                     </div>
-                    <div *ngIf="room.length === 0">
-                        <p>No room information available.</p>
+                    <label for="pac_observacions" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Observacions:</label>
+                    <div class="col-span-12 md:col-span-9 md:mb-4">
+                        <input pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
                     </div>
-                    <button class="p-3 border rounded-xl bg-blue-700 text-white mt-4" (click)="openCares(room[0]?.paciente?.pac_id)">Cares</button>
+                    <label for="pac_diagnostic" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Diagnostic:</label>
+                    <div class="col-span-12 md:col-span-9">
+                        <input pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
+                    </div>
+                    <hr />
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-12 gap-4">
+                            <label for="pac_alergias" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Alergias: </label>
+                            <div class="col-span-12 md:col-span-9">
+                                <input pInputText [disabled]="true" id="pac_alergias" type="text" [(ngModel)]="paciente.pac_alergias" />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-12 gap-4">
+                            <label for="pac_antecedentes" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Antecedentes: </label>
+                            <div class="col-span-12 md:col-span-9">
+                                <input pInputText [disabled]="true" id="pac_antecedentes" type="text" [(ngModel)]="paciente.pac_antecedentes" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="font-semibold text-xl mb-4">Informació del cuidador</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-12 gap-4">
+                            <label for="pac_nombre_cuidador" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Nom: </label>
+                            <div class="col-span-12 md:col-span-9">
+                                <input pInputText [disabled]="true" id="pac_nombre_cuidador" type="text" [(ngModel)]="paciente.pac_nombre_cuidador" />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-12 gap-4">
+                            <label for="pac_telefono_cuidador" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Num Telefon:</label>
+                            <div class="col-span-12 md:col-span-9">
+                                <input pInputText [disabled]="true" id="pac_telefono_cuidador" type="text" [(ngModel)]="paciente.pac_telefono_cuidador" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     `
 })
 export class insideRooms implements OnInit {
+    /* Room data */
     room_id: string | null = null;
     room: any[] = [];
+    /* Patient data */
 
+    /* Basicamente es un objeto para usarlo mejor en el front  */
+    paciente: {
+        pac_alergias: string | null;
+        pac_antecedentes: string | null;
+        pac_apellidos: string | null;
+        pac_direccion_completa: string | null;
+        pac_edad: number | null;
+        pac_fecha_ingreso: string | null;
+        pac_fecha_nacimiento: string | null;
+        pac_id: number | null;
+        pac_lengua_materna: string | null;
+        pac_nombre: string | null;
+        pac_nombre_cuidador: string | null;
+        pac_num_historial: number | null;
+        pac_telefono_cuidador: string | null;
+    } = {
+        pac_alergias: null,
+        pac_antecedentes: null,
+        pac_apellidos: null,
+        pac_direccion_completa: null,
+        pac_edad: null,
+        pac_fecha_ingreso: null,
+        pac_fecha_nacimiento: null,
+        pac_id: null,
+        pac_lengua_materna: null,
+        pac_nombre: null,
+        pac_nombre_cuidador: null,
+        pac_num_historial: null,
+        pac_telefono_cuidador: null
+    };
+    constantes: {
+        ta_sistolica: number | null;
+        ta_diastolica: number | null;
+        frequencia_respiratoria: number | null;
+        pulso: number | null;
+        temperatura: number | null;
+        saturacion_oxigeno: number | null;
+        talla: number | null;
+        diuresis: number | null;
+        deposiciones: string | null;
+        stp: string | null;
+    } = {
+        ta_sistolica: null,
+        ta_diastolica: null,
+        frequencia_respiratoria: null,
+        pulso: null,
+        temperatura: null,
+        saturacion_oxigeno: null,
+        talla: null,
+        diuresis: null,
+        deposiciones: null,
+        stp: null
+    };
+
+    /* Char data */
     lineData: any;
     lineOptions: any;
 
     subscription: Subscription;
     constructor(
-        private rs: RoomsService,
-        private route: ActivatedRoute,
-        private router: Router,
-        private layoutService: LayoutService
+        private readonly rs: RoomsService,
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+        private readonly layoutService: LayoutService
     ) {
         this.subscription = this.layoutService.configUpdate$.pipe(debounceTime(25)).subscribe(() => {
             this.initCharts();
@@ -70,6 +263,21 @@ export class insideRooms implements OnInit {
             this.rs.getRoom(this.room_id).subscribe((data: any) => {
                 this.room = data;
                 console.log(this.room);
+                this.paciente = {
+                    pac_alergias: this.room[0].paciente.pac_alergias,
+                    pac_antecedentes: this.room[0].paciente.pac_antecedentes,
+                    pac_apellidos: this.room[0].paciente.pac_apellidos,
+                    pac_direccion_completa: this.room[0].paciente.pac_direccion_completa,
+                    pac_edad: this.room[0].paciente.pac_edad,
+                    pac_fecha_ingreso: this.room[0].paciente.pac_fecha_ingreso,
+                    pac_fecha_nacimiento: this.room[0].paciente.pac_fecha_nacimiento,
+                    pac_id: this.room[0].paciente.pac_id,
+                    pac_lengua_materna: this.room[0].paciente.pac_lengua_materna,
+                    pac_nombre: this.room[0].paciente.pac_nombre,
+                    pac_nombre_cuidador: this.room[0].paciente.pac_nombre_cuidador,
+                    pac_num_historial: this.room[0].paciente.pac_num_historial,
+                    pac_telefono_cuidador: this.room[0].paciente.pac_telefono_cuidador
+                };
             });
         }
         this.initCharts();
@@ -77,6 +285,9 @@ export class insideRooms implements OnInit {
 
     openCares(pac_id: string) {
         this.router.navigate(['/cares/', pac_id]);
+    }
+    openDiet() {
+        this.router.navigate(['/diets/', this.room_id]);
     }
 
     initCharts() {
@@ -86,24 +297,64 @@ export class insideRooms implements OnInit {
         const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
         this.lineData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            labels: [
+            'Dilluns Matí', 'Dilluns Migdia', 'Dilluns Nit',
+            'Dimarts Matí', 'Dimarts Migdia', 'Dimarts Nit',
+            'Dimecres Matí', 'Dimecres Migdia', 'Dimecres Nit',
+            'Dijous Matí', 'Dijous Migdia', 'Dijous Nit',
+            'Divendres Matí', 'Divendres Migdia', 'Divendres Nit',
+            'Dissabte Matí', 'Dissabte Migdia', 'Dissabte Nit',
+            'Diumenge Matí', 'Diumenge Migdia', 'Diumenge Nit'
+            ],
             datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-500'),
-                    borderColor: documentStyle.getPropertyValue('--p-primary-500'),
-                    tension: 0.4
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-200'),
-                    borderColor: documentStyle.getPropertyValue('--p-primary-200'),
-                    tension: 0.4
-                }
+            {
+                label: 'Puls',
+                data: [72, 74, 73, 85, 87, 86, 78, 79, 77, 90, 92, 91, 76, 75, 74, 74, 73, 72, 73, 74, 75],
+                fill: false,
+                backgroundColor: '#FF6384', // Red
+                borderColor: '#FF6384',
+                tension: 0.4
+            },
+            {
+                label: 'Temperatura (°C)',
+                data: [36.5, 36.6, 36.5, 36.6, 36.7, 36.6, 36.7, 36.8, 36.7, 37.2, 37.3, 37.2, 36.6, 36.5, 36.6, 36.5, 36.4, 36.5, 36.4, 36.5, 36.6],
+                fill: false,
+                backgroundColor: '#FFCE56', // Yellow
+                borderColor: '#FFCE56',
+                tension: 0.4
+            },
+            {
+                label: 'Saturació d\'oxigen (%)',
+                data: [98, 97, 98, 97, 96, 97, 96, 95, 96, 92, 91, 92, 96, 97, 96, 97, 98, 97, 98, 97, 96],
+                fill: false,
+                backgroundColor: '#36A2EB', // Blue
+                borderColor: '#36A2EB',
+                tension: 0.4
+            },
+            {
+                label: 'Frequencia respiratoria',
+                data: [16, 17, 16, 17, 18, 17, 18, 19, 18, 20, 21, 20, 18, 17, 18, 17, 16, 17, 16, 17, 18],
+                fill: false,
+                backgroundColor: '#4BC0C0', // Teal
+                borderColor: '#4BC0C0',
+                tension: 0.4
+            },
+            {
+                label: 'TA sistólica',
+                data: [120, 121, 120, 122, 123, 122, 118, 119, 118, 140, 141, 140, 119, 120, 119, 120, 121, 120, 121, 122, 121],
+                fill: false,
+                backgroundColor: '#9966FF', // Purple
+                borderColor: '#9966FF',
+                tension: 0.4
+            },
+            {
+                label: 'TA diastólica',
+                data: [80, 81, 80, 82, 83, 82, 78, 79, 78, 95, 96, 95, 79, 80, 79, 80, 81, 80, 81, 82, 81],
+                fill: false,
+                backgroundColor: '#FF9F40', // Orange
+                borderColor: '#FF9F40',
+                tension: 0.4
+            }
             ]
         };
 
