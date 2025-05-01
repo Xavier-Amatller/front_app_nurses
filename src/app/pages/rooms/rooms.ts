@@ -15,50 +15,53 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, InputTextModule, FieldsetModule, ButtonModule, ProgressSpinnerModule],
     template: `
         <div *ngIf="loading; else content">
-            
+             <!-- TODO Añadir skeleton loader -->
         </div>
         <ng-template #content>
-            <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10">
-                <div *ngFor="let room of rooms" class="card w-full !p-0 !mb-0">
-                    <div class="flex flex-row">
-                        <div class="flex justify-between items-center p-5 bg-[var(--primary-color)] rounded-tl-[var(--content-border-radius)] rounded-br-[var(--content-border-radius)] w-[10rem] text-center">
-                            <span class=" text-white text-4xl font-bold">{{ room.hab_id }}</span>
-                        </div>
-                        <div class="p-5 flex gap-3 items-center w-4/6">
-                            <b class="text-2xl">Data</b>
-                            <b *ngIf="room.paciente !== null" class="text-lg mt-1 pl-2 border-l-2 border-blue-600"> {{ room.paciente.pac_fecha_ingreso }} </b>
-                            <b *ngIf="room.paciente === null" class="text-lg mt-1 pl-2 border-l-2 border-blue-600"> &nbsp; </b>
-                        </div>
-                        <div class="p-5 w-1/6 flex flex-col justify-center items-center">
-                            <div *ngIf="room.paciente !== null">
-                                <b class="text-xl">Ocupado</b>
+            <div class=" overflow-y-auto">
+                <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 mb-8">
+                    <div *ngFor="let room of rooms" class="card w-full !p-0 !mb-0">
+                        <div class="flex flex-row">
+                            <div class="flex justify-between items-center p-5 bg-[var(--primary-color)] rounded-tl-[var(--content-border-radius)] rounded-br-[var(--content-border-radius)] w-[10rem] text-center">
+                                <span class=" text-white text-4xl font-bold">{{ room.hab_id }}</span>
                             </div>
-                            <div *ngIf="room.paciente === null">
-                                <b class="text-xl">Libre</b>
+                            <div class="p-5 flex gap-3 items-center w-4/6">
+                                <b class="text-2xl">Data</b>
+                                <b *ngIf="room.paciente !== null" class="text-lg mt-1 pl-2 border-l-2 border-blue-600"> {{ room.paciente.pac_fecha_ingreso }} </b>
+                                <b *ngIf="room.paciente === null" class="text-lg mt-1 pl-2 border-l-2 border-blue-600"> &nbsp; </b>
+                            </div>
+                            <div class="p-5 w-1/6 flex flex-col justify-center items-center">
+                                <div *ngIf="room.paciente !== null">
+                                    <b class="text-xl">Ocupado</b>
+                                </div>
+                                <div *ngIf="room.paciente === null">
+                                    <b class="text-xl">Libre</b>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class=" m-5 mt-1">
-                        <p-fieldset legend="Observacions" [toggleable]="false" class="m-5 !p-0">
-                            <p>
-                                {{ room.hab_obs }}
-                            </p>
-                        </p-fieldset>
-                        <div *ngIf="room.paciente !== null" class="flex gap-5 max-h-[40px] min-h-[40px]">
-                            <p-button iconPos="right" icon="pi pi-arrow-right" label="Entrar l'habitació" size="large" class="w-1/4 flex justify-between" (click)="openRoom(room.hab_id)" />
+                        <div class=" m-5 mt-1">
+                            <p-fieldset legend="Observacions" [toggleable]="false" class="m-5 !p-0 ">
+                                <p class="h-[57px] overflow-hidden line-clamp-3 break-words text-lg justify-center">
+                                    {{ room.hab_obs }}
+                                </p>
+                            </p-fieldset>
+                            <div *ngIf="room.paciente !== null" class="flex gap-5 max-h-[40px] min-h-[40px]">
+                                <p-button iconPos="right" icon="pi pi-arrow-right" label="Entrar l'habitació" size="large" class="w-1/4 flex justify-between" (click)="openRoom(room.hab_id)" />
 
-                            <div class="p-3 border border-[var(--p-fieldset-border-color)]  rounded-[var(--content-border-radius)] w-1/4 truncate"><b>Edat</b> | {{ room.paciente.pac_edad }}</div>
-                            <div class="p-3 border border-[var(--p-fieldset-border-color)]  rounded-[var(--content-border-radius)] w-2/4 truncate"><b>Nom</b> | {{ room.paciente.pac_nombre }} {{ room.paciente.pac_apellidos }}</div>
-                        </div>
-                        <div *ngIf="room.paciente === null" class="flex gap-5 max-h-[40px] min-h-[40px]">
-                            <p-button [disabled]="true" iconPos="right" icon="pi pi-arrow-right" label="Entrar l'habitació" size="large" class="w-1/4 flex justify-between" (click)="openRoom(room.hab_id)" />
+                                <div class="p-3 border border-[var(--p-fieldset-border-color)]  rounded-[var(--content-border-radius)] w-1/4 truncate"><b>Edat</b> | {{ room.paciente.pac_edad }}</div>
+                                <div class="p-3 border border-[var(--p-fieldset-border-color)]  rounded-[var(--content-border-radius)] w-2/4 truncate"><b>Nom</b> | {{ room.paciente.pac_nombre }} {{ room.paciente.pac_apellidos }}</div>
+                            </div>
+                            <div *ngIf="room.paciente === null" class="flex gap-5 max-h-[40px] min-h-[40px]">
+                                <p-button [disabled]="true" iconPos="right" icon="pi pi-arrow-right" label="Entrar l'habitació" size="large" class="w-1/4 flex justify-between" (click)="openRoom(room.hab_id)" />
 
-                            <div class="p-3 border  border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-1/4 truncate"><b>Edat</b> |</div>
-                            <div class="p-3 border  border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-2/4 truncate"><b>Nom</b> |</div>
+                                <div class="p-3 border  border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-1/4 truncate"><b>Edat</b> |</div>
+                                <div class="p-3 border  border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-2/4 truncate"><b>Nom</b> |</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <p-paginator [rows]="rows" [totalRecords]="totalRecords" [first]="first" (onPageChange)="onPageChange($event)"></p-paginator>
         </ng-template>
 
         <!-- <div>
@@ -109,7 +112,6 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
                     </section>
                 </p-card>
             </div>
-            <p-paginator [rows]="rows" [totalRecords]="totalRecords" [first]="first" (onPageChange)="onPageChange($event)"></p-paginator>
         </div> -->
     `
 })
@@ -142,6 +144,6 @@ export class Rooms {
     }
 
     openRoom(room_id: string) {
-        this.router.navigate(['/rooms/', room_id]);
+        this.router.navigate(['habitacions/', room_id]);
     }
 }

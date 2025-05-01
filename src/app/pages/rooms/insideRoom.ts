@@ -42,7 +42,7 @@ import { Button } from 'primeng/button';
                             <p-tabpanel value="0" class="flex flex-wrap gap-12 mt-4">
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Puls</div>
-                                    <p-knob [(ngModel)]="constantes.pulso" [readonly]="false" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.pulso" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Temperatura</div>
@@ -284,10 +284,10 @@ export class insideRooms implements OnInit {
     }
 
     openCares(pac_id: string) {
-        this.router.navigate(['/cares/', pac_id]);
+        this.router.navigate(['habitacions/'+this.room_id+'/curas/', pac_id]);
     }
     openDiet() {
-        this.router.navigate(['/diets/', this.room_id]);
+        this.router.navigate(['habitacions/'+this.room_id+'/dietes/', this.room_id]);
     }
 
     initCharts() {

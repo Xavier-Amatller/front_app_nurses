@@ -14,9 +14,9 @@ export const appRoutes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: 'dashboard', component: Dashboard },
-            { path: 'rooms', loadChildren: () => import('./app/pages/rooms/rooms.routes') },
-            { path: 'diets', component: Diets },
-            { path: 'diets/:id', component: Diets },
+            { path: 'habitacions', loadChildren: () => import('./app/pages/rooms/rooms.routes') },
+            { path: 'dietes', component: Diets },
+            { path: 'dietes/:id', component: Diets },
             { path: 'cares/:id', component: Cares },
             { path: 'extras', loadChildren: () => import('./app/pages/pages.routes') }
         ]
