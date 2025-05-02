@@ -1,19 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, Subscription } from 'rxjs';
+import { Button } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { ChartModule } from 'primeng/chart';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { KnobModule } from 'primeng/knob';
 import { PaginatorModule } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
-import { RoomsService } from '../../service/rooms.service';
-import { ChartModule } from 'primeng/chart';
-import { LayoutService } from '../../layout/service/layout.service';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
 import { TabsModule } from 'primeng/tabs';
-import { KnobModule } from 'primeng/knob';
-import { CheckboxModule } from 'primeng/checkbox';
-import { Button } from 'primeng/button';
+import { Subscription, debounceTime } from 'rxjs';
+import { LayoutService } from '../../layout/service/layout.service';
+import { RoomsService } from '../../service/rooms.service';
+import { RegistroService } from '../../service/registro.service';
 @Component({
     selector: 'app-inside-room',
     standalone: true,
@@ -248,6 +249,7 @@ export class insideRooms implements OnInit {
     subscription: Subscription;
     constructor(
         private readonly rs: RoomsService,
+        private readonly regs: RegistroService,
         private readonly route: ActivatedRoute,
         private readonly router: Router,
         private readonly layoutService: LayoutService
@@ -262,7 +264,6 @@ export class insideRooms implements OnInit {
         if (this.room_id) {
             this.rs.getRoom(this.room_id).subscribe((data: any) => {
                 this.room = data;
-                console.log(this.room);
                 this.paciente = {
                     pac_alergias: this.room[0].paciente.pac_alergias,
                     pac_antecedentes: this.room[0].paciente.pac_antecedentes,
@@ -278,16 +279,23 @@ export class insideRooms implements OnInit {
                     pac_num_historial: this.room[0].paciente.pac_num_historial,
                     pac_telefono_cuidador: this.room[0].paciente.pac_telefono_cuidador
                 };
+
+                this.regs.getLastRegistro(this.room[0].paciente.pac_id).subscribe((data: any) => {
+                    console.log(data);
+                });
+
+                
+
             });
         }
         this.initCharts();
     }
 
     openCares(pac_id: string) {
-        this.router.navigate(['habitacions/'+this.room_id+'/curas/', pac_id]);
+        this.router.navigate(['habitacions/' + this.room_id + '/curas/', pac_id]);
     }
     openDiet() {
-        this.router.navigate(['habitacions/'+this.room_id+'/dietes/', this.room_id]);
+        this.router.navigate(['habitacions/' + this.room_id + '/dietes/', this.room_id]);
     }
 
     initCharts() {
@@ -298,63 +306,77 @@ export class insideRooms implements OnInit {
 
         this.lineData = {
             labels: [
-            'Dilluns Matí', 'Dilluns Migdia', 'Dilluns Nit',
-            'Dimarts Matí', 'Dimarts Migdia', 'Dimarts Nit',
-            'Dimecres Matí', 'Dimecres Migdia', 'Dimecres Nit',
-            'Dijous Matí', 'Dijous Migdia', 'Dijous Nit',
-            'Divendres Matí', 'Divendres Migdia', 'Divendres Nit',
-            'Dissabte Matí', 'Dissabte Migdia', 'Dissabte Nit',
-            'Diumenge Matí', 'Diumenge Migdia', 'Diumenge Nit'
+                'Dilluns Matí',
+                'Dilluns Migdia',
+                'Dilluns Nit',
+                'Dimarts Matí',
+                'Dimarts Migdia',
+                'Dimarts Nit',
+                'Dimecres Matí',
+                'Dimecres Migdia',
+                'Dimecres Nit',
+                'Dijous Matí',
+                'Dijous Migdia',
+                'Dijous Nit',
+                'Divendres Matí',
+                'Divendres Migdia',
+                'Divendres Nit',
+                'Dissabte Matí',
+                'Dissabte Migdia',
+                'Dissabte Nit',
+                'Diumenge Matí',
+                'Diumenge Migdia',
+                'Diumenge Nit'
             ],
             datasets: [
-            {
-                label: 'Puls',
-                data: [72, 74, 73, 85, 87, 86, 78, 79, 77, 90, 92, 91, 76, 75, 74, 74, 73, 72, 73, 74, 75],
-                fill: false,
-                backgroundColor: '#FF6384', // Red
-                borderColor: '#FF6384',
-                tension: 0.4
-            },
-            {
-                label: 'Temperatura (°C)',
-                data: [36.5, 36.6, 36.5, 36.6, 36.7, 36.6, 36.7, 36.8, 36.7, 37.2, 37.3, 37.2, 36.6, 36.5, 36.6, 36.5, 36.4, 36.5, 36.4, 36.5, 36.6],
-                fill: false,
-                backgroundColor: '#FFCE56', // Yellow
-                borderColor: '#FFCE56',
-                tension: 0.4
-            },
-            {
-                label: 'Saturació d\'oxigen (%)',
-                data: [98, 97, 98, 97, 96, 97, 96, 95, 96, 92, 91, 92, 96, 97, 96, 97, 98, 97, 98, 97, 96],
-                fill: false,
-                backgroundColor: '#36A2EB', // Blue
-                borderColor: '#36A2EB',
-                tension: 0.4
-            },
-            {
-                label: 'Frequencia respiratoria',
-                data: [16, 17, 16, 17, 18, 17, 18, 19, 18, 20, 21, 20, 18, 17, 18, 17, 16, 17, 16, 17, 18],
-                fill: false,
-                backgroundColor: '#4BC0C0', // Teal
-                borderColor: '#4BC0C0',
-                tension: 0.4
-            },
-            {
-                label: 'TA sistólica',
-                data: [120, 121, 120, 122, 123, 122, 118, 119, 118, 140, 141, 140, 119, 120, 119, 120, 121, 120, 121, 122, 121],
-                fill: false,
-                backgroundColor: '#9966FF', // Purple
-                borderColor: '#9966FF',
-                tension: 0.4
-            },
-            {
-                label: 'TA diastólica',
-                data: [80, 81, 80, 82, 83, 82, 78, 79, 78, 95, 96, 95, 79, 80, 79, 80, 81, 80, 81, 82, 81],
-                fill: false,
-                backgroundColor: '#FF9F40', // Orange
-                borderColor: '#FF9F40',
-                tension: 0.4
-            }
+                {
+                    label: 'Puls',
+                    data: [72, 74, 73, 85, 87, 86, 78, 79, 77, 90, 92, 91, 76, 75, 74, 74, 73, 72, 73, 74, 75],
+                    fill: false,
+                    backgroundColor: '#FF6384', // Red
+                    borderColor: '#FF6384',
+                    tension: 0.4
+                },
+                {
+                    label: 'Temperatura (°C)',
+                    data: [36.5, 36.6, 36.5, 36.6, 36.7, 36.6, 36.7, 36.8, 36.7, 37.2, 37.3, 37.2, 36.6, 36.5, 36.6, 36.5, 36.4, 36.5, 36.4, 36.5, 36.6],
+                    fill: false,
+                    backgroundColor: '#FFCE56', // Yellow
+                    borderColor: '#FFCE56',
+                    tension: 0.4
+                },
+                {
+                    label: "Saturació d'oxigen (%)",
+                    data: [98, 97, 98, 97, 96, 97, 96, 95, 96, 92, 91, 92, 96, 97, 96, 97, 98, 97, 98, 97, 96],
+                    fill: false,
+                    backgroundColor: '#36A2EB', // Blue
+                    borderColor: '#36A2EB',
+                    tension: 0.4
+                },
+                {
+                    label: 'Frequencia respiratoria',
+                    data: [16, 17, 16, 17, 18, 17, 18, 19, 18, 20, 21, 20, 18, 17, 18, 17, 16, 17, 16, 17, 18],
+                    fill: false,
+                    backgroundColor: '#4BC0C0', // Teal
+                    borderColor: '#4BC0C0',
+                    tension: 0.4
+                },
+                {
+                    label: 'TA sistólica',
+                    data: [120, 121, 120, 122, 123, 122, 118, 119, 118, 140, 141, 140, 119, 120, 119, 120, 121, 120, 121, 122, 121],
+                    fill: false,
+                    backgroundColor: '#9966FF', // Purple
+                    borderColor: '#9966FF',
+                    tension: 0.4
+                },
+                {
+                    label: 'TA diastólica',
+                    data: [80, 81, 80, 82, 83, 82, 78, 79, 78, 95, 96, 95, 79, 80, 79, 80, 81, 80, 81, 82, 81],
+                    fill: false,
+                    backgroundColor: '#FF9F40', // Orange
+                    borderColor: '#FF9F40',
+                    tension: 0.4
+                }
             ]
         };
 
