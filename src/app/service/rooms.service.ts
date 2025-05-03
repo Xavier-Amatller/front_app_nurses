@@ -40,7 +40,7 @@ export class RoomsService {
     }
 
     getRoom(room_id: string) {
-        return this.http.get(this.apiURL.concat(`/rooms/show/?id=${room_id}`), { headers: this.getHeaders() }).pipe(
+        return this.http.get(this.apiURL.concat(`/rooms/show?id=${room_id}`), { headers: this.getHeaders() }).pipe(
             catchError((error) => {
                 if (error.status === 401 || error.status === 403) {
                     localStorage.removeItem('authToken');
