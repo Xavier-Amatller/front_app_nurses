@@ -43,38 +43,38 @@ import { RegistroService } from '../../service/registro.service';
                             <p-tabpanel value="0" class="flex flex-wrap gap-12 mt-4">
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Puls</div>
-                                    <p-knob [(ngModel)]="constantes.pulso" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.pulso" [readonly]="true" [step]="10" [min]="30" [max]="220" valueTemplate="{value}" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Temperatura</div>
-                                    <p-knob [(ngModel)]="constantes.temperatura" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}°C" />
+                                    <p-knob [(ngModel)]="constantes.temperatura" [readonly]="true" [step]="10" [min]="30" [max]="42" valueTemplate="{value}°C" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Saturació d'oxigen</div>
-                                    <p-knob [(ngModel)]="constantes.saturacion_oxigeno" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}%" />
+                                    <p-knob [(ngModel)]="constantes.saturacion_oxigeno" [readonly]="true" [step]="10" [min]="80" [max]="100" valueTemplate="{value}%" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Frequencia respiratoria</div>
-                                    <p-knob [(ngModel)]="constantes.frequencia_respiratoria" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.frequencia_respiratoria" [readonly]="true" [step]="10" [min]="5" [max]="80" valueTemplate="{value}" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">TA sistólica</div>
-                                    <p-knob [(ngModel)]="constantes.ta_sistolica" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.ta_sistolica" [readonly]="true" [step]="10" [min]="60" [max]="180" valueTemplate="{value}" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">TA diastólica</div>
-                                    <p-knob [(ngModel)]="constantes.ta_diastolica" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.ta_diastolica" [readonly]="true" [step]="10" [min]="40" [max]="120" valueTemplate="{value}" />
                                 </div>
                             </p-tabpanel>
                             <p-tabpanel value="1">
                                 <div class="card flex flex-col gap-4">
                                     <div class="flex flex-col gap-2">
                                         <label for="dre_debito">Débito del Drenaje</label>
-                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                        <input [(ngModel)]="drenajes.dre_debito"  type="text" pInputText [disabled]="true" class="w-full h-max" />
                                     </div>
                                     <div class="flex flex-col gap-2">
                                         <label for="tdre_id">Tipo de Drenaje</label>
-                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                        <input [(ngModel)]="drenajes.tdre_desc" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                     </div>
                                 </div>
                             </p-tabpanel>
@@ -83,25 +83,25 @@ import { RegistroService } from '../../service/registro.service';
                                     <div class="flex justify-evenly gap-2">
                                         <div class="flex gap-2">
                                             <label for="mov_sedestacion">Sedestación</label>
-                                            <p-checkbox [binary]="true" [disabled]="true" inputId="mov_sedestacion" />
+                                            <p-checkbox [(ngModel)]="this.movilizaciones.mov_sedestacion" [binary]="true" [disabled]="true" inputId="mov_sedestacion" />
                                         </div>
                                         <div class="flex gap-2">
                                             <label for="mov_ajuda_deambulacion">Ayuda para Deambulación</label>
-                                            <p-checkbox [binary]="true" [disabled]="true" inputId="mov_ajuda_deambulacion" />
+                                            <p-checkbox  [(ngModel)]="this.movilizaciones.mov_ajuda_deambulacion" [binary]="true" [disabled]="true" inputId="mov_ajuda_deambulacion" />
                                         </div>
                                     </div>
 
                                     <div class="flex flex-col gap-2">
                                         <label for="mov_ajuda_descripcion">Descripción de la Ayuda</label>
-                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                        <input [(ngModel)]="this.movilizaciones.mov_ajuda_descripcion" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                     </div>
                                     <div class="flex flex-col gap-2">
                                         <label for="mov_cambios">Cambios Posturales</label>
-                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                        <input [(ngModel)]="this.movilizaciones.mov_cambios" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                     </div>
                                     <div class="flex flex-col gap-2">
                                         <label for="mov_decubitos">Decúbitos</label>
-                                        <input type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                        <input [(ngModel)]="this.movilizaciones.mov_decubitos" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                     </div>
                                 </div>
                             </p-tabpanel>
@@ -130,20 +130,17 @@ import { RegistroService } from '../../service/registro.service';
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card">
+                <!-- </div>
+                <div class="card"> -->
+                    <hr>
                     <div class="font-semibold text-xl mb-4">Informació del pacient</div>
                     <label for="pac_motiu_ingrees" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Motiu d'ingrés:</label>
                     <div class="col-span-12 md:col-span-9 md:mb-4">
-                        <input pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
-                    </div>
-                    <label for="pac_observacions" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Observacions:</label>
-                    <div class="col-span-12 md:col-span-9 md:mb-4">
-                        <input pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
+                        <input [(ngModel)]="this.diagnotico.dia_motivo" pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
                     </div>
                     <label for="pac_diagnostic" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Diagnostic:</label>
                     <div class="col-span-12 md:col-span-9">
-                        <input pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
+                        <input [(ngModel)]="this.diagnotico.dia_diagnostico" pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
                     </div>
                     <hr />
                     <div class="grid grid-cols-2 gap-4">
@@ -241,7 +238,34 @@ export class insideRooms implements OnInit {
         deposiciones: null,
         stp: null
     };
+    movilizaciones: {
+        mov_ajuda_deambulacion: boolean | null;
+        mov_ajuda_descripcion: string | null;
+        mov_cambios: string | null;
+        mov_decubitos: string | null;
+        mov_sedestacion: boolean | null;
+    } = {
+        mov_ajuda_deambulacion: null,
+        mov_ajuda_descripcion: null,
+        mov_cambios: null,
+        mov_decubitos: null,
+        mov_sedestacion: null
+    };
 
+    drenajes: {
+        dre_debito: string | null;
+        tdre_desc: string | null;
+    } = {
+        dre_debito: null,
+        tdre_desc: null
+    };
+    diagnotico: {
+        dia_diagnostico: string | null;
+        dia_motivo: string | null;
+    } = {
+        dia_diagnostico: null,
+        dia_motivo: null
+    };
     /* Char data */
     lineData: any;
     lineOptions: any;
@@ -282,6 +306,33 @@ export class insideRooms implements OnInit {
 
                 this.regs.getLastRegistro(this.room[0].paciente.pac_id).subscribe((data: any) => {
                     console.log(data);
+                    this.constantes = {
+                        ta_sistolica: data.lastRegistro.cv.cv_ta_sistolica ? parseInt(data.lastRegistro.cv.cv_ta_sistolica) : null,
+                        ta_diastolica: data.lastRegistro.cv.cv_ta_diastolica ? parseInt(data.lastRegistro.cv.cv_ta_diastolica) : null,
+                        frequencia_respiratoria: data.lastRegistro.cv.cv_frequencia_respiratoria ? parseInt(data.lastRegistro.cv.cv_frequencia_respiratoria) : null,
+                        pulso: data.lastRegistro.cv.cv_pulso ? parseInt(data.lastRegistro.cv.cv_pulso) : null,
+                        temperatura: data.lastRegistro.cv.cv_temperatura ? parseFloat(data.lastRegistro.cv.cv_temperatura) : null,
+                        saturacion_oxigeno: data.lastRegistro.cv.cv_saturacion_oxigeno ? parseInt(data.lastRegistro.cv.cv_saturacion_oxigeno) : null,
+                        talla: data.lastRegistro.cv.cv_talla ? parseInt(data.lastRegistro.cv.cv_talla) : null,
+                        diuresis: data.lastRegistro.cv.cv_diuresis ? parseInt(data.lastRegistro.cv.cv_diuresis) : null,
+                        deposiciones: data.lastRegistro.cv.cv_deposiciones || null,
+                        stp: data.lastRegistro.cv.cv_stp || null
+                    };
+                    this.movilizaciones = {
+                        mov_ajuda_deambulacion: data.lastRegistro.mov.mov_ajuda_deambulacion ? data.lastRegistro.mov.mov_ajuda_deambulacion : false,
+                        mov_ajuda_descripcion: data.lastRegistro.mov.mov_ajuda_descripcion ?? null,
+                        mov_cambios: data.lastRegistro.mov.mov_cambios ?? null,
+                        mov_decubitos: data.lastRegistro.mov.mov_decubitos ?? null,
+                        mov_sedestacion: data.lastRegistro.mov.mov_sedestacion ? data.lastRegistro.mov.mov_sedestacion : false
+                    }
+                    this.drenajes = {
+                        dre_debito: data.lastRegistro.dre.dre_debito ?? null,
+                        tdre_desc: data.lastRegistro.dre.tdre_desc ?? null
+                    };
+                    this.diagnotico = {
+                        dia_diagnostico: data.lastRegistro.dia.dia_diagnostico ?? null,
+                        dia_motivo: data.lastRegistro.dia.dia_motivo ?? null
+                    };
                 });
 
                 
