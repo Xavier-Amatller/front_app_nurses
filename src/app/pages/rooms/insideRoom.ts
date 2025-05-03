@@ -308,14 +308,14 @@ export class insideRooms implements OnInit {
                     console.log(data);
                     try {
                         this.constantes = {
-                            ta_sistolica: data.lastRegistro.cv.cv_ta_sistolica ? parseInt(data.lastRegistro.cv.cv_ta_sistolica) : null,
-                            ta_diastolica: data.lastRegistro.cv.cv_ta_diastolica ? parseInt(data.lastRegistro.cv.cv_ta_diastolica) : null,
-                            frequencia_respiratoria: data.lastRegistro.cv.cv_frequencia_respiratoria ? parseInt(data.lastRegistro.cv.cv_frequencia_respiratoria) : null,
-                            pulso: data.lastRegistro.cv.cv_pulso ? parseInt(data.lastRegistro.cv.cv_pulso) : null,
-                            temperatura: data.lastRegistro.cv.cv_temperatura ? parseFloat(data.lastRegistro.cv.cv_temperatura) : null,
-                            saturacion_oxigeno: data.lastRegistro.cv.cv_saturacion_oxigeno ? parseInt(data.lastRegistro.cv.cv_saturacion_oxigeno) : null,
-                            talla: data.lastRegistro.cv.cv_talla ? parseInt(data.lastRegistro.cv.cv_talla) : null,
-                            diuresis: data.lastRegistro.cv.cv_diuresis ? parseInt(data.lastRegistro.cv.cv_diuresis) : null,
+                            ta_sistolica: data.lastRegistro.cv.cv_ta_sistolica ? parseInt(data.lastRegistro.cv.cv_ta_sistolica) : 0,
+                            ta_diastolica: data.lastRegistro.cv.cv_ta_diastolica ? parseInt(data.lastRegistro.cv.cv_ta_diastolica) : 0,
+                            frequencia_respiratoria: data.lastRegistro.cv.cv_frequencia_respiratoria ? parseInt(data.lastRegistro.cv.cv_frequencia_respiratoria) : 0,
+                            pulso: data.lastRegistro.cv.cv_pulso ? parseInt(data.lastRegistro.cv.cv_pulso) : 0,
+                            temperatura: data.lastRegistro.cv.cv_temperatura ? parseFloat(data.lastRegistro.cv.cv_temperatura) : 0,
+                            saturacion_oxigeno: data.lastRegistro.cv.cv_saturacion_oxigeno ? parseInt(data.lastRegistro.cv.cv_saturacion_oxigeno) : 0,
+                            talla: data.lastRegistro.cv.cv_talla ? parseInt(data.lastRegistro.cv.cv_talla) : 0,
+                            diuresis: data.lastRegistro.cv.cv_diuresis ? parseInt(data.lastRegistro.cv.cv_diuresis) : 0,
                             deposiciones: data.lastRegistro.cv.cv_deposiciones || null,
                             stp: data.lastRegistro.cv.cv_stp || null
                         };
