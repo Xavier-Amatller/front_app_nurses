@@ -208,18 +208,28 @@ export class DietsFormComponent implements OnInit {
             next: (response) => {
                 this.response = response;
                 this.pac_id = this.response.data.pac_id;
-
-                this.lastDietText = this.response.data.Die_TText?.descripcion ?? '';
-                this.lastDietType = this.response.data.Tipos_Dietas.map((TDieta: any) => TDieta.descripcion);
-                this.lastDietHelp = this.response.data.Die_Autonomo == 1 ? 'Autònom' : 'Ajuda';
-                this.lastDietProte = this.response.data.Die_Protesi == 1 ? 'Sí' : 'No';
+                if (this.response.message === 'noDiet') {
+                    this.messageService.add({
+                        severity: 'warn',
+                        summary: 'Advertència',
+                        detail: 'Aquest pacient no té dieta assignada'
+                    });
+                } else {
+                    this.lastDietText = this.response.data.Die_TText?.descripcion ?? '';
+                    this.lastDietType = this.response.data.Tipos_Dietas.map((TDieta: any) => TDieta.descripcion);
+                    this.lastDietHelp = this.response.data.Die_Autonomo == 1 ? 'Autònom' : 'Ajuda';
+                    this.lastDietProte = this.response.data.Die_Protesi == 1 ? 'Sí' : 'No';
+                }
             },
-            error: () => {
-                this.messageService.add({
-                    severity: 'warn',
-                    summary: 'Advertència',
-                    detail: 'Aquest pacient no té dieta assignada'
-                });
+            error: (error) => {
+                if (error.error.message === 'noPatient') {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Advertència',
+                        detail: 'Aquesta habitació no té pacient assignat'
+                    });
+                }
+
                 this.lastDietText = '';
                 this.lastDietType = '';
                 this.lastDietHelp = '';

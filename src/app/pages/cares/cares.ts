@@ -51,7 +51,32 @@ import { MultiSelectModule } from 'primeng/multiselect';
                             <p-inputnumber formControlName="cv_saturacion_oxigeno" mode="decimal" [useGrouping]="false" [min]="0" [max]="100" />
                         </div>
                     </div>
-
+                    <!-- Drenajes -->
+                    <div class="card flex flex-col gap-4">
+                        <div class="font-semibold text-xl">Drenajes</div>
+                        <div class="flex flex-col gap-2">
+                            <label for="dre_debito">Débito del Drenaje</label>
+                            <textarea formControlName="dre_debito" rows="3" pTextarea></textarea>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="tdre_id">Tipo de Drenaje</label>
+                            <p-dropdown formControlName="tdre_id" [options]="tiposDrenajes" optionLabel="tdre_desc" optionValue="id" placeholder="Selecciona un tipo de drenaje" [showClear]="true" />
+                        </div>
+                    </div>
+                    <!-- Fecha del Registro -->
+                    <div class="card flex flex-col gap-4">
+                        <div class="font-semibold text-xl">Información del Registro</div>
+                        <!-- <div class="flex flex-col gap-2">
+                            <label for="Reg_Fecha">Fecha y Hora</label>
+                            <p-datepicker formControlName="Reg_Fecha" [showTime]="true" />
+                        </div> -->
+                        <div class="flex flex-col gap-2">
+                            <label for="Reg_Obs">Observaciones</label>
+                            <textarea pTextarea formControlName="Reg_Obs" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
                     <!-- Movilizaciones -->
                     <div class="card flex flex-col gap-4">
                         <div class="font-semibold text-xl">Movilizaciones</div>
@@ -65,46 +90,32 @@ import { MultiSelectModule } from 'primeng/multiselect';
                         </div>
                         <div class="flex flex-col gap-2">
                             <label for="mov_ajuda_descripcion">Descripción de la Ayuda</label>
-                            <textarea formControlName="mov_ajuda_descripcion" rows="3" pInputTextarea></textarea>
+                            <textarea formControlName="mov_ajuda_descripcion" rows="3" pTextarea></textarea>
                         </div>
                         <div class="flex flex-col gap-2">
                             <label for="mov_cambios">Cambios Posturales</label>
-                            <textarea formControlName="mov_cambios" rows="3" pInputTextarea></textarea>
+                            <textarea formControlName="mov_cambios" rows="3" pTextarea></textarea>
                         </div>
                         <div class="flex flex-col gap-2">
                             <label for="mov_decubitos">Decúbitos</label>
-                            <input type="text" formControlName="mov_decubitos" pInputText maxlength="45" />
+                            <input type="text" formControlName="mov_decubitos" pTextarea maxlength="45" />
                         </div>
                     </div>
-                </div>
-                <div class="md:w-1/2">
                     <!-- Diagnóstico -->
                     <div class="card flex flex-col gap-4">
                         <div class="font-semibold text-xl">Diagnóstico</div>
                         <div class="flex flex-col gap-2">
                             <label for="dia_diagnostico">Diagnóstico</label>
-                            <textarea formControlName="dia_diagnostico" rows="3" pInputTextarea></textarea>
+                            <textarea formControlName="dia_diagnostico" rows="3" pTextarea></textarea>
                         </div>
                         <div class="flex flex-col gap-2">
                             <label for="dia_motivo">Motivo del Diagnóstico</label>
-                            <textarea formControlName="dia_motivo" rows="3" pInputTextarea></textarea>
+                            <textarea formControlName="dia_motivo" rows="3" pTextarea></textarea>
                         </div>
                     </div>
 
-                    <!-- Drenajes -->
-                    <div class="card flex flex-col gap-4">
-                        <div class="font-semibold text-xl">Drenajes</div>
-                        <div class="flex flex-col gap-2">
-                            <label for="dre_debito">Débito del Drenaje</label>
-                            <textarea formControlName="dre_debito" rows="3" pInputTextarea></textarea>
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="tdre_id">Tipo de Drenaje</label>
-                            <p-dropdown formControlName="tdre_id" [options]="tiposDrenajes" optionLabel="tdre_desc" optionValue="id" placeholder="Selecciona un tipo de drenaje" [showClear]="true" />
-                        </div>
-                    </div>
                     <!-- Dietas -->
-                    <div class="card flex flex-col gap-4">
+                    <!-- <div class="card flex flex-col gap-4">
                         <div class="font-semibold text-xl">Dietas</div>
                         <div class="flex flex-col gap-2">
                             <label for="die_ttext">Textura de la Dieta</label>
@@ -122,20 +133,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
                             <label for="die_protesi">¿Tiene Prótesis?</label>
                             <p-checkbox formControlName="die_protesi" [binary]="true" inputId="die_protesi" />
                         </div>
-                    </div>
-
-                    <!-- Fecha del Registro -->
-                    <div class="card flex flex-col gap-4">
-                        <div class="font-semibold text-xl">Información del Registro</div>
-                        <div class="flex flex-col gap-2">
-                            <label for="Reg_Fecha">Fecha y Hora</label>
-                            <p-datepicker formControlName="Reg_Fecha" [showTime]="true" />
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="Reg_Obs">Observaciones</label>
-                            <textarea formControlName="Reg_Obs" rows="3"></textarea>
-                        </div>
-                    </div>
+                    </div> -->
 
                     <!-- Botón de Guardar -->
                     <div class="flex justify-end mt-4">
