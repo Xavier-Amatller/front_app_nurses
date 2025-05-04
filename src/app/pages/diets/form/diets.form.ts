@@ -99,8 +99,7 @@ interface SelectOption {
 
                         <div class="flex flex-wrap gap-2">
                             <label for="prosthesis">Portador de pròtesi</label>
-                            <p-checkbox id="prosthesis" [(ngModel)]="hasProsthesis" [binary]="true" [class.ng-invalid]="hasProsthesis === undefined && submitted" [class.ng-dirty]="submitted"></p-checkbox>
-                            <p-message *ngIf="hasProsthesis === undefined && submitted" severity="error" text="Indica si és portador de pròtesi"></p-message>
+                            <p-checkbox id="prosthesis" [(ngModel)]="hasProsthesis" [binary]="true"></p-checkbox>
                         </div>
                     </div>
                 </div>
@@ -235,39 +234,41 @@ export class DietsFormComponent implements OnInit {
 
     newDiet() {
         this.submitted = true;
+        if (this.hasProsthesis === undefined) {
+            this.hasProsthesis = false; // Set default value if undefined
+            if (this.pac_id && this.selectedTexture && this.selectedDietType.length > 0 && this.selectedAutonomy && this.hasProsthesis !== undefined) {
+                this.loading = true;
+                const sanitizedTexture = this.selectedTexture?.trim();
+                const sanitizedDietType = this.selectedDietType.map((type) => type.trim());
+                const sanitizedAutonomy = this.selectedAutonomy == 'AUTO';
+                const sanitizedProsthesis = this.hasProsthesis;
 
-        if (this.pac_id && this.selectedTexture && this.selectedDietType.length > 0 && this.selectedAutonomy && this.hasProsthesis !== undefined) {
-            this.loading = true;
-            const sanitizedTexture = this.selectedTexture?.trim();
-            const sanitizedDietType = this.selectedDietType.map((type) => type.trim());
-            const sanitizedAutonomy = this.selectedAutonomy == 'AUTO';
-            const sanitizedProsthesis = this.hasProsthesis;
-
-            const aux_id = Number(this.AuthService.getAuxiliarId());
-            if (!aux_id) {
-                console.error('Invalid auxId in localStorage');
-                this.loading = false;
-                return;
-            }
-
-            this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis, aux_id).subscribe({
-                next: (response) => {
-                    console.log(response);
-                    this.messageService.add({
-                        severity: 'Success',
-                        summary: 'Success Message',
-                        detail: 'Dieta assignada correctament'
-                    });
-                },
-                error: (error) => {
-                    console.log(error);
+                const aux_id = Number(this.AuthService.getAuxiliarId());
+                if (!aux_id) {
+                    console.error('Invalid auxId in localStorage');
                     this.loading = false;
-                },
-                complete: () => {
-                    this.searchDiet();
-                    this.loading = false;
+                    return;
                 }
-            });
+
+                this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis, aux_id).subscribe({
+                    next: (response) => {
+                        console.log(response);
+                        this.messageService.add({
+                            severity: 'Success',
+                            summary: 'Success Message',
+                            detail: 'Dieta assignada correctament'
+                        });
+                    },
+                    error: (error) => {
+                        console.log(error);
+                        this.loading = false;
+                    },
+                    complete: () => {
+                        this.searchDiet();
+                        this.loading = false;
+                    }
+                });
+            }
         }
     }
 }
