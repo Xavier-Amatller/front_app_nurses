@@ -217,7 +217,7 @@ export class DietsFormComponent implements OnInit {
             error: () => {
                 this.messageService.add({
                     severity: 'warn',
-                    summary: 'Warn Message',
+                    summary: 'Advertència',
                     detail: 'Aquest pacient no té dieta assignada'
                 });
                 this.lastDietText = '';
@@ -255,7 +255,7 @@ export class DietsFormComponent implements OnInit {
                     console.log(response);
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Success Message',
+                        summary: 'Dieta assignada',
                         detail: 'Dieta assignada correctament'
                     });
                 },
