@@ -8,7 +8,6 @@ import { appRoutes } from './app.routes';
 import { AuthGuard } from './app/pages/auth/guards/auth.guard';
 import { AuthService } from './app/service/auth.service';
 import { DietsService } from './app/service/diets.service';
-
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(appRoutes, withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
