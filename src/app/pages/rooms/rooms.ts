@@ -52,7 +52,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
                                 <div class="p-3 border border-[var(--p-fieldset-border-color)]  rounded-[var(--content-border-radius)] w-2/4 truncate"><b>Nom</b> | {{ room.paciente.pac_nombre }} {{ room.paciente.pac_apellidos }}</div>
                             </div>
                             <div *ngIf="room.paciente === null" class="flex gap-5 max-h-[40px] min-h-[40px]">
-                                <p-button [disabled]="true" iconPos="right" icon="pi pi-arrow-right" label="Entrar l'habitació" size="large" class="w-1/4 flex justify-between" (click)="openRoom(room.hab_id)" />
+                                <p-button [disabled]="true" iconPos="right" icon="pi pi-arrow-right" label="Entrar l'habitació" size="large" class="w-1/4 flex justify-between" />
 
                                 <div class="p-3 border  border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-1/4 truncate"><b>Edat</b> |</div>
                                 <div class="p-3 border  border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-2/4 truncate"><b>Nom</b> |</div>
