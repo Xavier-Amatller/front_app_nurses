@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegistroService } from '../../service/registro.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -236,60 +236,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
               />
             </div>
           </div>
-          <!-- Dietas -->
-          <div class="card flex flex-col gap-4">
-            <div class="font-semibold text-xl">Dietas</div>
-            <div class="flex flex-col gap-2">
-              <label for="die_ttext">Textura de la Dieta</label>
-              <p-dropdown
-                formControlName="die_ttext"
-                [options]="tiposTexturas"
-                optionLabel="ttex_desc"
-                optionValue="id"
-                placeholder="Selecciona una textura"
-                [showClear]="true"
-                [ngClass]="{
-                  'border-red-500': registroForm.get('die_ttext')?.invalid && registroForm.get('die_ttext')?.touched
-                }"
-              />
-            </div>
-            <div class="flex flex-col gap-2">
-              <label for="tipos_dietas">Tipos de Dieta</label>
-              <p-multiSelect
-                formControlName="tipos_dietas"
-                [options]="tiposDietas"
-                optionLabel="tdie_desc"
-                optionValue="id"
-                placeholder="Selecciona los tipos de dieta"
-                [showClear]="true"
-                [ngClass]="{
-                  'border-red-500': registroForm.get('tipos_dietas')?.invalid && registroForm.get('tipos_dietas')?.touched
-                }"
-              />
-            </div>
-            <div class="flex flex-col gap-2">
-              <label for="die_autonomo">¿Es Autónomo?</label>
-              <p-checkbox
-                formControlName="die_autonomo"
-                [binary]="true"
-                inputId="die_autonomo"
-                [ngClass]="{
-                  'border-red-500': registroForm.get('die_autonomo')?.invalid && registroForm.get('die_autonomo')?.touched
-                }"
-              />
-            </div>
-            <div class="flex flex-col gap-2">
-              <label for="die_protesi">¿Tiene Prótesis?</label>
-              <p-checkbox
-                formControlName="die_protesi"
-                [binary]="true"
-                inputId="die_protesi"
-                [ngClass]="{
-                  'border-red-500': registroForm.get('die_protesi')?.invalid && registroForm.get('die_protesi')?.touched
-                }"
-              />
-            </div>
-          </div>
 
           <!-- Fecha del Registro -->
           <div class="card flex flex-col gap-4">
@@ -319,6 +265,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 export class Cares implements OnInit {
   registroForm: FormGroup;
   auxiliarId: string | null = null;
+  pacienteId: string | null = null;
   tiposDrenajes: TipoDrenaje[] = [];
   tiposTexturas: TipoTextura[] = [];
   tiposDietas: TipoDieta[] = [];
@@ -327,7 +274,9 @@ export class Cares implements OnInit {
     private fb: FormBuilder,
     private registroService: RegistroService,
     private router: Router,
-    private readonly AuthService: AuthService
+    private readonly AuthService: AuthService,
+    private readonly route: ActivatedRoute,
+
   ) {
     this.registroForm = this.fb.group({
       cv_ta_sistolica: [null, Validators.required],
@@ -345,10 +294,6 @@ export class Cares implements OnInit {
       dia_motivo: ['', Validators.required],
       dre_debito: ['', Validators.required],
       tdre_id: [null, Validators.required],
-      die_ttext: [null, Validators.required],
-      tipos_dietas: [[], [Validators.required, Validators.minLength(1)]], // Al menos un tipo de dieta
-      die_autonomo: [null, Validators.required], // Checkbox, solo necesita un valor (true o false)
-      die_protesi: [null, Validators.required], // Checkbox, solo necesita un valor (true o false)
       Reg_Fecha: [new Date(), Validators.required],
       Reg_Obs: ['', Validators.required]
     });
@@ -357,10 +302,17 @@ export class Cares implements OnInit {
   ngOnInit(): void {
     this.auxiliarId = this.AuthService.getAuxiliarId();
     if (!this.auxiliarId) {
-      console.error('No se encontró el ID del auxiliar. Redirigiendo al login...');
       this.router.navigate(['/login']);
       return;
     }
+
+    this.pacienteId = this.route.snapshot.paramMap.get('id');
+
+    if (!this.pacienteId) {
+      this.router.navigate(['/habitacions']);
+      return;
+    }
+
     // Cargar tipos de drenajes
     this.registroService.getTiposDrenajes().subscribe({
       next: (tipos: TipoDrenaje[]) => {
@@ -396,7 +348,7 @@ export class Cares implements OnInit {
     if (this.registroForm.valid) {
       const registroData = {
         aux_id: this.auxiliarId,
-        pac_id: '1',
+        pac_id: this.pacienteId,
         reg_obs: this.registroForm.value.Reg_Obs,
         constantes_vitales: {
           cv_ta_sistolica: this.registroForm.value.cv_ta_sistolica,
@@ -421,15 +373,7 @@ export class Cares implements OnInit {
           dre_debito: this.registroForm.value.dre_debito,
           tdre_id: this.registroForm.value.tdre_id
         },
-        dieta: {
-          die_ttext: this.registroForm.value.die_ttext,
-          tipos_dietas: this.registroForm.value.tipos_dietas,
-          die_autonomo: this.registroForm.value.die_autonomo,
-          die_protesi: this.registroForm.value.die_protesi
-        }
       };
-
-      console.log(registroData);
 
       this.registroService.createRegistro(registroData).subscribe({
         next: (response: RegistroResponse) => {
