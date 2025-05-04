@@ -21,26 +21,26 @@ import { AuthService } from '../../service/auth.service';
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                     <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                         <div class="text-center mb-8">
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Tcai Alumnos</div>
-                            <span class="text-muted-color font-medium">Inicia sesion para continuar</span>
+                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Tcai Alumnes</div>
+                            <span class="text-muted-color font-medium">Inicia sessió per continuar</span>
                         </div>
 
                         <div>
                             <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Nº Auxiliar</label>
                             <input pInputText id="email1" type="text" placeholder="Nº Auxiliar" class="w-full md:w-[30rem] mb-8" [(ngModel)]="aux_number" />
 
-                            <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contraseña</label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Contraseña" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                            <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contrasenya</label>
+                            <p-password id="password1" [(ngModel)]="password" placeholder="Contrasenya" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
 
                             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                                <div class="flex items-center">
+                                <!-- <div class="flex items-center">
                                     <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
-                                    <label for="rememberme1">Recuerdame</label>
-                                </div>
-                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">¿Has olvidado tu contraseña?</span>
+                                    <label for="rememberme1">Recorda'm</label>
+                                </div> -->
+                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Has oblidat la teva contrasenya?</span>
                             </div>
-                            <div *ngIf="this.isLoginError" class="text-red-500 text-center mb-4">Credenciales incorrectas. Intente de nuevo.</div>
-                            <p-button [loading]="loading" label="Iniciar sesion" styleClass="w-full" (onClick)="login()"></p-button>
+                            <div *ngIf="this.isLoginError" class="text-red-500 text-center mb-4">Credencials incorrectes. Torna-ho a intentar.</div>
+                            <p-button [loading]="loading" label="Inicia sessió" styleClass="w-full" (onClick)="login()"></p-button>
                         </div>
                     </div>
                 </div>

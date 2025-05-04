@@ -203,7 +203,12 @@ export class DietsFormComponent implements OnInit {
         }
 
         this.loading = true;
-
+        // Reset the last diet values
+        this.lastDietText = '';
+        this.lastDietType = '';
+        this.lastDietHelp = '';
+        this.lastDietProte = '';
+        
         this.dietsService.getDiet(this.id).subscribe({
             next: (response) => {
                 this.response = response;
@@ -227,6 +232,13 @@ export class DietsFormComponent implements OnInit {
                         severity: 'error',
                         summary: 'Advertència',
                         detail: 'Aquesta habitació no té pacient assignat'
+                    });
+                }
+                if (error.error.message === 'roomNotFound') {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Aquesta habitació no existeix'
                     });
                 }
 
