@@ -236,39 +236,38 @@ export class DietsFormComponent implements OnInit {
         this.submitted = true;
         if (this.hasProsthesis === undefined) {
             this.hasProsthesis = false; // Set default value if undefined
-            if (this.pac_id && this.selectedTexture && this.selectedDietType.length > 0 && this.selectedAutonomy && this.hasProsthesis !== undefined) {
-                this.loading = true;
-                const sanitizedTexture = this.selectedTexture?.trim();
-                const sanitizedDietType = this.selectedDietType.map((type) => type.trim());
-                const sanitizedAutonomy = this.selectedAutonomy == 'AUTO';
-                const sanitizedProsthesis = this.hasProsthesis;
+        }
+        if (this.pac_id && this.selectedTexture && this.selectedDietType.length > 0 && this.selectedAutonomy && this.hasProsthesis !== undefined) {
+            this.loading = true;
+            const sanitizedTexture = this.selectedTexture?.trim();
+            const sanitizedDietType = this.selectedDietType.map((type) => type.trim());
+            const sanitizedAutonomy = this.selectedAutonomy == 'AUTO';
+            const sanitizedProsthesis = this.hasProsthesis;
 
-                const aux_id = Number(this.AuthService.getAuxiliarId());
-                if (!aux_id) {
-                    console.error('Invalid auxId in localStorage');
-                    this.loading = false;
-                    return;
-                }
-
-                this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis, aux_id).subscribe({
-                    next: (response) => {
-                        console.log(response);
-                        this.messageService.add({
-                            severity: 'Success',
-                            summary: 'Success Message',
-                            detail: 'Dieta assignada correctament'
-                        });
-                    },
-                    error: (error) => {
-                        console.log(error);
-                        this.loading = false;
-                    },
-                    complete: () => {
-                        this.searchDiet();
-                        this.loading = false;
-                    }
-                });
+            const aux_id = Number(this.AuthService.getAuxiliarId());
+            if (!aux_id) {
+                console.error('Invalid auxId in localStorage');
+                this.loading = false;
+                return;
             }
+            this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis, aux_id).subscribe({
+                next: (response) => {
+                    console.log(response);
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success Message',
+                        detail: 'Dieta assignada correctament'
+                    });
+                },
+                error: (error) => {
+                    console.log(error);
+                    this.loading = false;
+                },
+                complete: () => {
+                    this.searchDiet();
+                    this.loading = false;
+                }
+            });
         }
     }
 }

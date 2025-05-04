@@ -70,7 +70,7 @@ import { RegistroService } from '../../service/registro.service';
                                 <div class="card flex flex-col gap-4">
                                     <div class="flex flex-col gap-2">
                                         <label for="dre_debito">Débito del Drenaje</label>
-                                        <input [(ngModel)]="drenajes.dre_debito"  type="text" pInputText [disabled]="true" class="w-full h-max" />
+                                        <input [(ngModel)]="drenajes.dre_debito" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                     </div>
                                     <div class="flex flex-col gap-2">
                                         <label for="tdre_id">Tipo de Drenaje</label>
@@ -87,7 +87,7 @@ import { RegistroService } from '../../service/registro.service';
                                         </div>
                                         <div class="flex gap-2">
                                             <label for="mov_ajuda_deambulacion">Ayuda para Deambulación</label>
-                                            <p-checkbox  [(ngModel)]="this.movilizaciones.mov_ajuda_deambulacion" [binary]="true" [disabled]="true" inputId="mov_ajuda_deambulacion" />
+                                            <p-checkbox [(ngModel)]="this.movilizaciones.mov_ajuda_deambulacion" [binary]="true" [disabled]="true" inputId="mov_ajuda_deambulacion" />
                                         </div>
                                     </div>
 
@@ -130,9 +130,9 @@ import { RegistroService } from '../../service/registro.service';
                             </div>
                         </div>
                     </div>
-                <!-- </div>
+                    <!-- </div>
                 <div class="card"> -->
-                    <hr>
+                    <hr />
                     <div class="font-semibold text-xl mb-4">Informació del pacient</div>
                     <label for="pac_motiu_ingrees" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Motiu d'ingrés:</label>
                     <div class="col-span-12 md:col-span-9 md:mb-4">
@@ -306,56 +306,38 @@ export class insideRooms implements OnInit {
 
                 this.regs.getLastRegistro(this.room[0].paciente.pac_id).subscribe((data: any) => {
                     console.log(data);
-                    try {
-                        this.constantes = {
-                            ta_sistolica: data.lastRegistro.cv.cv_ta_sistolica ? parseInt(data.lastRegistro.cv.cv_ta_sistolica) : 0,
-                            ta_diastolica: data.lastRegistro.cv.cv_ta_diastolica ? parseInt(data.lastRegistro.cv.cv_ta_diastolica) : 0,
-                            frequencia_respiratoria: data.lastRegistro.cv.cv_frequencia_respiratoria ? parseInt(data.lastRegistro.cv.cv_frequencia_respiratoria) : 0,
-                            pulso: data.lastRegistro.cv.cv_pulso ? parseInt(data.lastRegistro.cv.cv_pulso) : 0,
-                            temperatura: data.lastRegistro.cv.cv_temperatura ? parseFloat(data.lastRegistro.cv.cv_temperatura) : 0,
-                            saturacion_oxigeno: data.lastRegistro.cv.cv_saturacion_oxigeno ? parseInt(data.lastRegistro.cv.cv_saturacion_oxigeno) : 0,
-                            talla: data.lastRegistro.cv.cv_talla ? parseInt(data.lastRegistro.cv.cv_talla) : 0,
-                            diuresis: data.lastRegistro.cv.cv_diuresis ? parseInt(data.lastRegistro.cv.cv_diuresis) : 0,
-                            deposiciones: data.lastRegistro.cv.cv_deposiciones || null,
-                            stp: data.lastRegistro.cv.cv_stp || null
-                        };
-                    } catch (error) {
-                        console.log('No hay registros: constantes vitales');
-                    }
 
-                    try {
-                        this.movilizaciones = {
-                            mov_ajuda_deambulacion: data.lastRegistro.mov.mov_ajuda_deambulacion ? data.lastRegistro.mov.mov_ajuda_deambulacion : false,
-                            mov_ajuda_descripcion: data.lastRegistro.mov.mov_ajuda_descripcion ?? null,
-                            mov_cambios: data.lastRegistro.mov.mov_cambios ?? null,
-                            mov_decubitos: data.lastRegistro.mov.mov_decubitos ?? null,
-                            mov_sedestacion: data.lastRegistro.mov.mov_sedestacion ? data.lastRegistro.mov.mov_sedestacion : false
-                        };
-                    } catch (error) {
-                        console.log('No hay registros: movilizaciones');
-                    }
+                    this.constantes = {
+                        ta_sistolica: data.lastRegistro.cv?.cv_ta_sistolica ? parseInt(data.lastRegistro.cv.cv_ta_sistolica) : 0,
+                        ta_diastolica: data.lastRegistro.cv?.cv_ta_diastolica ? parseInt(data.lastRegistro.cv.cv_ta_diastolica) : 0,
+                        frequencia_respiratoria: data.lastRegistro.cv?.cv_frequencia_respiratoria ? parseInt(data.lastRegistro.cv.cv_frequencia_respiratoria) : 0,
+                        pulso: data.lastRegistro.cv?.cv_pulso ? parseInt(data.lastRegistro.cv.cv_pulso) : 0,
+                        temperatura: data.lastRegistro.cv?.cv_temperatura ? parseFloat(data.lastRegistro.cv.cv_temperatura) : 0,
+                        saturacion_oxigeno: data.lastRegistro.cv?.cv_saturacion_oxigeno ? parseInt(data.lastRegistro.cv.cv_saturacion_oxigeno) : 0,
+                        talla: data.lastRegistro.cv?.cv_talla ? parseInt(data.lastRegistro.cv.cv_talla) : 0,
+                        diuresis: data.lastRegistro.cv?.cv_diuresis ? parseInt(data.lastRegistro.cv.cv_diuresis) : 0,
+                        deposiciones: data.lastRegistro.cv?.cv_deposiciones ?? '',
+                        stp: data.lastRegistro.cv?.cv_stp ?? ''
+                    };
 
-                    try {
-                        this.drenajes = {
-                            dre_debito: data.lastRegistro.dre.dre_debito ?? null,
-                            tdre_desc: data.lastRegistro.dre.tdre_desc ?? null
-                        };
-                    } catch (error) {
-                        console.log('No hay registros: drenajes');
-                    }
+                    this.movilizaciones = {
+                        mov_ajuda_deambulacion: data.lastRegistro.mov?.mov_ajuda_deambulacion ?? false,
+                        mov_ajuda_descripcion: data.lastRegistro.mov?.mov_ajuda_descripcion ?? '',
+                        mov_cambios: data.lastRegistro.mov?.mov_cambios ?? '',
+                        mov_decubitos: data.lastRegistro.mov?.mov_decubitos ?? '',
+                        mov_sedestacion: data.lastRegistro.mov?.mov_sedestacion ?? false
+                    };
 
-                    try {
-                        this.diagnotico = {
-                            dia_diagnostico: data.lastRegistro.dia.dia_diagnostico ?? null,
-                            dia_motivo: data.lastRegistro.dia.dia_motivo ?? null
-                        };
-                    } catch (error) {
-                        console.log('No hay registros: diagnostico');
-                    }
+                    this.drenajes = {
+                        dre_debito: data.lastRegistro.dre?.dre_debito ?? '',
+                        tdre_desc: data.lastRegistro.dre?.tdre_desc ?? ''
+                    };
+
+                    this.diagnotico = {
+                        dia_diagnostico: data.lastRegistro.dia?.dia_diagnostico ?? '',
+                        dia_motivo: data.lastRegistro.dia?.dia_motivo ?? ''
+                    };
                 });
-
-                
-
             });
         }
         this.initCharts();
