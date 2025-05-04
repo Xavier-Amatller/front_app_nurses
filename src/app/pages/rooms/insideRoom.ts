@@ -43,27 +43,27 @@ import { RegistroService } from '../../service/registro.service';
                             <p-tabpanel value="0" class="flex flex-wrap gap-12 mt-4">
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Puls</div>
-                                    <p-knob [(ngModel)]="constantes.pulso" [readonly]="true" [step]="10" [min]="30" [max]="220" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.pulso" [readonly]="true" [step]="10" [min]="0" [max]="220" valueTemplate="{value}" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Temperatura</div>
-                                    <p-knob [(ngModel)]="constantes.temperatura" [readonly]="true" [step]="10" [min]="30" [max]="42" valueTemplate="{value}°C" />
+                                    <p-knob [(ngModel)]="constantes.temperatura" [readonly]="true" [step]="10" [min]="0" [max]="42" valueTemplate="{value}°C" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Saturació d'oxigen</div>
-                                    <p-knob [(ngModel)]="constantes.saturacion_oxigeno" [readonly]="true" [step]="10" [min]="80" [max]="100" valueTemplate="{value}%" />
+                                    <p-knob [(ngModel)]="constantes.saturacion_oxigeno" [readonly]="true" [step]="10" [min]="0" [max]="100" valueTemplate="{value}%" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">Frequencia respiratoria</div>
-                                    <p-knob [(ngModel)]="constantes.frequencia_respiratoria" [readonly]="true" [step]="10" [min]="5" [max]="80" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.frequencia_respiratoria" [readonly]="true" [step]="10" [min]="0" [max]="80" valueTemplate="{value}" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">TA sistólica</div>
-                                    <p-knob [(ngModel)]="constantes.ta_sistolica" [readonly]="true" [step]="10" [min]="60" [max]="180" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.ta_sistolica" [readonly]="true" [step]="10" [min]="60" [max]="0" valueTemplate="{value}" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">TA diastólica</div>
-                                    <p-knob [(ngModel)]="constantes.ta_diastolica" [readonly]="true" [step]="10" [min]="40" [max]="120" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.ta_diastolica" [readonly]="true" [step]="10" [min]="40" [max]="0" valueTemplate="{value}" />
                                 </div>
                             </p-tabpanel>
                             <p-tabpanel value="1">
