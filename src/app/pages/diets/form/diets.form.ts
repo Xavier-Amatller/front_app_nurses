@@ -36,6 +36,8 @@ interface SelectOption {
                         </div>
                     </div>
                     <div class="card flex flex-col gap-4">
+                        <div class="font-semibold text-xl">Nova dieta</div>
+
                         <div class="flex flex-col gap-2">
                             <label for="textures">Textures</label>
                             <p-select id="textures" [(ngModel)]="selectedTexture" [options]="dietTextures" [loading]="loading" optionLabel="name" optionValue="code" placeholder="Selecciona una textura" class="w-full"> </p-select>
@@ -106,7 +108,11 @@ interface SelectOption {
     `
 })
 export class DietsFormComponent implements OnInit {
-    constructor(private readonly dietsService: DietsService,private readonly AuthService: AuthService,private readonly route: ActivatedRoute) {}
+    constructor(
+        private readonly dietsService: DietsService,
+        private readonly AuthService: AuthService,
+        private readonly route: ActivatedRoute
+    ) {}
 
     //Info New Data
     selectedTexture: string | null = null;
@@ -181,7 +187,6 @@ export class DietsFormComponent implements OnInit {
             error: (error) => {
                 console.error(error);
                 this.loading = false;
-
             },
             complete: () => {
                 this.loading = false;
@@ -199,13 +204,13 @@ export class DietsFormComponent implements OnInit {
 
             const aux_id = Number(this.AuthService.getAuxiliarId());
             console.log('aux_id', aux_id);
-            
+
             if (!aux_id) {
-                console.error("Invalid auxId in localStorage");
+                console.error('Invalid auxId in localStorage');
                 this.loading = false;
                 return;
             }
-            console.log('Diet created successfully!')
+            console.log('Diet created successfully!');
 
             this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis, aux_id).subscribe({
                 next: (response) => {
@@ -220,8 +225,7 @@ export class DietsFormComponent implements OnInit {
                     this.loading = false;
                 }
             });
-        }
-        else {
+        } else {
             console.error('Missing required fields');
             console.log('pac_id:', this.pac_id);
             console.log('selectedTexture:', this.selectedTexture);
