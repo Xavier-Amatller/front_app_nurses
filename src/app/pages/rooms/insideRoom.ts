@@ -183,8 +183,8 @@ export class insideRooms implements OnInit {
     /* Room data */
     room_id: string | null = null;
     room: any[] = [];
-    /* Patient data */
 
+    /* Patient data */
     /* Basicamente es un objeto para usarlo mejor en el front  */
     paciente: {
         pac_alergias: string | null;
@@ -201,20 +201,20 @@ export class insideRooms implements OnInit {
         pac_num_historial: number | null;
         pac_telefono_cuidador: string | null;
     } = {
-        pac_alergias: null,
-        pac_antecedentes: null,
-        pac_apellidos: null,
-        pac_direccion_completa: null,
-        pac_edad: null,
-        pac_fecha_ingreso: null,
-        pac_fecha_nacimiento: null,
-        pac_id: null,
-        pac_lengua_materna: null,
-        pac_nombre: null,
-        pac_nombre_cuidador: null,
-        pac_num_historial: null,
-        pac_telefono_cuidador: null
-    };
+            pac_alergias: null,
+            pac_antecedentes: null,
+            pac_apellidos: null,
+            pac_direccion_completa: null,
+            pac_edad: null,
+            pac_fecha_ingreso: null,
+            pac_fecha_nacimiento: null,
+            pac_id: null,
+            pac_lengua_materna: null,
+            pac_nombre: null,
+            pac_nombre_cuidador: null,
+            pac_num_historial: null,
+            pac_telefono_cuidador: null
+        };
     constantes: {
         ta_sistolica: number | null;
         ta_diastolica: number | null;
@@ -227,17 +227,17 @@ export class insideRooms implements OnInit {
         deposiciones: string | null;
         stp: string | null;
     } = {
-        ta_sistolica: null,
-        ta_diastolica: null,
-        frequencia_respiratoria: null,
-        pulso: null,
-        temperatura: null,
-        saturacion_oxigeno: null,
-        talla: null,
-        diuresis: null,
-        deposiciones: null,
-        stp: null
-    };
+            ta_sistolica: null,
+            ta_diastolica: null,
+            frequencia_respiratoria: null,
+            pulso: null,
+            temperatura: null,
+            saturacion_oxigeno: null,
+            talla: null,
+            diuresis: null,
+            deposiciones: null,
+            stp: null
+        };
     movilizaciones: {
         mov_ajuda_deambulacion: boolean | null;
         mov_ajuda_descripcion: string | null;
@@ -245,27 +245,27 @@ export class insideRooms implements OnInit {
         mov_decubitos: string | null;
         mov_sedestacion: boolean | null;
     } = {
-        mov_ajuda_deambulacion: null,
-        mov_ajuda_descripcion: null,
-        mov_cambios: null,
-        mov_decubitos: null,
-        mov_sedestacion: null
-    };
+            mov_ajuda_deambulacion: null,
+            mov_ajuda_descripcion: null,
+            mov_cambios: null,
+            mov_decubitos: null,
+            mov_sedestacion: null
+        };
 
     drenajes: {
         dre_debito: string | null;
         tdre_desc: string | null;
     } = {
-        dre_debito: null,
-        tdre_desc: null
-    };
+            dre_debito: null,
+            tdre_desc: null
+        };
     diagnotico: {
         dia_diagnostico: string | null;
         dia_motivo: string | null;
     } = {
-        dia_diagnostico: null,
-        dia_motivo: null
-    };
+            dia_diagnostico: null,
+            dia_motivo: null
+        };
     /* Char data */
     lineData: any;
     lineOptions: any;
@@ -285,61 +285,85 @@ export class insideRooms implements OnInit {
 
     ngOnInit(): void {
         this.room_id = this.route.snapshot.paramMap.get('id');
-        if (this.room_id) {
-            this.rs.getRoom(this.room_id).subscribe((data: any) => {
-                this.room = data;
-                this.paciente = {
-                    pac_alergias: this.room[0].paciente.pac_alergias,
-                    pac_antecedentes: this.room[0].paciente.pac_antecedentes,
-                    pac_apellidos: this.room[0].paciente.pac_apellidos,
-                    pac_direccion_completa: this.room[0].paciente.pac_direccion_completa,
-                    pac_edad: this.room[0].paciente.pac_edad,
-                    pac_fecha_ingreso: this.room[0].paciente.pac_fecha_ingreso,
-                    pac_fecha_nacimiento: this.room[0].paciente.pac_fecha_nacimiento,
-                    pac_id: this.room[0].paciente.pac_id,
-                    pac_lengua_materna: this.room[0].paciente.pac_lengua_materna,
-                    pac_nombre: this.room[0].paciente.pac_nombre,
-                    pac_nombre_cuidador: this.room[0].paciente.pac_nombre_cuidador,
-                    pac_num_historial: this.room[0].paciente.pac_num_historial,
-                    pac_telefono_cuidador: this.room[0].paciente.pac_telefono_cuidador
-                };
 
-                this.regs.getLastRegistro(this.room[0].paciente.pac_id).subscribe((data: any) => {
-                    console.log(data);
-
-                    this.constantes = {
-                        ta_sistolica: data.lastRegistro.cv?.cv_ta_sistolica ? parseInt(data.lastRegistro.cv.cv_ta_sistolica) : 0,
-                        ta_diastolica: data.lastRegistro.cv?.cv_ta_diastolica ? parseInt(data.lastRegistro.cv.cv_ta_diastolica) : 0,
-                        frequencia_respiratoria: data.lastRegistro.cv?.cv_frequencia_respiratoria ? parseInt(data.lastRegistro.cv.cv_frequencia_respiratoria) : 0,
-                        pulso: data.lastRegistro.cv?.cv_pulso ? parseInt(data.lastRegistro.cv.cv_pulso) : 0,
-                        temperatura: data.lastRegistro.cv?.cv_temperatura ? parseFloat(data.lastRegistro.cv.cv_temperatura) : 0,
-                        saturacion_oxigeno: data.lastRegistro.cv?.cv_saturacion_oxigeno ? parseInt(data.lastRegistro.cv.cv_saturacion_oxigeno) : 0,
-                        talla: data.lastRegistro.cv?.cv_talla ? parseInt(data.lastRegistro.cv.cv_talla) : 0,
-                        diuresis: data.lastRegistro.cv?.cv_diuresis ? parseInt(data.lastRegistro.cv.cv_diuresis) : 0,
-                        deposiciones: data.lastRegistro.cv?.cv_deposiciones ?? '',
-                        stp: data.lastRegistro.cv?.cv_stp ?? ''
-                    };
-
-                    this.movilizaciones = {
-                        mov_ajuda_deambulacion: data.lastRegistro.mov?.mov_ajuda_deambulacion ?? false,
-                        mov_ajuda_descripcion: data.lastRegistro.mov?.mov_ajuda_descripcion ?? '',
-                        mov_cambios: data.lastRegistro.mov?.mov_cambios ?? '',
-                        mov_decubitos: data.lastRegistro.mov?.mov_decubitos ?? '',
-                        mov_sedestacion: data.lastRegistro.mov?.mov_sedestacion ?? false
-                    };
-
-                    this.drenajes = {
-                        dre_debito: data.lastRegistro.dre?.dre_debito ?? '',
-                        tdre_desc: data.lastRegistro.dre?.tdre_desc ?? ''
-                    };
-
-                    this.diagnotico = {
-                        dia_diagnostico: data.lastRegistro.dia?.dia_diagnostico ?? '',
-                        dia_motivo: data.lastRegistro.dia?.dia_motivo ?? ''
-                    };
-                });
-            });
+        if (!this.room_id) {
+            console.error('No se encontró el ID de la room. Redirigiendo a rooms...');
+            this.router.navigate(['/habitacions']);
+            return;
         }
+
+        this.rs.getRoom(this.room_id).subscribe((data: any) => {
+            this.room = data;
+            this.paciente = {
+                pac_alergias: this.room[0].paciente.pac_alergias,
+                pac_antecedentes: this.room[0].paciente.pac_antecedentes,
+                pac_apellidos: this.room[0].paciente.pac_apellidos,
+                pac_direccion_completa: this.room[0].paciente.pac_direccion_completa,
+                pac_edad: this.room[0].paciente.pac_edad,
+                pac_fecha_ingreso: this.room[0].paciente.pac_fecha_ingreso,
+                pac_fecha_nacimiento: this.room[0].paciente.pac_fecha_nacimiento,
+                pac_id: this.room[0].paciente.pac_id,
+                pac_lengua_materna: this.room[0].paciente.pac_lengua_materna,
+                pac_nombre: this.room[0].paciente.pac_nombre,
+                pac_nombre_cuidador: this.room[0].paciente.pac_nombre_cuidador,
+                pac_num_historial: this.room[0].paciente.pac_num_historial,
+                pac_telefono_cuidador: this.room[0].paciente.pac_telefono_cuidador
+            };
+
+            this.regs.getLastRegistro(this.room[0].paciente.pac_id).subscribe((data: any) => {
+                console.log(data);
+                try {
+                    this.constantes = {
+                        ta_sistolica: data.lastRegistro.cv.cv_ta_sistolica ? parseInt(data.lastRegistro.cv.cv_ta_sistolica) : null,
+                        ta_diastolica: data.lastRegistro.cv.cv_ta_diastolica ? parseInt(data.lastRegistro.cv.cv_ta_diastolica) : null,
+                        frequencia_respiratoria: data.lastRegistro.cv.cv_frequencia_respiratoria ? parseInt(data.lastRegistro.cv.cv_frequencia_respiratoria) : null,
+                        pulso: data.lastRegistro.cv.cv_pulso ? parseInt(data.lastRegistro.cv.cv_pulso) : null,
+                        temperatura: data.lastRegistro.cv.cv_temperatura ? parseFloat(data.lastRegistro.cv.cv_temperatura) : null,
+                        saturacion_oxigeno: data.lastRegistro.cv.cv_saturacion_oxigeno ? parseInt(data.lastRegistro.cv.cv_saturacion_oxigeno) : null,
+                        talla: data.lastRegistro.cv.cv_talla ? parseInt(data.lastRegistro.cv.cv_talla) : null,
+                        diuresis: data.lastRegistro.cv.cv_diuresis ? parseInt(data.lastRegistro.cv.cv_diuresis) : null,
+                        deposiciones: data.lastRegistro.cv.cv_deposiciones || null,
+                        stp: data.lastRegistro.cv.cv_stp || null
+                    };
+                } catch (error) {
+                    console.log('No hay registros: constantes vitales');
+                }
+
+                try {
+                    this.movilizaciones = {
+                        mov_ajuda_deambulacion: data.lastRegistro.mov.mov_ajuda_deambulacion ? data.lastRegistro.mov.mov_ajuda_deambulacion : false,
+                        mov_ajuda_descripcion: data.lastRegistro.mov.mov_ajuda_descripcion ?? null,
+                        mov_cambios: data.lastRegistro.mov.mov_cambios ?? null,
+                        mov_decubitos: data.lastRegistro.mov.mov_decubitos ?? null,
+                        mov_sedestacion: data.lastRegistro.mov.mov_sedestacion ? data.lastRegistro.mov.mov_sedestacion : false
+                    };
+                } catch (error) {
+                    console.log('No hay registros: movilizaciones');
+                }
+
+                try {
+                    this.drenajes = {
+                        dre_debito: data.lastRegistro.dre.dre_debito ?? null,
+                        tdre_desc: data.lastRegistro.dre.tdre_desc ?? null
+                    };
+                } catch (error) {
+                    console.log('No hay registros: drenajes');
+                }
+
+                try {
+                    this.diagnotico = {
+                        dia_diagnostico: data.lastRegistro.dia.dia_diagnostico ?? null,
+                        dia_motivo: data.lastRegistro.dia.dia_motivo ?? null
+                    };
+                } catch (error) {
+                    console.log('No hay registros: diagnostico');
+                }
+            });
+
+
+
+        });
+
         this.initCharts();
     }
 

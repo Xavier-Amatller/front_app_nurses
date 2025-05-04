@@ -13,12 +13,12 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [AuthGuard],
         children: [
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', component: Dashboard },
             { path: 'habitacions', loadChildren: () => import('./app/pages/rooms/rooms.routes') },
             { path: 'dietes', component: Diets },
-            { path: 'dietes/:id', component: Diets },
-            { path: 'cares/:id', component: Cares },
-            { path: 'extras', loadChildren: () => import('./app/pages/pages.routes') }
+            // { path: 'dietes/:id', component: Diets },
+            // { path: 'extras', loadChildren: () => import('./app/pages/pages.routes') }
         ]
     },
     { path: 'login', component: Login },
