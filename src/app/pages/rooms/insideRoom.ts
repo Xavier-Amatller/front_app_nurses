@@ -59,11 +59,11 @@ import { RegistroService } from '../../service/registro.service';
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">TA sistólica</div>
-                                    <p-knob [(ngModel)]="constantes.ta_sistolica" [readonly]="true" [step]="10" [min]="60" [max]="0" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.ta_sistolica" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
                                 </div>
                                 <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                     <div class="font-semibold text-xl text-center">TA diastólica</div>
-                                    <p-knob [(ngModel)]="constantes.ta_diastolica" [readonly]="true" [step]="10" [min]="40" [max]="0" valueTemplate="{value}" />
+                                    <p-knob [(ngModel)]="constantes.ta_diastolica" [readonly]="true" [step]="10" [min]="0" [max]="120" valueTemplate="{value}" />
                                 </div>
                             </p-tabpanel>
                             <p-tabpanel value="1">
