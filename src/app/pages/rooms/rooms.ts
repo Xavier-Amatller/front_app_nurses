@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { FieldsetModule } from 'primeng/fieldset';
+import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SkeletonModule } from 'primeng/skeleton';
 import { RoomsService } from '../../service/rooms.service';
-import { FieldsetModule } from 'primeng/fieldset';
-import { ButtonModule } from 'primeng/button';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @Component({
     selector: 'app-rooms',
     standalone: true,
@@ -32,10 +32,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
                             </div>
                             <div class="p-5 w-1/6 flex flex-col justify-center items-center">
                                 <div *ngIf="room.paciente !== null">
-                                    <b class="text-xl">Ocupado</b>
+                                    <b class="text-xl">Ocupat</b>
                                 </div>
                                 <div *ngIf="room.paciente === null">
-                                    <b class="text-xl">Libre</b>
+                                    <b class="text-xl">Lliure</b>
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
                                 </p>
                             </p-fieldset>
                             <div *ngIf="room.paciente !== null" class="flex gap-5 max-h-[40px] min-h-[40px]">
-                                <p-button iconPos="right" icon="pi pi-arrow-right" label="Entrar l'habitació" size="large" class="w-1/4 flex justify-between" (click)="openRoom(room.hab_id)" />
+                                <p-button iconPos="right" icon="pi pi-arrow-right" label="Entrar" size="large" class="w-1/4 flex justify-between" (click)="openRoom(room.hab_id)" />
 
                                 <div class="p-3 border border-[var(--p-fieldset-border-color)]  rounded-[var(--content-border-radius)] w-1/4 truncate"><b>Edat</b> | {{ room.paciente.pac_edad }}</div>
                                 <div class="p-3 border border-[var(--p-fieldset-border-color)]  rounded-[var(--content-border-radius)] w-2/4 truncate"><b>Nom</b> | {{ room.paciente.pac_nombre }} {{ room.paciente.pac_apellidos }}</div>

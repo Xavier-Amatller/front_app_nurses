@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RegistroService } from '../../service/registro.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { InputTextModule } from 'primeng/inputtext';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { DatePickerModule } from 'primeng/datepicker';
-import { TextareaModule } from 'primeng/textarea';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
 import { DropdownModule } from 'primeng/dropdown';
-import { AuthService } from '../../service/auth.service';
-import { TipoDrenaje, RegistroResponse, TipoTextura, TipoDieta } from '../../models/interfaces';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { TextareaModule } from 'primeng/textarea';
+import { RegistroResponse, TipoDieta, TipoDrenaje, TipoTextura } from '../../models/interfaces';
+import { AuthService } from '../../service/auth.service';
+import { RegistroService } from '../../service/registro.service';
 
 @Component({
   selector: 'app-cares',
@@ -148,7 +148,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
               <textarea
                 formControlName="mov_ajuda_descripcion"
                 rows="3"
-                pInputTextarea
+                pTextarea
                 [ngClass]="{
                   'border-red-500': registroForm.get('mov_ajuda_descripcion')?.invalid && registroForm.get('mov_ajuda_descripcion')?.touched
                 }"
@@ -159,7 +159,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
               <textarea
                 formControlName="mov_cambios"
                 rows="3"
-                pInputTextarea
+                pTextarea
                 [ngClass]="{
                   'border-red-500': registroForm.get('mov_cambios')?.invalid && registroForm.get('mov_cambios')?.touched
                 }"
@@ -188,7 +188,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
               <textarea
                 formControlName="dia_diagnostico"
                 rows="3"
-                pInputTextarea
+                pTextarea
                 [ngClass]="{
                   'border-red-500': registroForm.get('dia_diagnostico')?.invalid && registroForm.get('dia_diagnostico')?.touched
                 }"
@@ -199,7 +199,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
               <textarea
                 formControlName="dia_motivo"
                 rows="3"
-                pInputTextarea
+                pTextarea
                 [ngClass]="{
                   'border-red-500': registroForm.get('dia_motivo')?.invalid && registroForm.get('dia_motivo')?.touched
                 }"
@@ -215,7 +215,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
               <textarea
                 formControlName="dre_debito"
                 rows="3"
-                pInputTextarea
+                pTextarea
                 [ngClass]="{
                   'border-red-500': registroForm.get('dre_debito')?.invalid && registroForm.get('dre_debito')?.touched
                 }"
@@ -245,7 +245,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
               <textarea
                 formControlName="Reg_Obs"
                 rows="3"
-                pInputTextarea
+                pTextarea
                 [ngClass]="{
                   'border-red-500': registroForm.get('Reg_Obs')?.invalid && registroForm.get('Reg_Obs')?.touched
                 }"
