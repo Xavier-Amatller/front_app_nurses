@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 import { FluidModule } from 'primeng/fluid';
 import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
-import { FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 
 @Component({
@@ -45,18 +45,22 @@ import { TextareaModule } from 'primeng/textarea';
             </div>
             <div class="md:w-1/2">
                 <div class="card flex flex-col gap-4">
-                    <div class="font-semibold text-xl">Horizontal</div>
-                    <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
-                        <label for="name3" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Name</label>
-                        <div class="col-span-12 md:col-span-10">
-                            <input pInputText id="name3" type="text" />
-                        </div>
+                    <!-- Demanar dietes -->
+                    <div class="flex flex-col gap-2">
+                        <label for="dietFrequency">Demandar dietes</label>
+                        <p-select id="dietFrequency" [(ngModel)]="selectedDietFrequency" [options]="dietFrequencyOptions" placeholder="Selecciona una freqüència" class="w-full"></p-select>
                     </div>
-                    <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
-                        <label for="email3" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Email</label>
-                        <div class="col-span-12 md:col-span-10">
-                            <input pInputText id="email3" type="text" />
-                        </div>
+
+                    <!-- Desplegable 1 -->
+                    <div class="flex flex-col gap-2">
+                        <label for="desplegable1">Desplegable 1</label>
+                        <p-select id="desplegable1" [(ngModel)]="selectedDesplegable1" [options]="desplegable1Options" placeholder="Selecciona una opció" class="w-full"></p-select>
+                    </div>
+
+                    <!-- Desplegable 2 -->
+                    <div class="flex flex-col gap-2">
+                        <label for="desplegable2">Desplegable 2</label>
+                        <p-select id="desplegable2" [(ngModel)]="selectedDesplegable2" [options]="desplegable2Options" placeholder="Selecciona una opció" class="w-full"></p-select>
                     </div>
                 </div>
 
