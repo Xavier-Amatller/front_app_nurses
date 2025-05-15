@@ -6,6 +6,7 @@ import { Button } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
+import { Drawer } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { KnobModule } from 'primeng/knob';
 import { PaginatorModule } from 'primeng/paginator';
@@ -13,12 +14,12 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TabsModule } from 'primeng/tabs';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from '../../layout/service/layout.service';
-import { RoomsService } from '../../service/rooms.service';
 import { RegistroService } from '../../service/registro.service';
+import { RoomsService } from '../../service/rooms.service';
 @Component({
     selector: 'app-inside-room',
     standalone: true,
-    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button],
+    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button, Drawer],
 
     template: `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -28,11 +29,52 @@ import { RegistroService } from '../../service/registro.service';
                     <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
                     <div class="font-semibold text-xl mt-12 mb-4 flex justify-between items-center">
                         Ultimes dades registrades
-                        <div class="flex gap-4">
+
+                        <p-drawer [(visible)]="visibleLeft" class="!w-[20vw]" header="Historial">
+                            <div
+                                *ngFor="let item of historyData"
+                                class="card border !p-0"
+                                [ngClass]="{
+                                    'border-[var(--surface-border)]': selectedHistoryItem !== item ,
+                                    'border-[var(--primary-color)]': selectedHistoryItem === item
+                                }"
+                            >
+                                <div class="card hover:cursor-pointer " (click)="viewHistoryData(item)">
+                                    <h4 class="mb-0">Dia {{ item.reg_fecha }}</h4>
+                                    <p class="mb-6 text-gray-600 text-lg">{{ item.reg_hora }}</p>
+                                    <p>Pulsaciones {{ item.cv?.cv_pulso ?? '-' }} x min</p>
+                                    <p>SYS: {{ item.cv?.cv_ta_sistolica ?? '-' }}</p>
+                                    <p>DIA: {{ item.cv?.cv_ta_diastolica ?? '-' }}</p>
+                                    <p>Saturación oxigeno: {{ item.cv?.cv_saturacion_oxigeno ?? '-' }}</p>
+                                </div>
+                            </div>
+                        </p-drawer>
+                        <div class="flex gap-4 mb-2">
                             <p-button (click)="openCares(room[0]?.paciente?.pac_id)">Afegir curas</p-button>
                             <p-button (click)="openDiet()">Afegir dieta</p-button>
                         </div>
                     </div>
+                    <div (click)="visibleLeft = true" class="flex gap-2 text-[var(--primary-color)] hover:cursor-pointer">
+                        <p class="font-sm " (click)="visibleLeft = true">Veure el historial</p>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="var(--primary-color)"
+                            stroke-width="1"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-external-link"
+                        >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+                            <path d="M11 13l9 -9" />
+                            <path d="M15 4h5v5" />
+                        </svg>
+                    </div>
+
                     <p-tabs value="0">
                         <p-tablist>
                             <p-tab value="0">Constants</p-tab>
@@ -130,8 +172,6 @@ import { RegistroService } from '../../service/registro.service';
                             </div>
                         </div>
                     </div>
-                    <!-- </div>
-                <div class="card"> -->
                     <hr />
                     <div class="font-semibold text-xl mb-4">Informació del pacient</div>
                     <label for="pac_motiu_ingrees" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Motiu d'ingrés:</label>
@@ -180,6 +220,20 @@ import { RegistroService } from '../../service/registro.service';
     `
 })
 export class insideRooms implements OnInit {
+    selectedHistoryItem: any = null;
+
+    visibleLeft: boolean = false;
+    historyData: {
+        reg_timestamp?: string;
+        reg_fecha?: string;
+        reg_hora?: string;
+        cv?: {
+            cv_pulso?: number | string;
+            cv_ta_sistolica?: number | string;
+            cv_ta_diastolica?: number | string;
+            cv_saturacion_oxigeno?: number | string;
+        };
+    }[] = [];
     /* Room data */
     room_id: string | null = null;
     room: any[] = [];
@@ -201,20 +255,20 @@ export class insideRooms implements OnInit {
         pac_num_historial: number | null;
         pac_telefono_cuidador: string | null;
     } = {
-            pac_alergias: null,
-            pac_antecedentes: null,
-            pac_apellidos: null,
-            pac_direccion_completa: null,
-            pac_edad: null,
-            pac_fecha_ingreso: null,
-            pac_fecha_nacimiento: null,
-            pac_id: null,
-            pac_lengua_materna: null,
-            pac_nombre: null,
-            pac_nombre_cuidador: null,
-            pac_num_historial: null,
-            pac_telefono_cuidador: null
-        };
+        pac_alergias: null,
+        pac_antecedentes: null,
+        pac_apellidos: null,
+        pac_direccion_completa: null,
+        pac_edad: null,
+        pac_fecha_ingreso: null,
+        pac_fecha_nacimiento: null,
+        pac_id: null,
+        pac_lengua_materna: null,
+        pac_nombre: null,
+        pac_nombre_cuidador: null,
+        pac_num_historial: null,
+        pac_telefono_cuidador: null
+    };
     constantes: {
         ta_sistolica: number | null;
         ta_diastolica: number | null;
@@ -227,17 +281,17 @@ export class insideRooms implements OnInit {
         deposiciones: string | null;
         stp: string | null;
     } = {
-            ta_sistolica: null,
-            ta_diastolica: null,
-            frequencia_respiratoria: null,
-            pulso: null,
-            temperatura: null,
-            saturacion_oxigeno: null,
-            talla: null,
-            diuresis: null,
-            deposiciones: null,
-            stp: null
-        };
+        ta_sistolica: null,
+        ta_diastolica: null,
+        frequencia_respiratoria: null,
+        pulso: null,
+        temperatura: null,
+        saturacion_oxigeno: null,
+        talla: null,
+        diuresis: null,
+        deposiciones: null,
+        stp: null
+    };
     movilizaciones: {
         mov_ajuda_deambulacion: boolean | null;
         mov_ajuda_descripcion: string | null;
@@ -245,27 +299,27 @@ export class insideRooms implements OnInit {
         mov_decubitos: string | null;
         mov_sedestacion: boolean | null;
     } = {
-            mov_ajuda_deambulacion: null,
-            mov_ajuda_descripcion: null,
-            mov_cambios: null,
-            mov_decubitos: null,
-            mov_sedestacion: null
-        };
+        mov_ajuda_deambulacion: null,
+        mov_ajuda_descripcion: null,
+        mov_cambios: null,
+        mov_decubitos: null,
+        mov_sedestacion: null
+    };
 
     drenajes: {
         dre_debito: string | null;
         tdre_desc: string | null;
     } = {
-            dre_debito: null,
-            tdre_desc: null
-        };
+        dre_debito: null,
+        tdre_desc: null
+    };
     diagnotico: {
         dia_diagnostico: string | null;
         dia_motivo: string | null;
     } = {
-            dia_diagnostico: null,
-            dia_motivo: null
-        };
+        dia_diagnostico: null,
+        dia_motivo: null
+    };
     /* Char data */
     lineData: any;
     lineOptions: any;
@@ -287,7 +341,6 @@ export class insideRooms implements OnInit {
         this.room_id = this.route.snapshot.paramMap.get('id');
 
         if (!this.room_id) {
-            console.error('No se encontró el ID de la room. Redirigiendo a rooms...');
             this.router.navigate(['/habitacions']);
             return;
         }
@@ -309,6 +362,24 @@ export class insideRooms implements OnInit {
                 pac_num_historial: this.room[0].paciente.pac_num_historial,
                 pac_telefono_cuidador: this.room[0].paciente.pac_telefono_cuidador
             };
+
+            this.regs.getHistory(this.room[0].paciente.pac_id).subscribe((data: any) => {
+                this.historyData = data.map((item: any) => {
+                    let fecha = null;
+                    let hora = null;
+                    if (item.reg_timestamp) {
+                        const [f, h] = item.reg_timestamp.split(' ');
+                        fecha = f;
+                        hora = h;
+                    }
+                    return {
+                        ...item,
+                        reg_fecha: fecha,
+                        reg_hora: hora
+                    };
+                });
+                console.log(this.historyData);
+            });
 
             this.regs.getLastRegistro(this.room[0].paciente.pac_id).subscribe((data: any) => {
                 console.log(data);
@@ -359,9 +430,6 @@ export class insideRooms implements OnInit {
                     console.log('No hay registros: diagnostico');
                 }
             });
-
-
-
         });
 
         this.initCharts();
@@ -374,6 +442,36 @@ export class insideRooms implements OnInit {
         this.router.navigate(['habitacions/' + this.room_id + '/dietes/', this.room_id]);
     }
 
+    viewHistoryData(item: any) {
+        this.selectedHistoryItem = item;
+        this.constantes = {
+            ta_sistolica: item.cv.cv_ta_sistolica ? parseInt(item.cv.cv_ta_sistolica) : null,
+            ta_diastolica: item.cv.cv_ta_diastolica ? parseInt(item.cv.cv_ta_diastolica) : null,
+            frequencia_respiratoria: item.cv.cv_frequencia_respiratoria ? parseInt(item.cv.cv_frequencia_respiratoria) : null,
+            pulso: item.cv.cv_pulso ? parseInt(item.cv.cv_pulso) : null,
+            temperatura: item.cv.cv_temperatura ? parseFloat(item.cv.cv_temperatura) : null,
+            saturacion_oxigeno: item.cv.cv_saturacion_oxigeno ? parseInt(item.cv.cv_saturacion_oxigeno) : null,
+            talla: item.cv.cv_talla ? parseInt(item.cv.cv_talla) : null,
+            diuresis: item.cv.cv_diuresis ? parseInt(item.cv.cv_diuresis) : null,
+            deposiciones: item.cv.cv_deposiciones || null,
+            stp: item.cv.cv_stp || null
+        };
+        this.drenajes = {
+            dre_debito: item.dre.dre_debito ?? null,
+            tdre_desc: item.dre.tdre_desc ?? null
+        };
+        this.diagnotico = {
+            dia_diagnostico: item.dia.dia_diagnostico ?? null,
+            dia_motivo: item.dia.dia_motivo ?? null
+        };
+        this.movilizaciones = {
+            mov_ajuda_deambulacion: item.mov.mov_ajuda_deambulacion ? item.mov.mov_ajuda_deambulacion : false,
+            mov_ajuda_descripcion: item.mov.mov_ajuda_descripcion ?? null,
+            mov_cambios: item.mov.mov_cambios ?? null,
+            mov_decubitos: item.mov.mov_decubitos ?? null,
+            mov_sedestacion: item.mov.mov_sedestacion ? item.mov.mov_sedestacion : false
+        };
+    }
     initCharts() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
