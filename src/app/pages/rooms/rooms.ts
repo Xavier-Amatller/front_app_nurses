@@ -1,3 +1,9 @@
+import {
+    animate,
+    style,
+    transition,
+    trigger
+} from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -13,14 +19,18 @@ import { RoomsService } from '../../service/rooms.service';
     selector: 'app-rooms',
     standalone: true,
     imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, InputTextModule, FieldsetModule, ButtonModule, ProgressSpinnerModule],
+    animations: [trigger('fadeAnimation', [transition(':enter', [style({ opacity: 0 }), animate('600ms ease-in', style({ opacity: 1 }))]), transition(':leave', [animate('400ms ease-out', style({ opacity: 0 }))])])],
     template: `
-        <div *ngIf="loading; else content">
-             <!-- TODO Añadir skeleton loader -->
+        <div @fadeAnimation class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 mb-8" *ngIf="loading; else content">
+            <p-skeleton class="w-[100%] transition-all" height="270.55px"></p-skeleton>
+            <p-skeleton class="w-[100%] transition-all" height="270.55px"></p-skeleton>
+            <p-skeleton class="w-[100%] transition-all" height="270.55px"></p-skeleton>
+            <p-skeleton class="w-[100%] transition-all" height="270.55px"></p-skeleton>
         </div>
         <ng-template #content>
             <div class=" overflow-y-auto">
                 <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 mb-8">
-                    <div *ngFor="let room of rooms" class="card w-full !p-0 !mb-0">
+                    <div @fadeAnimation *ngFor="let room of rooms" class="card w-full !p-0 !mb-0">
                         <div class="flex flex-row">
                             <div class="flex justify-between items-center p-5 bg-[var(--primary-color)] rounded-tl-[var(--content-border-radius)] rounded-br-[var(--content-border-radius)] w-[10rem] text-center">
                                 <span class=" text-white text-4xl font-bold">{{ room.hab_id }}</span>
