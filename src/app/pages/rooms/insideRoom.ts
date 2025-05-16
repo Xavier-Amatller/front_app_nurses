@@ -28,14 +28,13 @@ import { RoomsService } from '../../service/rooms.service';
                 <div class="card ">
                     <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
                     <div class="font-semibold text-xl mt-12 mb-4 flex justify-between items-center">
-                        Ultimes dades registrades
-
+                        <h5 class="w-[80%]">Ultimes dades registrades</h5>
                         <p-drawer [(visible)]="visibleLeft" class="!w-[20vw]" header="Historial">
                             <div
                                 *ngFor="let item of historyData"
                                 class="card border !p-0"
                                 [ngClass]="{
-                                    'border-[var(--surface-border)]': selectedHistoryItem !== item ,
+                                    'border-[var(--surface-border)]': selectedHistoryItem !== item,
                                     'border-[var(--primary-color)]': selectedHistoryItem === item
                                 }"
                             >
@@ -50,8 +49,8 @@ import { RoomsService } from '../../service/rooms.service';
                             </div>
                         </p-drawer>
                         <div class="flex gap-4 mb-2">
-                            <p-button (click)="openCares(room[0]?.paciente?.pac_id)">Afegir curas</p-button>
-                            <p-button (click)="openDiet()">Afegir dieta</p-button>
+                            <p-button class="w-max" (click)="openCares(room[0]?.paciente?.pac_id)">Afegir curas</p-button>
+                            <p-button class="w-max" (click)="openDiet()">Afegir dieta</p-button>
                         </div>
                     </div>
                     <div (click)="visibleLeft = true" class="flex gap-2 text-[var(--primary-color)] hover:cursor-pointer">
