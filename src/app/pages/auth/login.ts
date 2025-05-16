@@ -9,6 +9,7 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { AuthService } from '../../service/auth.service';
+
 @Component({
     selector: 'app-login',
     standalone: true,
@@ -26,11 +27,11 @@ import { AuthService } from '../../service/auth.service';
                         </div>
 
                         <div>
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Nº Auxiliar</label>
-                            <input pInputText id="email1" type="text" placeholder="Nº Auxiliar" class="w-full md:w-[30rem] mb-8" [(ngModel)]="aux_number" />
+                            <label for="aux_number" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Nº Auxiliar</label>
+                            <input pInputText id="aux_number" type="text" placeholder="Nº Auxiliar" class="w-full md:w-[30rem] mb-8" [(ngModel)]="aux_number" required />
 
-                            <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contrasenya</label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Contrasenya" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                            <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contrasenya</label>
+                            <p-password id="password" [(ngModel)]="password" placeholder="Contrasenya" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false" required></p-password>
 
                             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                                 <!-- <div class="flex items-center">
@@ -39,7 +40,7 @@ import { AuthService } from '../../service/auth.service';
                                 </div> -->
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Has oblidat la teva contrasenya?</span>
                             </div>
-                            <div *ngIf="this.isLoginError" class="text-red-500 text-center mb-4">Credencials incorrectes. Torna-ho a intentar.</div>
+                            <div *ngIf="isLoginError" class="text-red-500 text-center mb-4">Credencials incorrectes. Torna-ho a intentar.</div>
                             <p-button [loading]="loading" label="Inicia sessió" styleClass="w-full" (onClick)="login()"></p-button>
                         </div>
                     </div>
@@ -58,33 +59,40 @@ export class Login implements OnInit {
     constructor(
         private readonly AuthService: AuthService,
         private readonly router: Router
-    ) { }
+    ) {}
 
     ngOnInit(): void {
         if (this.AuthService.isAuthenticated()) {
-            this.router.navigate(['/dashboard']);
+            this.redirectBasedOnRole();
         }
     }
 
-    login() {
+    login(): void {
         this.loading = true;
+        this.isLoginError = false; // Resetear el error al intentar de nuevo
         this.AuthService.login(this.aux_number, this.password).subscribe({
             next: (response) => {
-                if (!response) {
-                    this.isLoginError = true;
+                if (response && response.token) {
+                    this.AuthService.setAuthData(response); // Almacena token, userId y role
+                    this.redirectBasedOnRole();
                 } else {
-                    console.log(response);
-                    this.AuthService.setAuxiliarId(response.aux_id);
-                    this.AuthService.setToken(response.token);
-                    this.router.navigate(['/dashboard']);
+                    this.isLoginError = true;
                 }
                 this.loading = false;
             },
             error: (error) => {
-                console.log(error);
+                console.error('Error al iniciar sesión', error);
                 this.isLoginError = true;
                 this.loading = false;
             }
         });
+    }
+
+    private redirectBasedOnRole(): void {
+        if (this.AuthService.isAdmin()) {
+            this.router.navigate(['/backoffice']);
+        } else {
+            this.router.navigate(['/dashboard']);
+        }
     }
 }

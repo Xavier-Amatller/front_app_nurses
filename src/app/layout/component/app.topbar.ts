@@ -6,11 +6,12 @@ import { Menu } from 'primeng/menu';
 import { StyleClassModule } from 'primeng/styleclass';
 import { LayoutService } from '../service/layout.service';
 import { AppConfigurator } from './app.configurator';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator,Menu],
+    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, Menu],
     template: `
         <div class="layout-topbar-blur">
             <div class="layout-topbar">
@@ -79,23 +80,19 @@ import { AppConfigurator } from './app.configurator';
     `
 })
 export class AppTopbar {
+
+    constructor(public layoutService: LayoutService, private readonly AuthService: AuthService,
+    ) { }
+
     items!: MenuItem[];
 
     overlayMenuItems = [
         {
             label: 'Tanca sessió',
             icon: 'pi pi-sign-out',
-            command: () => this.onLogout()
+            command: () => this.AuthService.logout()
         },
     ];
-
-    onLogout() {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('aux_id');
-        window.location.href = '/';
-    }
-
-    constructor(public layoutService: LayoutService) {}
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
