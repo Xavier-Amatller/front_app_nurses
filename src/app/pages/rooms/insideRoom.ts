@@ -14,13 +14,14 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TabsModule } from 'primeng/tabs';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from '../../layout/service/layout.service';
+import { Constantes, Diagnostico, Drenajes, HistoryData, Movilizaciones, Paciente } from '../../models/interfaces';
 import { RegistroService } from '../../service/registro.service';
 import { RoomsService } from '../../service/rooms.service';
+
 @Component({
     selector: 'app-inside-room',
     standalone: true,
     imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button, Drawer],
-
     template: `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- columna de la izquierda -->
@@ -175,11 +176,11 @@ import { RoomsService } from '../../service/rooms.service';
                     <div class="font-semibold text-xl mb-4">Informació del pacient</div>
                     <label for="pac_motiu_ingrees" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Motiu d'ingrés:</label>
                     <div class="col-span-12 md:col-span-9 md:mb-4">
-                        <input [(ngModel)]="this.diagnotico.dia_motivo" pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
+                        <input [(ngModel)]="this.diagnostico.dia_motivo" pInputText [disabled]="true" id="pac_motiu_ingrees" type="text" class="w-full min-h-20" />
                     </div>
                     <label for="pac_diagnostic" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Diagnostic:</label>
                     <div class="col-span-12 md:col-span-9">
-                        <input [(ngModel)]="this.diagnotico.dia_diagnostico" pInputText [disabled]="true" id="pac_alergias" type="text" class="w-full min-h-20" />
+                        <input [(ngModel)]="this.diagnostico.dia_diagnostico" pInputText [disabled]="true" id="pac_diagnostic" type="text" class="w-full min-h-20" />
                     </div>
                     <hr />
                     <div class="grid grid-cols-2 gap-4">
@@ -222,64 +223,28 @@ export class insideRooms implements OnInit {
     selectedHistoryItem: any = null;
 
     visibleLeft: boolean = false;
-    historyData: {
-        reg_timestamp?: string;
-        reg_fecha?: string;
-        reg_hora?: string;
-        cv?: {
-            cv_pulso?: number | string;
-            cv_ta_sistolica?: number | string;
-            cv_ta_diastolica?: number | string;
-            cv_saturacion_oxigeno?: number | string;
-        };
-    }[] = [];
+    historyData: HistoryData[] = [];
     /* Room data */
     room_id: string | null = null;
     room: any[] = [];
 
     /* Patient data */
-    /* Basicamente es un objeto para usarlo mejor en el front  */
-    paciente: {
-        pac_alergias: string | null;
-        pac_antecedentes: string | null;
-        pac_apellidos: string | null;
-        pac_direccion_completa: string | null;
-        pac_edad: number | null;
-        pac_fecha_ingreso: string | null;
-        pac_fecha_nacimiento: string | null;
-        pac_id: number | null;
-        pac_lengua_materna: string | null;
-        pac_nombre: string | null;
-        pac_nombre_cuidador: string | null;
-        pac_num_historial: number | null;
-        pac_telefono_cuidador: string | null;
-    } = {
-        pac_alergias: null,
-        pac_antecedentes: null,
-        pac_apellidos: null,
-        pac_direccion_completa: null,
-        pac_edad: null,
-        pac_fecha_ingreso: null,
-        pac_fecha_nacimiento: null,
-        pac_id: null,
-        pac_lengua_materna: null,
-        pac_nombre: null,
-        pac_nombre_cuidador: null,
-        pac_num_historial: null,
-        pac_telefono_cuidador: null
+    paciente: Paciente = {
+        pac_alergias: '',
+        pac_antecedentes: '',
+        pac_apellidos: '',
+        pac_direccion_completa: '',
+        pac_edad: 0,
+        pac_fecha_ingreso: '',
+        pac_fecha_nacimiento: '',
+        pac_id: 0,
+        pac_lengua_materna: '',
+        pac_nombre: '',
+        pac_nombre_cuidador: '',
+        pac_num_historial: 0,
+        pac_telefono_cuidador: ''
     };
-    constantes: {
-        ta_sistolica: number | null;
-        ta_diastolica: number | null;
-        frequencia_respiratoria: number | null;
-        pulso: number | null;
-        temperatura: number | null;
-        saturacion_oxigeno: number | null;
-        talla: number | null;
-        diuresis: number | null;
-        deposiciones: string | null;
-        stp: string | null;
-    } = {
+    constantes: Constantes = {
         ta_sistolica: null,
         ta_diastolica: null,
         frequencia_respiratoria: null,
@@ -291,35 +256,22 @@ export class insideRooms implements OnInit {
         deposiciones: null,
         stp: null
     };
-    movilizaciones: {
-        mov_ajuda_deambulacion: boolean | null;
-        mov_ajuda_descripcion: string | null;
-        mov_cambios: string | null;
-        mov_decubitos: string | null;
-        mov_sedestacion: boolean | null;
-    } = {
+    movilizaciones: Movilizaciones = {
         mov_ajuda_deambulacion: null,
         mov_ajuda_descripcion: null,
         mov_cambios: null,
         mov_decubitos: null,
         mov_sedestacion: null
     };
-
-    drenajes: {
-        dre_debito: string | null;
-        tdre_desc: string | null;
-    } = {
+    drenajes: Drenajes = {
         dre_debito: null,
         tdre_desc: null
     };
-    diagnotico: {
-        dia_diagnostico: string | null;
-        dia_motivo: string | null;
-    } = {
+    diagnostico: Diagnostico = {
         dia_diagnostico: null,
         dia_motivo: null
     };
-    /* Char data */
+    /* Chart data */
     lineData: any;
     lineOptions: any;
 
@@ -421,7 +373,7 @@ export class insideRooms implements OnInit {
                 }
 
                 try {
-                    this.diagnotico = {
+                    this.diagnostico = {
                         dia_diagnostico: data.lastRegistro.dia.dia_diagnostico ?? null,
                         dia_motivo: data.lastRegistro.dia.dia_motivo ?? null
                     };
@@ -434,43 +386,44 @@ export class insideRooms implements OnInit {
         this.initCharts();
     }
 
-    openCares(pac_id: string) {
+    openCares(pac_id: number) {
         this.router.navigate(['habitacions/' + this.room_id + '/curas/', pac_id]);
     }
     openDiet() {
         this.router.navigate(['habitacions/' + this.room_id + '/dietes/', this.room_id]);
     }
 
-    viewHistoryData(item: any) {
+    viewHistoryData(item: HistoryData) {
         this.selectedHistoryItem = item;
         this.constantes = {
-            ta_sistolica: item.cv.cv_ta_sistolica ? parseInt(item.cv.cv_ta_sistolica) : null,
-            ta_diastolica: item.cv.cv_ta_diastolica ? parseInt(item.cv.cv_ta_diastolica) : null,
-            frequencia_respiratoria: item.cv.cv_frequencia_respiratoria ? parseInt(item.cv.cv_frequencia_respiratoria) : null,
-            pulso: item.cv.cv_pulso ? parseInt(item.cv.cv_pulso) : null,
-            temperatura: item.cv.cv_temperatura ? parseFloat(item.cv.cv_temperatura) : null,
-            saturacion_oxigeno: item.cv.cv_saturacion_oxigeno ? parseInt(item.cv.cv_saturacion_oxigeno) : null,
-            talla: item.cv.cv_talla ? parseInt(item.cv.cv_talla) : null,
-            diuresis: item.cv.cv_diuresis ? parseInt(item.cv.cv_diuresis) : null,
-            deposiciones: item.cv.cv_deposiciones || null,
-            stp: item.cv.cv_stp || null
+            ta_sistolica: item.cv?.cv_ta_sistolica ? parseInt(item.cv.cv_ta_sistolica as string) : null,
+            ta_diastolica: item.cv?.cv_ta_diastolica ? parseInt(item.cv.cv_ta_diastolica as string) : null,
+            frequencia_respiratoria: item.cv?.cv_frequencia_respiratoria ? parseInt(item.cv.cv_frequencia_respiratoria as string) : null,
+            pulso: item.cv?.cv_pulso ? parseInt(item.cv.cv_pulso as string) : null,
+            temperatura: item.cv?.cv_temperatura ? parseFloat(item.cv.cv_temperatura as string) : null,
+            saturacion_oxigeno: item.cv?.cv_saturacion_oxigeno ? parseInt(item.cv.cv_saturacion_oxigeno as string) : null,
+            talla: item.cv?.cv_talla ? parseInt(item.cv.cv_talla as string) : null,
+            diuresis: item.cv?.cv_diuresis ? parseInt(item.cv.cv_diuresis as string) : null,
+            deposiciones: item.cv?.cv_deposiciones || null,
+            stp: item.cv?.cv_stp || null
         };
         this.drenajes = {
-            dre_debito: item.dre.dre_debito ?? null,
-            tdre_desc: item.dre.tdre_desc ?? null
+            dre_debito: item.dre?.dre_debito ?? null,
+            tdre_desc: item.dre?.tdre_desc ?? null
         };
-        this.diagnotico = {
-            dia_diagnostico: item.dia.dia_diagnostico ?? null,
-            dia_motivo: item.dia.dia_motivo ?? null
+        this.diagnostico = {
+            dia_diagnostico: item.dia?.dia_diagnostico ?? null,
+            dia_motivo: item.dia?.dia_motivo ?? null
         };
         this.movilizaciones = {
-            mov_ajuda_deambulacion: item.mov.mov_ajuda_deambulacion ? item.mov.mov_ajuda_deambulacion : false,
-            mov_ajuda_descripcion: item.mov.mov_ajuda_descripcion ?? null,
-            mov_cambios: item.mov.mov_cambios ?? null,
-            mov_decubitos: item.mov.mov_decubitos ?? null,
-            mov_sedestacion: item.mov.mov_sedestacion ? item.mov.mov_sedestacion : false
+            mov_ajuda_deambulacion: item.mov?.mov_ajuda_deambulacion ?? false,
+            mov_ajuda_descripcion: item.mov?.mov_ajuda_descripcion ?? null,
+            mov_cambios: item.mov?.mov_cambios ?? null,
+            mov_decubitos: item.mov?.mov_decubitos ?? null,
+            mov_sedestacion: item.mov?.mov_sedestacion ?? false
         };
     }
+
     initCharts() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
