@@ -4,9 +4,9 @@ import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
 import { StyleClassModule } from 'primeng/styleclass';
+import { AuthService } from '../../service/auth.service';
 import { LayoutService } from '../service/layout.service';
 import { AppConfigurator } from './app.configurator';
-import { AuthService } from '../../service/auth.service';
 
 @Component({
     selector: 'app-topbar',
@@ -56,23 +56,27 @@ import { AuthService } from '../../service/auth.service';
                     <button class="layout-topbar-menu-button layout-topbar-action" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
                         <i class="pi pi-ellipsis-v"></i>
                     </button>
-
+                    
                     <div class="layout-topbar-menu hidden lg:block">
                         <div class="layout-topbar-menu-content">
-                            <button type="button" class="layout-topbar-action">
+                            <!-- <button type="button" class="layout-topbar-action">
                                 <i class="pi pi-calendar"></i>
                                 <span>Calendar</span>
                             </button>
                             <button type="button" class="layout-topbar-action">
                                 <i class="pi pi-inbox"></i>
                                 <span>Messages</span>
-                            </button>
-                            <button type="button" class="layout-topbar-action" (click)="menu.toggle($event)">
+                            </button> -->
+                            <button type="button" class="layout-topbar-action">
                                 <i class="pi pi-user"></i>
                                 <span>Profile</span>
                             </button>
+                            <button type="button" class="layout-topbar-action transition-all hover:bg-red-400" (click)="logOut()">
+                                <i class="pi pi-sign-out"></i>
+                                <span>Sortir</span>
+                            </button>
                         </div>
-                        <p-menu #menu  [popup]="true" [model]="overlayMenuItems"></p-menu>
+                        
                     </div>
                 </div>
             </div>
@@ -80,9 +84,12 @@ import { AuthService } from '../../service/auth.service';
     `
 })
 export class AppTopbar {
+    constructor(
+        public layoutService: LayoutService,
+        private readonly AuthService: AuthService
+    ) {}
 
-    constructor(public layoutService: LayoutService, private readonly AuthService: AuthService,
-    ) { }
+    displayConfirmation: boolean = false;
 
     items!: MenuItem[];
 
@@ -91,10 +98,13 @@ export class AppTopbar {
             label: 'Tanca sessió',
             icon: 'pi pi-sign-out',
             command: () => this.AuthService.logout()
-        },
+        }
     ];
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
+    }
+    logOut(){
+        this.AuthService.logout();
     }
 }
