@@ -297,9 +297,7 @@ export class InsideRooms implements OnInit {
         private readonly router: Router,
         private readonly layoutService: LayoutService
     ) {
-        this.subscription = this.layoutService.configUpdate$.pipe(debounceTime(25)).subscribe(() => {
-            this.initCharts();
-        });
+        this.subscription = this.layoutService.configUpdate$.pipe(debounceTime(25)).subscribe(() => {});
     }
 
     ngOnInit(): void {
@@ -441,6 +439,21 @@ export class InsideRooms implements OnInit {
                         this.loading = false;
                     }
                 });
+
+                this.regs.getChartData(this.room[0].paciente.pac_id).subscribe((data: any) => {
+                    const chartLabels = data.map((item: any) => item.label);
+
+                    const chartData = data.map((item: any) => ({
+                        ta_sistolica: item.ta_sistolica ? parseInt(item.ta_sistolica) : null,
+                        ta_diastolica: item.ta_diastolica ? parseInt(item.ta_diastolica) : null,
+                        frecuencia_respiratoria: item.frecuencia_respiratoria ? parseInt(item.frecuencia_respiratoria) : null,
+                        pulso: item.pulso ? parseInt(item.pulso) : null,
+                        temperatura: item.temperatura ? parseFloat(item.temperatura) : null,
+                        saturacion_oxigeno: item.saturacion_oxigeno ? parseInt(item.saturacion_oxigeno) : null
+                    }));
+
+                    this.initChart(chartLabels, chartData);
+                });
             },
             error: (err) => {
                 if (err.status === 404) {
@@ -494,8 +507,6 @@ export class InsideRooms implements OnInit {
                 this.loading = false;
             }
         });
-
-        this.initCharts();
     }
 
     openCares(pac_id: number) {
@@ -537,7 +548,107 @@ export class InsideRooms implements OnInit {
         };
     }
 
-    initCharts() {
+    initChart(chartLabels: string[], chartData: any[]) {
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--text-color');
+        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+
+        const chartDataPulso = chartData.map((item: any) => item.pulso);
+        const chartDataTemperatura = chartData.map((item: any) => item.temperatura);
+        const chartDataSaturacion = chartData.map((item: any) => item.saturacion_oxigeno);
+        const chartDataFrecuencia = chartData.map((item: any) => item.frecuencia_respiratoria);
+        const chartDataTASistolica = chartData.map((item: any) => item.ta_sistolica);
+        const chartDataTADiastolica = chartData.map((item: any) => item.ta_diastolica);
+
+        this.lineData = {
+            labels: chartLabels,
+            datasets: [
+                {
+                    label: 'Puls',
+                    data: chartDataPulso,
+                    fill: false,
+                    backgroundColor: '#FF6384',
+                    borderColor: '#FF6384',
+                    tension: 0.4
+                },
+                {
+                    label: 'Temperatura (°C)',
+                    data: chartDataTemperatura,
+                    fill: false,
+                    backgroundColor: '#FFCE56',
+                    borderColor: '#FFCE56',
+                    tension: 0.4
+                },
+                {
+                    label: "Saturació d'oxigen (%)",
+                    data: chartDataSaturacion,
+                    fill: false,
+                    backgroundColor: '#36A2EB',
+                    borderColor: '#36A2EB',
+                    tension: 0.4
+                },
+                {
+                    label: 'Frequencia respiratoria',
+                    data: chartDataFrecuencia,
+                    fill: false,
+                    backgroundColor: '#4BC0C0',
+                    borderColor: '#4BC0C0',
+                    tension: 0.4
+                },
+                {
+                    label: 'TA sistólica',
+                    data: chartDataTASistolica,
+                    fill: false,
+                    backgroundColor: '#9966FF',
+                    borderColor: '#9966FF',
+                    tension: 0.4
+                },
+                {
+                    label: 'TA diastólica',
+                    data: chartDataTADiastolica,
+                    fill: false,
+                    backgroundColor: '#FF9F40',
+                    borderColor: '#FF9F40',
+                    tension: 0.4
+                }
+            ]
+        };
+
+        this.lineOptions = {
+            maintainAspectRatio: false,
+            aspectRatio: 0.7,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
+                }
+            }
+        };
+    }
+
+    /* initCharts() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
         const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
@@ -650,5 +761,5 @@ export class InsideRooms implements OnInit {
                 }
             }
         };
-    }
+    } */
 }

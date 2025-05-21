@@ -106,4 +106,17 @@ export class RegistroService {
             })
         );
     }
+
+    getChartData(pac_id: number) {
+        return this.http.get(`${this.apiUrl}/constantes-vitales/chart/${pac_id}`, { headers: this.getHeaders() }).pipe(
+            catchError((error) => {
+                if (error.status === 401 || error.status === 403) {
+                    localStorage.removeItem('authToken');
+                    this.router.navigate(['/login']);
+                    return throwError(() => new Error('No autorizado. Redirigiendo al login...'));
+                }
+                return throwError(() => error);
+            })
+        );
+    }
 }

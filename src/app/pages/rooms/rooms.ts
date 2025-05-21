@@ -20,13 +20,13 @@ import { RoomsService } from '../../service/rooms.service';
     template: `
         <div *ngIf="loading; else content">
             <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 mb-8">
-                <p-skeleton @fadeAnimation height="285px" *ngFor="let i of [].constructor(4); let j = index"></p-skeleton>
+                <p-skeleton height="285px" *ngFor="let i of [].constructor(4); let j = index"></p-skeleton>
             </div>
         </div>
         <ng-template #content>
             <div class="overflow-y-auto">
-                <div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 mb-8">
-                    <app-room-card @fadeAnimation *ngFor="let room of rooms" [room]="room"></app-room-card>
+                <div @fadeAnimation class="grid lg:grid-cols-2 sm:grid-cols-1 gap-10 mb-8">
+                    <app-room-card *ngFor="let room of rooms" [room]="room"></app-room-card>
                 </div>
             </div>
             <p-paginator [rows]="rows" [totalRecords]="totalRecords" [first]="first" (onPageChange)="onPageChange($event)"></p-paginator>
