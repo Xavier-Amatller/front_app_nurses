@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { Menu } from 'primeng/menu';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AuthService } from '../../service/auth.service';
 import { LayoutService } from '../service/layout.service';
@@ -11,7 +10,7 @@ import { AppConfigurator } from './app.configurator';
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, Menu],
+    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator,],
     template: `
         <div class="layout-topbar-blur">
             <div class="layout-topbar">
