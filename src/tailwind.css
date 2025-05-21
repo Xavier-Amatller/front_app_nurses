@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.chart-dialog-custom canvas {
+    width: 100% !important;
+    height: 90% !important;
+    display: block;
+}

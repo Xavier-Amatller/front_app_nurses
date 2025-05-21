@@ -7,6 +7,7 @@ import { Button } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
+import { Dialog } from 'primeng/dialog';
 import { Drawer } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { KnobModule } from 'primeng/knob';
@@ -21,7 +22,7 @@ import { RoomsService } from '../../service/rooms.service';
 @Component({
     selector: 'app-inside-room',
     standalone: true,
-    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button, Drawer],
+    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button, Drawer, Dialog],
     animations: [trigger('fadeAnimation', [transition(':enter', [style({ opacity: 0 }), animate('600ms ease-in', style({ opacity: 1 }))]), transition(':leave', [animate('400ms ease-out', style({ opacity: 0 }))])])],
 
     template: `
@@ -35,6 +36,30 @@ import { RoomsService } from '../../service/rooms.service';
                 </ng-container>
                 <ng-template #contentLeft>
                     <div @fadeAnimation class="card">
+                        <div class="width-full flex justify-between">
+                            <h4>Ultims 7 dies</h4>
+                            <div (click)="showDialog()" class="flex text-end gap-2 mb-2 text-[var(--primary-color)] hover:cursor-pointer">
+                                <p class="font-sm">Ampliar gràfic</p>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="var(--primary-color)"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-window-maximize"
+                                >
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M3 16m0 1a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1z" />
+                                    <path d="M4 12v-6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-6" />
+                                    <path d="M12 8h4v4" />
+                                    <path d="M16 8l-5 5" />
+                                </svg>
+                            </div>
+                        </div>
                         <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
                         <div @fadeAnimation class="font-semibold text-xl mt-12 mb-4 flex justify-between items-center">
                             <h5 class="w-[80%]">Ultimes dades registrades</h5>
@@ -57,6 +82,9 @@ import { RoomsService } from '../../service/rooms.service';
                                     </div>
                                 </div>
                             </p-drawer>
+                            <p-dialog [modal]="true" [(visible)]="visible" [style]="{ width: '80rem', height: '60rem' }" [maximizable]="true">
+                                <p-chart class="h-[30px] chart-dialog-custom" type="line" [data]="lineData" [options]="lineOptions"></p-chart>
+                            </p-dialog>
                             <div class="flex gap-4 mb-2">
                                 <p-button class="w-max" (click)="openCares(room[0]?.paciente?.pac_id)">Afegir curas</p-button>
                                 <p-button class="w-max" (click)="openDiet()">Afegir dieta</p-button>
@@ -238,6 +266,7 @@ import { RoomsService } from '../../service/rooms.service';
 export class InsideRooms implements OnInit {
     selectedHistoryItem: any = null;
     visibleLeft: boolean = false;
+    visible: boolean = false;
     historyData: HistoryData[] = [];
     loading: boolean = true; // Added loading state
     room_id: string | null = null;
@@ -547,7 +576,9 @@ export class InsideRooms implements OnInit {
             mov_sedestacion: item.mov?.mov_sedestacion ?? false
         };
     }
-
+    showDialog() {
+        this.visible = true;
+    }
     initChart(chartLabels: string[], chartData: any[]) {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
