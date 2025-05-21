@@ -1,19 +1,21 @@
+import { animate, style, transition, trigger } from '@angular/animations';
+import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FluidModule } from 'primeng/fluid';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
+import { Skeleton } from 'primeng/skeleton';
 import { TextareaModule } from 'primeng/textarea';
+import { ToastModule } from 'primeng/toast';
 import { AuthService } from '../../../service/auth.service';
 import { DietsService } from '../../../service/diets.service';
-import { ActivatedRoute } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { MessageModule } from 'primeng/message';
-import { NgIf } from '@angular/common';
 
 interface SelectOption {
     name: string;
@@ -23,8 +25,10 @@ interface SelectOption {
 @Component({
     selector: 'app-diets-form',
     standalone: true,
-    imports: [InputTextModule, FluidModule, ButtonModule, SelectModule, FormsModule, TextareaModule, CheckboxModule, MultiSelectModule, ToastModule, MessageModule, NgIf],
+    imports: [InputTextModule, FluidModule, ButtonModule, SelectModule, FormsModule, TextareaModule, CheckboxModule, MultiSelectModule, ToastModule, MessageModule, NgIf, NgFor, Skeleton],
     providers: [MessageService],
+    animations: [trigger('fadeAnimation', [transition(':enter', [style({ opacity: 0 }), animate('600ms ease-in', style({ opacity: 1 }))]), transition(':leave', [animate('400ms ease-out', style({ opacity: 0 }))])])],
+
     template: `
         <p-fluid>
             <p-toast position="top-right"></p-toast>
@@ -42,7 +46,7 @@ interface SelectOption {
             </div>
             <div class="flex flex-col md:flex-row gap-8">
                 <div class="md:w-1/2">
-                    <div class="card flex flex-col gap-4">
+                    <div class="card flex flex-col gap-4 h-[350px]">
                         <div class="font-semibold text-xl">Nova dieta</div>
 
                         <div class="flex flex-col gap-2">
@@ -62,7 +66,7 @@ interface SelectOption {
                             <p-message *ngIf="!selectedTexture && submitted" severity="error" text="La textura és obligatòria"></p-message>
                         </div>
 
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-2 ">
                             <label for="dietType">Tipus de dieta</label>
                             <p-multiSelect
                                 id="dietType"
@@ -104,7 +108,7 @@ interface SelectOption {
                     </div>
                 </div>
                 <div class="md:w-1/2">
-                    <div class="card flex flex-col gap-8">
+                    <div class="card flex flex-col gap-8 h-[350px]">
                         <div class="font-semibold text-xl">Dieta actual</div>
                         <div class="grid grid-cols-12 gap-4">
                             <label for="lastDietText" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Textures:</label>
@@ -133,6 +137,28 @@ interface SelectOption {
                     </div>
                 </div>
             </div>
+            <ng-container *ngIf="loading; else historyDietBlock">
+                <div @fadeAnimation class="card flex gap-4 mt-8 overflow-x-auto h-auto">
+                    <p-skeleton class="w-[300px] transition-all" height="180px"></p-skeleton>
+                    <p-skeleton class="w-[300px] transition-all" height="180px"></p-skeleton>
+                    <p-skeleton class="w-[300px] transition-all" height="180px"></p-skeleton>
+                    <p-skeleton class="w-[300px] transition-all" height="180px"></p-skeleton>
+                </div>
+            </ng-container>
+            <ng-template #historyDietBlock>
+                <div  @fadeAnimation *ngIf="historyDiet.length > 0" class="card flex gap-4 mt-8 overflow-x-auto h-auto">
+                    <div *ngFor="let item of historyDiet" class=" !p-0">
+                        <div class="card border w-[300px]">
+                            <h4 class="mb-0">Dia {{ item.reg_fecha }}</h4>
+                            <p class="mb-6 text-gray-600 text-lg">{{ item.reg_hora }}</p>
+                            <p>Textura: {{ item.Die_TText?.descripcion ?? '-' }}</p>
+                            <p>Tipus de dieta: {{ item.tipos_dietas }}</p>
+                            <p>Autònom o ajuda: {{ item.Die_Autonomo === true ? 'Autònom' : 'Ajuda' }}</p>
+                            <p>Portador de pròtesi: {{ item.Die_Protesi === true ? 'Sí' : 'No' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
         </p-fluid>
     `
 })
@@ -145,6 +171,7 @@ export class DietsFormComponent implements OnInit {
     ) {}
 
     selectedTexture: string | null = null;
+    historyDiet: any[] = [];
     selectedDietType: string[] = [];
     selectedAutonomy: string | null = null;
     hasProsthesis: boolean | undefined = undefined;
@@ -157,7 +184,7 @@ export class DietsFormComponent implements OnInit {
     loading = true;
     response: any = null;
     submitted = false;
-
+    dietHistoryLoading = false;
     dietTextures: SelectOption[] = [{ name: '', code: '' }];
     dietTypes: SelectOption[] = [];
     autonomyOptions: SelectOption[] = [
@@ -208,22 +235,53 @@ export class DietsFormComponent implements OnInit {
         this.lastDietType = '';
         this.lastDietHelp = '';
         this.lastDietProte = '';
-        
+
         this.dietsService.getDiet(this.id).subscribe({
             next: (response) => {
                 this.response = response;
                 this.pac_id = this.response.data.pac_id;
                 if (this.response.message === 'noDiet') {
+                    this.historyDiet = [];
                     this.messageService.add({
                         severity: 'warn',
                         summary: 'Advertència',
                         detail: 'Aquest pacient no té dieta assignada'
                     });
                 } else {
+                    // Actualiza los campos con los datos reales del backend
                     this.lastDietText = this.response.data.Die_TText?.descripcion ?? '';
-                    this.lastDietType = this.response.data.Tipos_Dietas.map((TDieta: any) => TDieta.descripcion);
-                    this.lastDietHelp = this.response.data.Die_Autonomo == 1 ? 'Autònom' : 'Ajuda';
-                    this.lastDietProte = this.response.data.Die_Protesi == 1 ? 'Sí' : 'No';
+                    this.lastDietType = (this.response.data.Tipos_Dietas ?? []).map((TDieta: any) => TDieta.descripcion).join(', ');
+                    this.lastDietHelp = this.response.data.Die_Autonomo === true ? 'Autònom' : 'Ajuda';
+                    this.lastDietProte = this.response.data.Die_Protesi === true ? 'Sí' : 'No';
+
+                    this.dietsService.getDietsHistory(this.pac_id).subscribe({
+                        next: (response: any) => {
+                            this.historyDiet = response.data.history.map((item: any) => {
+                                let fecha = '';
+                                let hora = '';
+                                if (item.reg_timestamp) {
+                                    const [f, h] = item.reg_timestamp.split(' ');
+                                    fecha = f;
+                                    hora = h;
+                                }
+                                // Procesar Tipos_Dietas para mostrar descripciones unidas por coma o '-'
+                                const tiposDietas = item.Tipos_Dietas && Array.isArray(item.Tipos_Dietas) ? item.Tipos_Dietas.map((d: any) => d.descripcion).join(', ') : '-';
+                                return {
+                                    ...item,
+                                    reg_fecha: fecha,
+                                    reg_hora: hora,
+                                    tiposDietas
+                                };
+                            });
+                        },
+                        error: (error) => {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Error al carregar la història de la dieta'
+                            });
+                        }
+                    });
                 }
             },
             error: (error) => {
@@ -268,13 +326,11 @@ export class DietsFormComponent implements OnInit {
 
             const aux_id = Number(this.AuthService.getAuxiliarId());
             if (!aux_id) {
-                console.error('Invalid auxId in localStorage');
                 this.loading = false;
                 return;
             }
             this.dietsService.insertDiet(this.pac_id, sanitizedTexture, sanitizedDietType, sanitizedAutonomy, sanitizedProsthesis, aux_id).subscribe({
                 next: (response) => {
-                    console.log(response);
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Dieta assignada',
@@ -282,7 +338,6 @@ export class DietsFormComponent implements OnInit {
                     });
                 },
                 error: (error) => {
-                    console.log(error);
                     this.loading = false;
                 },
                 complete: () => {
