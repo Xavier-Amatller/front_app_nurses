@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { Habitacion } from '../models/interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -40,7 +41,7 @@ export class RoomsService {
     }
 
     getRoom(room_id: string) {
-        return this.http.get(this.apiURL.concat(`/rooms/show?id=${room_id}`), { headers: this.getHeaders() }).pipe(
+        return this.http.get<Habitacion>(this.apiURL.concat(`/rooms/show?hab_id=${room_id}`), { headers: this.getHeaders() }).pipe(
             catchError((error) => {
                 if (error.status === 401 || error.status === 403) {
                     localStorage.removeItem('authToken');

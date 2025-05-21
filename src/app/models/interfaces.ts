@@ -1,72 +1,79 @@
 export interface TipoDrenaje {
-    id: number;
-    tdre_desc: string;
+  id: number;
+  tdre_desc: string;
 }
 
 export interface RegistroResponse {
-    message: string;
-    registro: {
-        id: number;
-        aux_id: string;
-        pac_id: string;
-        reg_fecha: string;
-    };
+  message: string;
+  registro: {
+    id: number;
+    aux_id: string;
+    pac_id: string;
+    reg_fecha: string;
+  };
 }
 
 export interface TipoTextura {
-    id: number;
-    ttex_desc: string;
+  id: number;
+  ttex_desc: string;
 }
 
 export interface TipoDieta {
-    id: number;
-    tdie_desc: string;
+  id: number;
+  tdie_desc: string;
+}
+
+export interface Habitacion {
+  id: number;
+  hab_id: number;
+  hab_obs: string | null;
+  paciente: Paciente | null;
 }
 
 export interface Paciente {
-    pac_alergias: string;
-    pac_antecedentes: string;
-    pac_apellidos: string;
-    pac_direccion_completa: string;
-    pac_edad: number;
-    pac_fecha_ingreso: string;
-    pac_fecha_nacimiento: string;
-    pac_id: number;
-    pac_lengua_materna: string;
-    pac_nombre: string;
-    pac_nombre_cuidador: string;
-    pac_num_historial: number;
-    pac_telefono_cuidador: string;
+  pac_alergias: string;
+  pac_antecedentes: string;
+  pac_apellidos: string;
+  pac_direccion_completa: string;
+  pac_edad: number;
+  pac_fecha_ingreso: string;
+  pac_fecha_nacimiento: string;
+  pac_id: number;
+  pac_lengua_materna: string;
+  pac_nombre: string;
+  pac_nombre_cuidador: string;
+  pac_num_historial: number;
+  pac_telefono_cuidador: string;
 }
 export interface Constantes {
-    ta_sistolica: number | null;
-    ta_diastolica: number | null;
-    frequencia_respiratoria: number | null;
-    pulso: number | null;
-    temperatura: number | null;
-    saturacion_oxigeno: number | null;
-    talla: number | null;
-    diuresis: number | null;
-    deposiciones: string | null;
-    stp: string | null;
+  ta_sistolica: number | null;
+  ta_diastolica: number | null;
+  frequencia_respiratoria: number | null;
+  pulso: number | null;
+  temperatura: number | null;
+  saturacion_oxigeno: number | null;
+  talla: number | null;
+  diuresis: number | null;
+  deposiciones: string | null;
+  stp: string | null;
 }
 
 export interface Drenajes {
-    dre_debito: string | null;
-    tdre_desc: string | null;
+  dre_debito: string | null;
+  tdre_desc: string | null;
 }
 
 export interface Movilizaciones {
-    mov_ajuda_deambulacion: boolean | null;
-    mov_ajuda_descripcion: string | null;
-    mov_cambios: string | null;
-    mov_decubitos: string | null;
-    mov_sedestacion: boolean | null;
+  mov_ajuda_deambulacion: boolean | null;
+  mov_ajuda_descripcion: string | null;
+  mov_cambios: string | null;
+  mov_decubitos: string | null;
+  mov_sedestacion: boolean | null;
 }
 
 export interface Diagnostico {
-    dia_diagnostico: string | null;
-    dia_motivo: string | null;
+  dia_diagnostico: string | null;
+  dia_motivo: string | null;
 }
 
 export interface HistoryData {
@@ -101,3 +108,7 @@ export interface HistoryData {
     dia_motivo?: string;
   };
 }
+
+
+
+

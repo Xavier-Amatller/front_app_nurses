@@ -10,7 +10,8 @@ export const backofficeRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'auxiliares', pathMatch: 'full' },
       { path: 'auxiliares', loadComponent: () => import('./auxiliar/auxiliar-management.component').then(m => m.AuxiliarManagementComponent) },
-      { path: 'pacientes', loadComponent: () => import('./patient/patient-management.component').then(m => m.PatientManagementComponent) }
+      { path: 'pacientes', loadComponent: () => import('./patient/patient-management.component').then(m => m.PatientManagementComponent) },
+      { path: 'habitaciones', loadComponent: () => import('./room/room-management.component').then(m => m.RoomManagementComponent) }
     ]
   }
 ];

@@ -26,6 +26,11 @@ import { AuthService } from '../../service/auth.service';
               Gestionar Pacientes
             </a>
           </li>
+          <li>
+            <a routerLink="habitaciones" routerLinkActive="text-blue-600 font-bold" [routerLinkActiveOptions]="{ exact: false }" class="text-gray-600 hover:text-blue-600">
+              Gestionar Habitaciones
+            </a>
+          </li>
         </ul>
       </nav>
       <main class="p-4">
