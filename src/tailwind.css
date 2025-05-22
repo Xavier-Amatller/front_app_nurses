@@ -4,6 +4,7 @@
 
 .chart-dialog-custom canvas {
     width: 100% !important;
-    height: 90% !important;
+    height: 100% !important;
+    margin-top: 20px;
     display: block;
 }

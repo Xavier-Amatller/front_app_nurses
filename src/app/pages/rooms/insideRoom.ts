@@ -82,8 +82,9 @@ import { RoomsService } from '../../service/rooms.service';
                                     </div>
                                 </div>
                             </p-drawer>
-                            <p-dialog [modal]="true" [(visible)]="visible" [style]="{ width: '80rem', height: '60rem' }" [maximizable]="true">
-                                <p-chart class="h-[30px] chart-dialog-custom" type="line" [data]="lineData" [options]="lineOptions"></p-chart>
+                            <!-- Poner true el modal, si lo quieren con fondo oscuro -->
+                            <p-dialog [modal]="false" [(visible)]="visible" [style]="{ width: '70rem' }" [maximizable]="true">
+                                <p-chart class="chart-dialog-custom" [height]="'700px'" type="line" [data]="lineData" [options]="lineOptions"></p-chart>
                             </p-dialog>
                             <div class="flex gap-4 mb-2">
                                 <p-button class="w-max" (click)="openCares(room[0]?.paciente?.pac_id)">Afegir curas</p-button>
@@ -581,7 +582,7 @@ export class InsideRooms implements OnInit {
     }
     initChart(chartLabels: string[], chartData: any[]) {
         const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color');
+        const textColor = documentStyle.getPropertyValue('--text-color-secondary'   );
         const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
         const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
@@ -659,7 +660,11 @@ export class InsideRooms implements OnInit {
             scales: {
                 x: {
                     ticks: {
-                        color: textColorSecondary
+                        color: textColorSecondary,
+                        callback: (val: any, index: number) => {
+                            const fullLabel = this.lineData.labels[index];
+                            return fullLabel.split('(')[0].trim();
+                        }
                     },
                     grid: {
                         color: surfaceBorder,
