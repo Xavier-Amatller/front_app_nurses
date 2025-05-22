@@ -41,12 +41,14 @@ import { RoomCardComponent } from '../../../components/room-card';
     template: `
         <div class="p-6 bg-white rounded-lg shadow-md">
             <h2 class="text-xl font-semibold mb-4">Asignar Habitaciones</h2>
-            <div class="field">
+            <div class="flex justify-between">
                 <label for="numRoom" class="sr-only"></label>
-                <input [(ngModel)]="hab_id" pInputText id="numRoom" type="text" placeholder="Num habitació" [class.ng-invalid]="!hab_id" />
-                <p-button (onClick)="searchHabitacio()" [loading]="loading" [disabled]="!hab_id" label="Trobar habitacio" [fluid]="false"></p-button>
-                <p-button *ngIf="room?.paciente" (onClick)="unassignPatient()" [loading]="unsubscribeLoading" [disabled]="!room?.paciente" label="Donar de baixa" [fluid]="false"></p-button>
-                <p-button *ngIf="!room?.paciente" (onClick)="assignPatient()" [loading]="unsubscribeLoading" [disabled]="room?.paciente" label="Donar de alta" [fluid]="false"></p-button>
+                <div>
+                    <input [(ngModel)]="hab_id" pInputText id="numRoom" type="text" placeholder="Num habitació" [class.ng-invalid]="!hab_id" />
+                    <p-button class="ml-3" (onClick)="searchHabitacio()" [loading]="loading" [disabled]="!hab_id" label="Trobar habitacio" [fluid]="false"></p-button>
+                </div>
+                <p-button *ngIf="room?.paciente" (onClick)="unassignPatient()" [loading]="asigmentloading" [disabled]="!room?.paciente" label="Donar de baixa" [fluid]="false"></p-button>
+                <p-button *ngIf="room && !room?.paciente" (onClick)="assignPatient()" [loading]="asigmentloading" [disabled]="room.paciente" label="Donar de alta" [fluid]="false"></p-button>
             </div>
             <br />
             <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px;" *ngIf="room">
@@ -57,8 +59,9 @@ import { RoomCardComponent } from '../../../components/room-card';
 })
 export class RoomManagementComponent implements OnInit {
     hab_id: string = '';
+    patient_id: string = '';
     loading = false;
-    unsubscribeLoading = false;
+    asigmentloading = false;
     room: Habitacion | null = null;
 
     constructor(
@@ -77,7 +80,7 @@ export class RoomManagementComponent implements OnInit {
         this.rs.getRoom(this.hab_id).subscribe((data: any) => {
             this.room = data[0];
             console.log(this.room);
-            
+
             this.loading = false;
         });
     }
@@ -86,18 +89,18 @@ export class RoomManagementComponent implements OnInit {
         if (!this.hab_id) {
             return;
         }
-        this.unsubscribeLoading = true;
+        this.asigmentloading = true;
 
         this.rs.unassignPatient(this.hab_id).subscribe({
             next: (data: any) => {
                 this.room = data.data;
             },
             error: (error: Error) => {
-                console.error('Error al donar de baixa la habitació:', error);
-                this.unsubscribeLoading = false;
+                console.error('Error al donar de baixa el pacient:', error);
+                this.asigmentloading = false;
             },
             complete: () => {
-                this.unsubscribeLoading = false;
+                this.asigmentloading = false;
                 this.searchHabitacio();
             }
         });
@@ -107,21 +110,20 @@ export class RoomManagementComponent implements OnInit {
         if (!this.hab_id) {
             return;
         }
-        this.unsubscribeLoading = true;
+        this.asigmentloading = true;
 
-        this.rs.unassignPatient(this.hab_id).subscribe({
+        this.rs.assignPatient(this.hab_id, this.patient_id).subscribe({
             next: (data: any) => {
                 this.room = data.data;
             },
             error: (error: Error) => {
-                console.error('Error al donar de baixa la habitació:', error);
-                this.unsubscribeLoading = false;
+                console.error('Error al donar de alta el pacient:', error);
+                this.asigmentloading = false;
             },
             complete: () => {
-                this.unsubscribeLoading = false;
+                this.asigmentloading = false;
                 this.searchHabitacio();
             }
         });
     }
-
 }

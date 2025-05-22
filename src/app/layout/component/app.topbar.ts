@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AuthService } from '../../service/auth.service';
 import { LayoutService } from '../service/layout.service';
 import { AppConfigurator } from './app.configurator';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator,],
+    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, ButtonModule],
     template: `
         <div class="layout-topbar-blur">
             <div class="layout-topbar">
@@ -32,6 +33,8 @@ import { AppConfigurator } from './app.configurator';
                 </div>
 
                 <div class="layout-topbar-actions layout-topbar-actions-bg">
+                    <p-button *ngIf="this.isAdmin()" (click)="backoffice()">Administracion</p-button>
+
                     <div class="layout-config-menu">
                         <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                             <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
@@ -55,27 +58,19 @@ import { AppConfigurator } from './app.configurator';
                     <button class="layout-topbar-menu-button layout-topbar-action" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
                         <i class="pi pi-ellipsis-v"></i>
                     </button>
-                    
+
                     <div class="layout-topbar-menu hidden lg:block">
                         <div class="layout-topbar-menu-content">
-                            <!-- <button type="button" class="layout-topbar-action">
-                                <i class="pi pi-calendar"></i>
-                                <span>Calendar</span>
-                            </button>
-                            <button type="button" class="layout-topbar-action">
-                                <i class="pi pi-inbox"></i>
-                                <span>Messages</span>
-                            </button> -->
                             <button type="button" class="layout-topbar-action">
                                 <i class="pi pi-user"></i>
                                 <span>Profile</span>
                             </button>
+
                             <button type="button" class="layout-topbar-action transition-all hover:bg-red-400" (click)="logOut()">
                                 <i class="pi pi-sign-out"></i>
                                 <span>Sortir</span>
                             </button>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -85,7 +80,8 @@ import { AppConfigurator } from './app.configurator';
 export class AppTopbar {
     constructor(
         public layoutService: LayoutService,
-        private readonly AuthService: AuthService
+        private readonly AuthService: AuthService,
+        private readonly router: Router
     ) {}
 
     displayConfirmation: boolean = false;
@@ -103,7 +99,13 @@ export class AppTopbar {
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
     }
-    logOut(){
+    logOut() {
         this.AuthService.logout();
+    }
+    backoffice() {
+        this.router.navigate(['/backoffice']);
+    }
+    isAdmin() {
+        return this.AuthService.isAdmin();
     }
 }
