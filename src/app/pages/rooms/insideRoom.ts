@@ -93,7 +93,7 @@ import { RoomsService } from '../../service/rooms.service';
                                 <p-button class="w-max" (click)="openDiet()">Afegir dieta</p-button>
                             </div>
                         </div>
-                        <div class="flex w-auto text-[var(--primary-color)]">
+                        <div class="flex mb-3 w-auto text-[var(--primary-color)]">
                             <div (click)="visibleLeft = true" class="flex gap-2 justify-center hover:cursor-pointer">
                                 <p class="font-sm">Veure el historial</p>
                                 <svg
