@@ -48,6 +48,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_ta_sistolica')?.invalid && registroForm.get('cv_ta_sistolica')?.touched
                                 }"
+                                [placeholder]="'Max 140 mmHg - Min 90 mmHg'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -69,6 +70,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_ta_diastolica')?.invalid && registroForm.get('cv_ta_diastolica')?.touched
                                 }"
+                                [placeholder]="'Max 90 mmHg - Min 50 mmHg'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -87,6 +89,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_pulso')?.invalid && registroForm.get('cv_pulso')?.touched
                                 }"
+                                [placeholder]="'Max 100 bpm - Min 50 bpm'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -112,6 +115,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_frecuencia_respiratoria')?.invalid && registroForm.get('cv_frecuencia_respiratoria')?.touched
                                 }"
+                                [placeholder]="'Max 20 rpm - Min 12 rpm'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -134,6 +138,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_temperatura')?.invalid && registroForm.get('cv_temperatura')?.touched
                                 }"
+                                [placeholder]="'Max 38.5 °C - Min 34.9 °C'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -152,6 +157,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_saturacion_oxigeno')?.invalid && registroForm.get('cv_saturacion_oxigeno')?.touched
                                 }"
+                                [placeholder]="'Min 94%'"
                             />
                         </div>
                     </div>
