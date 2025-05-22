@@ -139,16 +139,15 @@ interface SelectOption {
             </div>
             <ng-container *ngIf="loading; else historyDietBlock">
                 <div @fadeAnimation class="card flex gap-4 mt-8 overflow-x-auto h-auto">
-                    <p-skeleton class="w-[300px] transition-all" height="180px"></p-skeleton>
-                    <p-skeleton class="w-[300px] transition-all" height="180px"></p-skeleton>
-                    <p-skeleton class="w-[300px] transition-all" height="180px"></p-skeleton>
-                    <p-skeleton class="w-[300px] transition-all" height="180px"></p-skeleton>
+                    <ng-container *ngFor="let i of [].constructor(5); let idx = index">
+                        <p-skeleton class="w-[300px] transition-all" height="180px"></p-skeleton>
+                    </ng-container>
                 </div>
             </ng-container>
             <ng-template #historyDietBlock>
-                <div  @fadeAnimation *ngIf="historyDiet.length > 0" class="card flex gap-4 mt-8 overflow-x-auto h-auto">
+                <div @fadeAnimation *ngIf="historyDiet.length > 0" class="card flex gap-4 mt-8 overflow-x-auto h-auto">
                     <div *ngFor="let item of historyDiet" class=" !p-0">
-                        <div class="card border w-[300px]">
+                        <div class="card !border border-[var(--surface-border)] w-[300px]">
                             <h4 class="mb-0">Dia {{ item.reg_fecha }}</h4>
                             <p class="mb-6 text-gray-600 text-lg">{{ item.reg_hora }}</p>
                             <p>Textura: {{ item.Die_TText?.descripcion ?? '-' }}</p>
@@ -286,6 +285,7 @@ export class DietsFormComponent implements OnInit {
             },
             error: (error) => {
                 if (error.error.message === 'noPatient') {
+                    this.historyDiet = [];
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Advertència',
@@ -293,6 +293,7 @@ export class DietsFormComponent implements OnInit {
                     });
                 }
                 if (error.error.message === 'roomNotFound') {
+                    this.historyDiet = [];
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
