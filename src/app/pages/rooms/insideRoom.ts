@@ -38,26 +38,28 @@ import { RoomsService } from '../../service/rooms.service';
                     <div @fadeAnimation class="card">
                         <div class="width-full flex justify-between">
                             <h4>Ultims 7 dies</h4>
-                            <div (click)="showDialog()" class="flex text-end gap-2 mb-2 text-[var(--primary-color)] hover:cursor-pointer">
-                                <p class="font-sm">Ampliar gràfic</p>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="var(--primary-color)"
-                                    stroke-width="1"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-window-maximize"
-                                >
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M3 16m0 1a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1z" />
-                                    <path d="M4 12v-6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-6" />
-                                    <path d="M12 8h4v4" />
-                                    <path d="M16 8l-5 5" />
-                                </svg>
+                            <div class="text-[var(--primary-color)]">
+                                <div (click)="showDialog()" class="flex gap-2 hover:cursor-pointer">
+                                    <p class="font-sm">Ampliar gràfic</p>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="var(--primary-color)"
+                                        stroke-width="1"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="icon icon-tabler icons-tabler-outline icon-tabler-window-maximize"
+                                    >
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M3 16m0 1a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1z" />
+                                        <path d="M4 12v-6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-6" />
+                                        <path d="M12 8h4v4" />
+                                        <path d="M16 8l-5 5" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                         <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
@@ -91,25 +93,27 @@ import { RoomsService } from '../../service/rooms.service';
                                 <p-button class="w-max" (click)="openDiet()">Afegir dieta</p-button>
                             </div>
                         </div>
-                        <div (click)="visibleLeft = true" class="flex gap-2 text-[var(--primary-color)] hover:cursor-pointer">
-                            <p class="font-sm">Veure el historial</p>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="var(--primary-color)"
-                                stroke-width="1"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-external-link"
-                            >
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
-                                <path d="M11 13l9 -9" />
-                                <path d="M15 4h5v5" />
-                            </svg>
+                        <div class="flex w-auto text-[var(--primary-color)]">
+                            <div (click)="visibleLeft = true" class="flex gap-2 justify-center hover:cursor-pointer">
+                                <p class="font-sm">Veure el historial</p>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="var(--primary-color)"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-external-link"
+                                >
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+                                    <path d="M11 13l9 -9" />
+                                    <path d="M15 4h5v5" />
+                                </svg>
+                            </div>
                         </div>
 
                         <p-tabs value="0">
@@ -582,7 +586,7 @@ export class InsideRooms implements OnInit {
     }
     initChart(chartLabels: string[], chartData: any[]) {
         const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color-secondary'   );
+        const textColor = documentStyle.getPropertyValue('--text-color-secondary');
         const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
         const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
