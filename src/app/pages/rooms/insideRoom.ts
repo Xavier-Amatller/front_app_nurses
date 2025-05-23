@@ -1,8 +1,10 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import Chart, { ChartEvent, LegendItem } from 'chart.js/auto';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import { Button } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
@@ -19,6 +21,9 @@ import { LayoutService } from '../../layout/service/layout.service';
 import { Constantes, Diagnostico, Drenajes, HistoryData, Movilizaciones, Paciente } from '../../models/interfaces';
 import { RegistroService } from '../../service/registro.service';
 import { RoomsService } from '../../service/rooms.service';
+
+Chart.register(annotationPlugin);
+
 @Component({
     selector: 'app-inside-room',
     standalone: true,
@@ -85,8 +90,10 @@ import { RoomsService } from '../../service/rooms.service';
                                 </div>
                             </p-drawer>
                             <!-- Poner true el modal, si lo quieren con fondo oscuro -->
-                            <p-dialog [modal]="false" [(visible)]="visible" [style]="{ width: '70rem' }" [maximizable]="true">
-                                <p-chart class="chart-dialog-custom" [height]="'700px'" type="line" [data]="lineData" [options]="lineOptions"></p-chart>
+                            <p-dialog [modal]="false" [(visible)]="visible" [style]="{ width: '70rem' }" [maximizable]="true" (onShow)="onDialogShow()" (onHide)="onDialogHide()">
+                                <ng-container *ngIf="chartReady" class="min-h-[700px]">
+                                    <p-chart #chartRef class="chart-dialog-custom" [height]="'700px'" type="line" [data]="lineData" [options]="lineOptionsDialog"></p-chart>
+                                </ng-container>
                             </p-dialog>
                             <div class="flex gap-4 mb-2">
                                 <p-button class="w-max" (click)="openCares(room[0]?.paciente?.pac_id)">Afegir curas</p-button>
@@ -321,6 +328,9 @@ export class InsideRooms implements OnInit {
     };
     lineData: any;
     lineOptions: any;
+    lineOptionsDialog: any;
+
+    chartReady = false;
 
     subscription: Subscription;
 
@@ -586,6 +596,254 @@ export class InsideRooms implements OnInit {
     showDialog() {
         this.visible = true;
     }
+
+    @ViewChild('chartRef') chartComponent: any;
+
+    onDialogShow() {
+        this.lineOptionsDialog = this.buildLineOptions();
+        this.chartReady = true;
+    }
+    onDialogHide() {
+        this.chartReady = false;
+    }
+
+    buildLineOptions(): any {
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--text-color-secondary');
+        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+
+        return {
+            maintainAspectRatio: false,
+            aspectRatio: 0.7,
+            animation: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor
+                    },
+                    onClick: (e: ChartEvent, legendItem: LegendItem, legend: any) => {
+                        const chart = legend.chart;
+                        const datasetIndex = legendItem.datasetIndex;
+
+                        if (datasetIndex === undefined) return;
+
+                        const meta = chart.getDatasetMeta(datasetIndex);
+                        meta.hidden = meta.hidden === null ? !chart.data.datasets[datasetIndex].hidden : null;
+
+                        const isVisible = !meta.hidden;
+                        const annotationPlugin = chart.options.plugins.annotation;
+
+                        console.log(legendItem.text.toLowerCase());
+
+                        if (legendItem.text.toLowerCase().includes('puls')) {
+                            console.log(legendItem.text);
+                            annotationPlugin.annotations.pulsMax.display = isVisible;
+                            annotationPlugin.annotations.pulsMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('temperatura')) {
+                            annotationPlugin.annotations.temperaturaMax.display = isVisible;
+                            annotationPlugin.annotations.temperaturaMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('saturació')) {
+                            annotationPlugin.annotations.saturacionMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('frequencia')) {
+                            annotationPlugin.annotations.frecuenciaMax.display = isVisible;
+                            annotationPlugin.annotations.frecuenciaMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('ta sistólica')) {
+                            annotationPlugin.annotations.tasistolicaMax.display = isVisible;
+                            annotationPlugin.annotations.tasistolicaMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('ta diastólica')) {
+                            annotationPlugin.annotations.tadiastolicaMax.display = isVisible;
+                            annotationPlugin.annotations.tadiastolicaMin.display = isVisible;
+                        }
+
+                        chart.update();
+                    }
+                },
+                annotation: {
+                    annotations: {
+                        pulsMin: {
+                            type: 'line',
+                            yMin: 50,
+                            yMax: 50,
+                            borderColor: '#FF6384',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min Puls',
+                                color: '#FF6384',
+                                position: 'start'
+                            }
+                        },
+                        pulsMax: {
+                            type: 'line',
+                            yMin: 100,
+                            yMax: 100,
+                            borderColor: '#FF6384',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max Puls',
+                                color: '#FF6384',
+                                position: 'start'
+                            }
+                        },
+                        temperaturaMin: {
+                            type: 'line',
+                            yMin: 34.9,
+                            yMax: 34.9,
+                            borderColor: '#FFCE56',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min Temperatura (°C)',
+                                color: '#FFCE56',
+                                position: 'start'
+                            }
+                        },
+                        temperaturaMax: {
+                            type: 'line',
+                            yMin: 38.5,
+                            yMax: 38.5,
+                            borderColor: '#FFCE56',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max Temperatura (°C)',
+                                color: '#FFCE56',
+                                position: 'start'
+                            }
+                        },
+                        saturacionMin: {
+                            type: 'line',
+                            yMin: 94,
+                            yMax: 94,
+                            borderColor: '#36A2EB',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: "Min Saturació d'oxigen (%)",
+                                color: '#36A2EB',
+                                position: 'start'
+                            }
+                        },
+                        frecuenciaMin: {
+                            type: 'line',
+                            yMin: 12,
+                            yMax: 12,
+                            borderColor: '#4BC0C0',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min Frequencia respiratoria',
+                                color: '#4BC0C0',
+                                position: 'start'
+                            }
+                        },
+                        frecuenciaMax: {
+                            type: 'line',
+                            yMin: 20,
+                            yMax: 20,
+                            borderColor: '#4BC0C0',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max Frequencia respiratoria',
+                                color: '#4BC0C0',
+                                position: 'start'
+                            }
+                        },
+                        tasistolicaMin: {
+                            type: 'line',
+                            yMin: 90,
+                            yMax: 90,
+                            borderColor: '#9966FF',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min TA sistólica',
+                                color: '#9966FF',
+                                position: 'start'
+                            }
+                        },
+                        tasistolicaMax: {
+                            type: 'line',
+                            yMin: 140,
+                            yMax: 140,
+                            borderColor: '#9966FF',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max TA sistólica',
+                                color: '#9966FF',
+                                position: 'start'
+                            }
+                        },
+                        tadiastolicaMax: {
+                            type: 'line',
+                            yMin: 90,
+                            yMax: 90,
+                            borderColor: '#FF9F40',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max TA diastólica',
+                                color: '#FF9F40',
+                                position: 'start'
+                            }
+                        },
+                        tadiastolicaMin: {
+                            type: 'line',
+                            yMin: 50,
+                            yMax: 50,
+                            borderColor: '#FF9F40',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min TA diastólica',
+                                color: '#FF9F40',
+                                position: 'start'
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: textColorSecondary,
+                        callback: (val: any, index: number) => {
+                            const fullLabel = this.lineData.labels[index];
+                            return fullLabel.split('(')[0].trim();
+                        }
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
+                }
+            }
+        };
+    }
+
     initChart(chartLabels: string[], chartData: any[]) {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color-secondary');
@@ -660,6 +918,199 @@ export class InsideRooms implements OnInit {
                 legend: {
                     labels: {
                         color: textColor
+                    },
+                    onClick: (e: ChartEvent, legendItem: LegendItem, legend: any) => {
+                        const chart = legend.chart;
+                        const datasetIndex = legendItem.datasetIndex;
+
+                        if (datasetIndex === undefined) return;
+
+                        const meta = chart.getDatasetMeta(datasetIndex);
+                        meta.hidden = meta.hidden === null ? !chart.data.datasets[datasetIndex].hidden : null;
+
+                        const isVisible = !meta.hidden;
+                        const annotationPlugin = chart.options.plugins.annotation;
+
+                        console.log(legendItem.text.toLowerCase());
+
+                        if (legendItem.text.toLowerCase().includes('puls')) {
+                            console.log(legendItem.text);
+                            annotationPlugin.annotations.pulsMax.display = isVisible;
+                            annotationPlugin.annotations.pulsMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('temperatura')) {
+                            annotationPlugin.annotations.temperaturaMax.display = isVisible;
+                            annotationPlugin.annotations.temperaturaMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('saturació')) {
+                            annotationPlugin.annotations.saturacionMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('frequencia')) {
+                            annotationPlugin.annotations.frecuenciaMax.display = isVisible;
+                            annotationPlugin.annotations.frecuenciaMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('ta sistólica')) {
+                            annotationPlugin.annotations.tasistolicaMax.display = isVisible;
+                            annotationPlugin.annotations.tasistolicaMin.display = isVisible;
+                        }
+
+                        if (legendItem.text.toLowerCase().includes('ta diastólica')) {
+                            annotationPlugin.annotations.tadiastolicaMax.display = isVisible;
+                            annotationPlugin.annotations.tadiastolicaMin.display = isVisible;
+                        }
+
+                        chart.update();
+                    }
+                },
+                annotation: {
+                    annotations: {
+                        pulsMin: {
+                            type: 'line',
+                            yMin: 50,
+                            yMax: 50,
+                            borderColor: '#FF6384',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min Puls',
+                                color: '#FF6384',
+                                position: 'start'
+                            }
+                        },
+                        pulsMax: {
+                            type: 'line',
+                            yMin: 100,
+                            yMax: 100,
+                            borderColor: '#FF6384',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max Puls',
+                                color: '#FF6384',
+                                position: 'start'
+                            }
+                        },
+                        temperaturaMin: {
+                            type: 'line',
+                            yMin: 34.9,
+                            yMax: 34.9,
+                            borderColor: '#FFCE56',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min Temperatura (°C)',
+                                color: '#FFCE56',
+                                position: 'start'
+                            }
+                        },
+                        temperaturaMax: {
+                            type: 'line',
+                            yMin: 38.5,
+                            yMax: 38.5,
+                            borderColor: '#FFCE56',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max Temperatura (°C)',
+                                color: '#FFCE56',
+                                position: 'start'
+                            }
+                        },
+                        saturacionMin: {
+                            type: 'line',
+                            yMin: 94,
+                            yMax: 94,
+                            borderColor: '#36A2EB',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: "Min Saturació d'oxigen (%)",
+                                color: '#36A2EB',
+                                position: 'start'
+                            }
+                        },
+                        frecuenciaMin: {
+                            type: 'line',
+                            yMin: 12,
+                            yMax: 12,
+                            borderColor: '#4BC0C0',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min Frequencia respiratoria',
+                                color: '#4BC0C0',
+                                position: 'start'
+                            }
+                        },
+                        frecuenciaMax: {
+                            type: 'line',
+                            yMin: 20,
+                            yMax: 20,
+                            borderColor: '#4BC0C0',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max Frequencia respiratoria',
+                                color: '#4BC0C0',
+                                position: 'start'
+                            }
+                        },
+                        tasistolicaMin: {
+                            type: 'line',
+                            yMin: 90,
+                            yMax: 90,
+                            borderColor: '#9966FF',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min TA sistólica',
+                                color: '#9966FF',
+                                position: 'start'
+                            }
+                        },
+                        tasistolicaMax: {
+                            type: 'line',
+                            yMin: 140,
+                            yMax: 140,
+                            borderColor: '#9966FF',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max TA sistólica',
+                                color: '#9966FF',
+                                position: 'start'
+                            }
+                        },
+                        tadiastolicaMax: {
+                            type: 'line',
+                            yMin: 90,
+                            yMax: 90,
+                            borderColor: '#FF9F40',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Max TA diastólica',
+                                color: '#FF9F40',
+                                position: 'start'
+                            }
+                        },
+                        tadiastolicaMin: {
+                            type: 'line',
+                            yMin: 50,
+                            yMax: 50,
+                            borderColor: '#FF9F40',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: 'Min TA diastólica',
+                                color: '#FF9F40',
+                                position: 'start'
+                            }
+                        }
                     }
                 }
             },
