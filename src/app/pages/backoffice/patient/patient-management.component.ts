@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
-import { InputTextModule } from 'primeng/inputtext';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
-import { PatientService } from '../../../service/patient.service';
+import { CheckboxModule } from 'primeng/checkbox';
 import { FluidModule } from 'primeng/fluid';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
-import { CheckboxModule } from 'primeng/checkbox';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { PatientService } from '../../../service/patient.service';
 
 @Component({
     selector: 'app-patient-management',
@@ -34,7 +34,7 @@ import { MessageService } from 'primeng/api';
     providers: [MessageService], // Añadir MessageService como proveedor
     template: `
         <p-toast></p-toast>
-        <div class="p-6 bg-white rounded-lg shadow-md">
+        <div class="card">
             <div class="mb-4">
                 <input [(ngModel)]="pac_id" pInputText id="numRoom" type="text" placeholder="ID del paciente" [class.ng-invalid]="!pac_id" />
                 <p-button class="ml-3" (onClick)="searchPacient()" [loading]="loading" [disabled]="!pac_id" label="Trobar pacient" [fluid]="false"></p-button>

@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../service/auth.service';
+import { Component } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
     selector: 'app-backoffice',
@@ -47,6 +47,7 @@ export class BackofficeComponent {
     }
 
     campus(): void {
+        console.log('Redirecting to campus...');
         this.router.navigate(['/tauler']);
     }
 }

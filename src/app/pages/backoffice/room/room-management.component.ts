@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
-import { InputTextModule } from 'primeng/inputtext';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
+import { CheckboxModule } from 'primeng/checkbox';
 import { FluidModule } from 'primeng/fluid';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
-import { CheckboxModule } from 'primeng/checkbox';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { ToastModule } from 'primeng/toast';
-import { MessageModule } from 'primeng/message';
-import { RoomsService } from '../../../service/rooms.service';
-import { Habitacion } from '../../../models/interfaces';
 import { RoomCardComponent } from '../../../components/room-card';
+import { Habitacion } from '../../../models/interfaces';
+import { RoomsService } from '../../../service/rooms.service';
 
 @Component({
     selector: 'app-room-management',
@@ -39,7 +39,7 @@ import { RoomCardComponent } from '../../../components/room-card';
     ],
 
     template: `
-        <div class="p-6 bg-white rounded-lg shadow-md">
+        <div class="card">
             <h2 class="text-xl font-semibold mb-4">Asignar Habitaciones</h2>
             <div class="flex justify-between">
                 <label for="numRoom" class="sr-only"></label>
