@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -12,18 +13,20 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { Tag } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
+import { Toast } from 'primeng/toast';
 import { RegistroResponse, TipoDieta, TipoDrenaje, TipoTextura } from '../../models/interfaces';
 import { AuthService } from '../../service/auth.service';
 import { RegistroService } from '../../service/registro.service';
 @Component({
     selector: 'app-cares',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, InputNumberModule, DatePickerModule, TextareaModule, CheckboxModule, DropdownModule, MultiSelectModule, Tag],
-    providers: [AuthService],
+    imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, InputNumberModule, DatePickerModule, TextareaModule, CheckboxModule, DropdownModule, MultiSelectModule, Tag, Toast],
+    providers: [AuthService, MessageService],
     animations: [trigger('tagAnimation', [transition(':enter', [style({ opacity: 0 }), animate('300ms 500ms ease-in', style({ opacity: 1 }))]), transition(':leave', [animate('200ms ease-out', style({ opacity: 0 }))])])],
 
     template: `
         <div>
+            <p-toast position="top-right"></p-toast>
             <form class="flex flex-col-2 gap-8" [formGroup]="registroForm" (ngSubmit)="onSubmit()">
                 <div class="md:w-1/2">
                     <!-- Constantes Vitales -->
@@ -315,11 +318,12 @@ export class Cares implements OnInit {
     tiposDietas: TipoDieta[] = [];
 
     constructor(
-        private fb: FormBuilder,
-        private registroService: RegistroService,
-        private router: Router,
+        private readonly fb: FormBuilder,
+        private readonly registroService: RegistroService,
+        private readonly router: Router,
         private readonly AuthService: AuthService,
-        private readonly route: ActivatedRoute
+        private readonly route: ActivatedRoute,
+        private readonly messageService: MessageService
     ) {
         this.registroForm = this.fb.group({
             cv_ta_sistolica: [null, Validators.required],
@@ -363,6 +367,11 @@ export class Cares implements OnInit {
             },
             error: (error) => {
                 console.error('Error al cargar los tipos de drenajes', error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Error al carregar els tipus de drenatges'
+                });
             }
         });
 
@@ -373,6 +382,11 @@ export class Cares implements OnInit {
             },
             error: (error) => {
                 console.error('Error al cargar los tipos de texturas', error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Error al cargar los tipos de texturas'
+                });
             }
         });
 
@@ -383,6 +397,11 @@ export class Cares implements OnInit {
             },
             error: (error) => {
                 console.error('Error al cargar los tipos de dietas', error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Error al cargar los tipos de dietas'
+                });
             }
         });
     }
@@ -422,10 +441,21 @@ export class Cares implements OnInit {
                 next: (response: RegistroResponse) => {
                     const currentUrl = this.router.url;
                     const modifiedUrl = currentUrl.split('/').slice(1, -2).join('/');
-                    this.router.navigate([modifiedUrl]);
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Registre realitzat',
+                        detail: "El registre s'ha creat correctament"
+                    });
+                    setTimeout(() => {
+                        this.router.navigate([modifiedUrl]);
+                    }, 3000);
                 },
                 error: (error) => {
-                    console.error('Error al crear el registro', error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Error al crear el registre'
+                    });
                 }
             });
         }
