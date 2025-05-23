@@ -47,6 +47,6 @@ export class BackofficeComponent {
     }
 
     campus(): void {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/tauler']);
     }
 }

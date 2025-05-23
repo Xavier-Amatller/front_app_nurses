@@ -13,8 +13,8 @@ export const appRoutes: Routes = [
     component: AppLayout,
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: Dashboard },
+      { path: '', redirectTo: 'tauler', pathMatch: 'full' },
+      { path: 'tauler', component: Dashboard },
       { path: 'habitacions', loadChildren: () => import('./app/pages/rooms/rooms.routes') },
       { path: 'dietes', component: Diets },
     ]
