@@ -36,7 +36,7 @@ import { PatientService } from '../../../service/patient.service';
         <p-toast></p-toast>
         <div class="card">
             <div class="mb-4">
-                <input [(ngModel)]="pac_id" pInputText id="numRoom" type="text" placeholder="ID del paciente" [class.ng-invalid]="!pac_id" />
+                <input [(ngModel)]="pac_id" pInputText id="numPac" type="text" placeholder="ID del pacient" />
                 <p-button class="ml-3" (onClick)="searchPacient()" [loading]="loading" [disabled]="!pac_id" label="Trobar pacient" [fluid]="false"></p-button>
             </div>
 
