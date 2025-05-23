@@ -95,7 +95,7 @@ import { RoomsService } from '../../service/rooms.service';
                         </div>
                         <div class="flex mb-3 w-auto text-[var(--primary-color)]">
                             <div (click)="visibleLeft = true" class="flex gap-2 justify-center hover:cursor-pointer">
-                                <p class="font-sm">Veure el historial</p>
+                                <p class="font-sm">Veure l'historial</p>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="20"
@@ -152,11 +152,11 @@ import { RoomsService } from '../../service/rooms.service';
                                 <p-tabpanel value="1">
                                     <div class="card flex flex-col gap-4">
                                         <div class="flex flex-col gap-2">
-                                            <label for="dre_debito">Débito del Drenaje</label>
+                                            <label for="dre_debito">Dèbit del Drenatge</label>
                                             <input [(ngModel)]="drenajes.dre_debito" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                         </div>
                                         <div class="flex flex-col gap-2">
-                                            <label for="tdre_id">Tipo de Drenaje</label>
+                                            <label for="tdre_id">Tipus de Drenatge</label>
                                             <input [(ngModel)]="drenajes.tdre_desc" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                         </div>
                                     </div>
@@ -165,24 +165,24 @@ import { RoomsService } from '../../service/rooms.service';
                                     <div class="card flex flex-col gap-4">
                                         <div class="flex justify-evenly gap-2">
                                             <div class="flex gap-2">
-                                                <label for="mov_sedestacion">Sedestación</label>
+                                                <label for="mov_sedestacion">Sedestació</label>
                                                 <p-checkbox [(ngModel)]="this.movilizaciones.mov_sedestacion" [binary]="true" [disabled]="true" inputId="mov_sedestacion" />
                                             </div>
                                             <div class="flex gap-2">
-                                                <label for="mov_ajuda_deambulacion">Ayuda para Deambulación</label>
+                                                <label for="mov_ajuda_deambulacion">Ajuda per a Deambulació</label>
                                                 <p-checkbox [(ngModel)]="this.movilizaciones.mov_ajuda_deambulacion" [binary]="true" [disabled]="true" inputId="mov_ajuda_deambulacion" />
                                             </div>
                                         </div>
                                         <div class="flex flex-col gap-2">
-                                            <label for="mov_ajuda_descripcion">Descripción de la Ayuda</label>
+                                            <label for="mov_ajuda_descripcion">Descripció de l'ajuda</label>
                                             <input [(ngModel)]="this.movilizaciones.mov_ajuda_descripcion" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                         </div>
                                         <div class="flex flex-col gap-2">
-                                            <label for="mov_cambios">Cambios Posturales</label>
+                                            <label for="mov_cambios">Canvis posturals</label>
                                             <input [(ngModel)]="this.movilizaciones.mov_cambios" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                         </div>
                                         <div class="flex flex-col gap-2">
-                                            <label for="mov_decubitos">Decúbitos</label>
+                                            <label for="mov_decubitos">Decúbits</label>
                                             <input [(ngModel)]="this.movilizaciones.mov_decubitos" type="text" pInputText [disabled]="true" class="w-full h-max" />
                                         </div>
                                     </div>
@@ -208,13 +208,13 @@ import { RoomsService } from '../../service/rooms.service';
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="grid grid-cols-12 gap-4">
-                                <label for="pac_edad" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Edad: </label>
+                                <label for="pac_edad" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Edat: </label>
                                 <div class="col-span-12 md:col-span-9">
                                     <input pInputText [disabled]="true" id="pac_edad" type="number" [(ngModel)]="paciente.pac_edad" />
                                 </div>
                             </div>
                             <div class="grid grid-cols-12 gap-4">
-                                <label for="pac_lengua_materna" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Lengua Materna: </label>
+                                <label for="pac_lengua_materna" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Llengua Materna: </label>
                                 <div class="col-span-12 md:col-span-9">
                                     <input pInputText [disabled]="true" id="pac_lengua_materna" type="text" [(ngModel)]="paciente.pac_lengua_materna" />
                                 </div>
@@ -222,24 +222,24 @@ import { RoomsService } from '../../service/rooms.service';
                         </div>
                         <hr />
                         <div class="font-semibold text-xl mb-4">Informació del pacient</div>
-                        <label for="pac_motiu_ingrees" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Motiu d'ingrés:</label>
+                        <label for="pac_motiu_ingrees" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Motiu d'ingrés: </label>
                         <div class="col-span-12 md:col-span-9 md:mb-4">
                             <input [(ngModel)]="this.diagnostico.dia_motivo" pInputText [disabled]="true" id="pac_motiu_ingrees" type="text" class="w-full min-h-20" />
                         </div>
-                        <label for="pac_diagnostic" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Diagnostic:</label>
+                        <label for="pac_diagnostic" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Diagnostic: </label>
                         <div class="col-span-12 md:col-span-9">
                             <input [(ngModel)]="this.diagnostico.dia_diagnostico" pInputText [disabled]="true" id="pac_diagnostic" type="text" class="w-full min-h-20" />
                         </div>
                         <hr />
                         <div class="grid grid-cols-2 gap-4">
                             <div class="grid grid-cols-12 gap-4">
-                                <label for="pac_alergias" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Alergias: </label>
+                                <label for="pac_alergias" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Al·lèrgies: </label>
                                 <div class="col-span-12 md:col-span-9">
                                     <input pInputText [disabled]="true" id="pac_alergias" type="text" [(ngModel)]="paciente.pac_alergias" />
                                 </div>
                             </div>
                             <div class="grid grid-cols-12 gap-4">
-                                <label for="pac_antecedentes" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Antecedentes: </label>
+                                <label for="pac_antecedentes" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Antecedents: </label>
                                 <div class="col-span-12 md:col-span-9">
                                     <input pInputText [disabled]="true" id="pac_antecedentes" type="text" [(ngModel)]="paciente.pac_antecedentes" />
                                 </div>
@@ -256,7 +256,7 @@ import { RoomsService } from '../../service/rooms.service';
                                 </div>
                             </div>
                             <div class="grid grid-cols-12 gap-4">
-                                <label for="pac_telefono_cuidador" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Num Telefon:</label>
+                                <label for="pac_telefono_cuidador" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Núm Telèfon:</label>
                                 <div class="col-span-12 md:col-span-9">
                                     <input pInputText [disabled]="true" id="pac_telefono_cuidador" type="text" [(ngModel)]="paciente.pac_telefono_cuidador" />
                                 </div>
@@ -377,6 +377,8 @@ export class InsideRooms implements OnInit {
                                 reg_hora: hora
                             };
                         });
+
+                        this.historyData = this.historyData.reverse();
                     },
                     error: (err) => {
                         if (err.status === 404) {

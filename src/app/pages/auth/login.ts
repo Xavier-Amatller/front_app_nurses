@@ -92,7 +92,7 @@ export class Login implements OnInit {
         if (this.AuthService.isAdmin()) {
             this.router.navigate(['/backoffice']);
         } else {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/tauler']);
         }
     }
 }

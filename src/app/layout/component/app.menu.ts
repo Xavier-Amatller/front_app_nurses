@@ -23,7 +23,7 @@ export class AppMenu {
             {
                 label: 'Patients',
                 items: [
-                    { label: 'Dashboard', icon: 'pi pi-fw pi-th-large', routerLink: ['/dashboard'] },
+                    { label: 'Tauler', icon: 'pi pi-fw pi-th-large', routerLink: ['/tauler'] },
                     { label: 'Habitacions', icon: 'pi pi-fw pi-building', routerLink: ['/habitacions'] },
                     { label: 'Dietes', icon: 'pi pi-fw pi-face-smile', routerLink: ['/dietes'] },
                 ]

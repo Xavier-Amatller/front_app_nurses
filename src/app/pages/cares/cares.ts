@@ -3,28 +3,32 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DatePickerModule } from 'primeng/datepicker';
+import { Dialog } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { Tag } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
+import { Toast } from 'primeng/toast';
 import { RegistroResponse, TipoDieta, TipoDrenaje, TipoTextura } from '../../models/interfaces';
 import { AuthService } from '../../service/auth.service';
 import { RegistroService } from '../../service/registro.service';
 @Component({
     selector: 'app-cares',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, InputNumberModule, DatePickerModule, TextareaModule, CheckboxModule, DropdownModule, MultiSelectModule, Tag],
-    providers: [AuthService],
+    imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, InputNumberModule, DatePickerModule, TextareaModule, CheckboxModule, DropdownModule, MultiSelectModule, Tag, Toast, Dialog],
+    providers: [AuthService, MessageService, ConfirmationService],
     animations: [trigger('tagAnimation', [transition(':enter', [style({ opacity: 0 }), animate('300ms 500ms ease-in', style({ opacity: 1 }))]), transition(':leave', [animate('200ms ease-out', style({ opacity: 0 }))])])],
 
     template: `
         <div>
-            <form class="flex flex-col-2 gap-8" [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+            <p-toast position="top-right"></p-toast>
+            <form class="flex flex-col-2 gap-8" [formGroup]="registroForm" (ngSubmit)="onSubmit(this.alertsChecked)">
                 <div class="md:w-1/2">
                     <!-- Constantes Vitales -->
                     <div class="card flex flex-col gap-4">
@@ -48,6 +52,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_ta_sistolica')?.invalid && registroForm.get('cv_ta_sistolica')?.touched
                                 }"
+                                [placeholder]="'Max 140 mmHg - Min 90 mmHg'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -69,6 +74,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_ta_diastolica')?.invalid && registroForm.get('cv_ta_diastolica')?.touched
                                 }"
+                                [placeholder]="'Max 90 mmHg - Min 50 mmHg'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -87,6 +93,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_pulso')?.invalid && registroForm.get('cv_pulso')?.touched
                                 }"
+                                [placeholder]="'Max 100 bpm - Min 50 bpm'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -112,6 +119,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_frecuencia_respiratoria')?.invalid && registroForm.get('cv_frecuencia_respiratoria')?.touched
                                 }"
+                                [placeholder]="'Max 20 rpm - Min 12 rpm'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -134,6 +142,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_temperatura')?.invalid && registroForm.get('cv_temperatura')?.touched
                                 }"
+                                [placeholder]="'Max 38.5 °C - Min 34.9 °C'"
                             />
                         </div>
                         <div class="flex flex-col gap-2">
@@ -152,6 +161,7 @@ import { RegistroService } from '../../service/registro.service';
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('cv_saturacion_oxigeno')?.invalid && registroForm.get('cv_saturacion_oxigeno')?.touched
                                 }"
+                                [placeholder]="'Min 94%'"
                             />
                         </div>
                     </div>
@@ -295,6 +305,16 @@ import { RegistroService } from '../../service/registro.service';
                     <div class="flex justify-end mt-4">
                         <p-button label="Guardar" type="submit" [disabled]="registroForm.invalid" />
                     </div>
+                    <p-dialog header="Alertes!" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
+                    <div class="flex items-center justify-center">
+                        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+                        <span>Hi ha alertes, el pacient pot estar en perill. ¿Estás segur de que vols continuar?</span>
+                    </div>
+                    <ng-template #footer>
+                        <p-button label="No" icon="pi pi-times" (click)="closeConfirmation()" text severity="secondary" />
+                        <p-button label="Sí" icon="pi pi-check" (click)="closeAndSendConfirmation()" severity="danger" outlined autofocus />
+                    </ng-template>
+                </p-dialog>
                 </div>
             </form>
         </div>
@@ -308,12 +328,18 @@ export class Cares implements OnInit {
     tiposTexturas: TipoTextura[] = [];
     tiposDietas: TipoDieta[] = [];
 
+    displayConfirmation: boolean = false;
+    hasAlert: boolean = false; // Variable para controlar la alerta
+    alertsChecked = false;
+
     constructor(
-        private fb: FormBuilder,
-        private registroService: RegistroService,
-        private router: Router,
+        private readonly fb: FormBuilder,
+        private readonly registroService: RegistroService,
+        private readonly router: Router,
         private readonly AuthService: AuthService,
-        private readonly route: ActivatedRoute
+        private readonly route: ActivatedRoute,
+        private readonly messageService: MessageService,
+        private confirmationService: ConfirmationService
     ) {
         this.registroForm = this.fb.group({
             cv_ta_sistolica: [null, Validators.required],
@@ -357,6 +383,11 @@ export class Cares implements OnInit {
             },
             error: (error) => {
                 console.error('Error al cargar los tipos de drenajes', error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Error al carregar els tipus de drenatges'
+                });
             }
         });
 
@@ -367,6 +398,11 @@ export class Cares implements OnInit {
             },
             error: (error) => {
                 console.error('Error al cargar los tipos de texturas', error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Error al cargar los tipos de texturas'
+                });
             }
         });
 
@@ -377,11 +413,21 @@ export class Cares implements OnInit {
             },
             error: (error) => {
                 console.error('Error al cargar los tipos de dietas', error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Error al cargar los tipos de dietas'
+                });
             }
+        });
+
+        // Observa cambios en el formulario para actualizar hasAlert
+        this.registroForm.valueChanges.subscribe(() => {
+            this.checkAlert();
         });
     }
 
-    onSubmit(): void {
+    onSubmit($alertsChecked: boolean): void {
         if (this.registroForm.valid) {
             const registroData = {
                 aux_id: this.auxiliarId,
@@ -412,16 +458,68 @@ export class Cares implements OnInit {
                 }
             };
 
+            this.registroForm.valueChanges.subscribe(() => {
+                this.checkAlert();
+            });
+
+            if (!$alertsChecked) {
+                 if(this.hasAlert) {
+                this.openConfirmation();
+                return;
+            }
+            }
+           
             this.registroService.createRegistro(registroData).subscribe({
                 next: (response: RegistroResponse) => {
                     const currentUrl = this.router.url;
                     const modifiedUrl = currentUrl.split('/').slice(1, -2).join('/');
-                    this.router.navigate([modifiedUrl]);
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Registre realitzat',
+                        detail: "El registre s'ha creat correctament"
+                    });
+                    setTimeout(() => {
+                        this.router.navigate([modifiedUrl]);
+                    }, 3000);
                 },
                 error: (error) => {
-                    console.error('Error al crear el registro', error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Error al crear el registre'
+                    });
                 }
             });
         }
+    }
+
+    checkAlert(): void {
+        const sistolica = this.registroForm.get('cv_ta_sistolica')?.value;
+        const diastolica = this.registroForm.get('cv_ta_diastolica')?.value;
+        const pulso = this.registroForm.get('cv_pulso')?.value;
+        const frecuencia = this.registroForm.get('cv_frecuencia_respiratoria')?.value;
+        const temperatura = this.registroForm.get('cv_temperatura')?.value;
+        const saturacion = this.registroForm.get('cv_saturacion_oxigeno')?.value;
+
+
+        this.hasAlert =
+            (sistolica && (sistolica > 140 || sistolica < 90) && this.registroForm.get('cv_ta_sistolica')?.touched) ||
+            (diastolica && (diastolica >= 90 || diastolica < 50) && this.registroForm.get('cv_ta_diastolica')?.touched) ||
+            (pulso && (pulso > 100 || pulso < 50) && this.registroForm.get('cv_pulso')?.touched) ||
+            (frecuencia && (frecuencia > 20 || frecuencia < 12) && this.registroForm.get('cv_frecuencia_respiratoria')?.touched) ||
+            (temperatura && (temperatura > 38.5 || temperatura < 34.9) && this.registroForm.get('cv_temperatura')?.touched) ||
+            (saturacion && saturacion < 94 && this.registroForm.get('cv_saturacion_oxigeno')?.touched);
+    }
+    openConfirmation() {
+        this.displayConfirmation = true;
+    }
+
+    closeConfirmation() {
+        this.displayConfirmation = false;
+    }
+    closeAndSendConfirmation(){
+        this.displayConfirmation = false;
+        this.alertsChecked = true;
+        this.onSubmit(this.alertsChecked);
     }
 }
