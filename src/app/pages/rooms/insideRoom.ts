@@ -648,6 +648,7 @@ export class InsideRooms implements OnInit {
                         }
 
                         if (legendItem.text.toLowerCase().includes('saturació')) {
+                            annotationPlugin.annotations.saturacionMax.display = isVisible;
                             annotationPlugin.annotations.saturacionMin.display = isVisible;
                         }
 
@@ -720,6 +721,19 @@ export class InsideRooms implements OnInit {
                             label: {
                                 content: 'Max Temperatura (°C)',
                                 color: '#FFCE56',
+                                position: 'start'
+                            }
+                        },
+                        saturacionMax: {
+                            type: 'line',
+                            yMin: 100,
+                            yMax: 100,
+                            borderColor: '#36A2EB',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: "Max Saturació d'oxigen (%)",
+                                color: '#36A2EB',
                                 position: 'start'
                             }
                         },
@@ -945,6 +959,7 @@ export class InsideRooms implements OnInit {
                         }
 
                         if (legendItem.text.toLowerCase().includes('saturació')) {
+                            annotationPlugin.annotations.saturacionMax.display = isVisible;
                             annotationPlugin.annotations.saturacionMin.display = isVisible;
                         }
 
@@ -1017,6 +1032,19 @@ export class InsideRooms implements OnInit {
                             label: {
                                 content: 'Max Temperatura (°C)',
                                 color: '#FFCE56',
+                                position: 'start'
+                            }
+                        },
+                        saturacionMax: {
+                            type: 'line',
+                            yMin: 100,
+                            yMax: 100,
+                            borderColor: '#36A2EB',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            label: {
+                                content: "Max Saturació d'oxigen (%)",
+                                color: '#36A2EB',
                                 position: 'start'
                             }
                         },
