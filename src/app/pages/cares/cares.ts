@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DatePickerModule } from 'primeng/datepicker';
+import { Dialog } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
@@ -20,14 +21,14 @@ import { RegistroService } from '../../service/registro.service';
 @Component({
     selector: 'app-cares',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, InputNumberModule, DatePickerModule, TextareaModule, CheckboxModule, DropdownModule, MultiSelectModule, Tag, Toast],
-    providers: [AuthService, MessageService],
+    imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, InputNumberModule, DatePickerModule, TextareaModule, CheckboxModule, DropdownModule, MultiSelectModule, Tag, Toast, Dialog],
+    providers: [AuthService, MessageService, ConfirmationService],
     animations: [trigger('tagAnimation', [transition(':enter', [style({ opacity: 0 }), animate('300ms 500ms ease-in', style({ opacity: 1 }))]), transition(':leave', [animate('200ms ease-out', style({ opacity: 0 }))])])],
 
     template: `
         <div>
             <p-toast position="top-right"></p-toast>
-            <form class="flex flex-col-2 gap-8" [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+            <form class="flex flex-col-2 gap-8" [formGroup]="registroForm" (ngSubmit)="onSubmit(this.alertsChecked)">
                 <div class="md:w-1/2">
                     <!-- Constantes Vitales -->
                     <div class="card flex flex-col gap-4">
@@ -304,6 +305,16 @@ import { RegistroService } from '../../service/registro.service';
                     <div class="flex justify-end mt-4">
                         <p-button label="Guardar" type="submit" [disabled]="registroForm.invalid" />
                     </div>
+                    <p-dialog header="Alertes!" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
+                    <div class="flex items-center justify-center">
+                        <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
+                        <span>Hi ha alertes, el pacient pot estar en perill. ¿Estás segur de que vols continuar?</span>
+                    </div>
+                    <ng-template #footer>
+                        <p-button label="No" icon="pi pi-times" (click)="closeConfirmation()" text severity="secondary" />
+                        <p-button label="Sí" icon="pi pi-check" (click)="closeAndSendConfirmation()" severity="danger" outlined autofocus />
+                    </ng-template>
+                </p-dialog>
                 </div>
             </form>
         </div>
@@ -317,13 +328,18 @@ export class Cares implements OnInit {
     tiposTexturas: TipoTextura[] = [];
     tiposDietas: TipoDieta[] = [];
 
+    displayConfirmation: boolean = false;
+    hasAlert: boolean = false; // Variable para controlar la alerta
+    alertsChecked = false;
+
     constructor(
         private readonly fb: FormBuilder,
         private readonly registroService: RegistroService,
         private readonly router: Router,
         private readonly AuthService: AuthService,
         private readonly route: ActivatedRoute,
-        private readonly messageService: MessageService
+        private readonly messageService: MessageService,
+        private confirmationService: ConfirmationService
     ) {
         this.registroForm = this.fb.group({
             cv_ta_sistolica: [null, Validators.required],
@@ -404,9 +420,14 @@ export class Cares implements OnInit {
                 });
             }
         });
+
+        // Observa cambios en el formulario para actualizar hasAlert
+        this.registroForm.valueChanges.subscribe(() => {
+            this.checkAlert();
+        });
     }
 
-    onSubmit(): void {
+    onSubmit($alertsChecked: boolean): void {
         if (this.registroForm.valid) {
             const registroData = {
                 aux_id: this.auxiliarId,
@@ -437,6 +458,17 @@ export class Cares implements OnInit {
                 }
             };
 
+            this.registroForm.valueChanges.subscribe(() => {
+                this.checkAlert();
+            });
+
+            if (!$alertsChecked) {
+                 if(this.hasAlert) {
+                this.openConfirmation();
+                return;
+            }
+            }
+           
             this.registroService.createRegistro(registroData).subscribe({
                 next: (response: RegistroResponse) => {
                     const currentUrl = this.router.url;
@@ -459,5 +491,35 @@ export class Cares implements OnInit {
                 }
             });
         }
+    }
+
+    checkAlert(): void {
+        const sistolica = this.registroForm.get('cv_ta_sistolica')?.value;
+        const diastolica = this.registroForm.get('cv_ta_diastolica')?.value;
+        const pulso = this.registroForm.get('cv_pulso')?.value;
+        const frecuencia = this.registroForm.get('cv_frecuencia_respiratoria')?.value;
+        const temperatura = this.registroForm.get('cv_temperatura')?.value;
+        const saturacion = this.registroForm.get('cv_saturacion_oxigeno')?.value;
+
+
+        this.hasAlert =
+            (sistolica && (sistolica > 140 || sistolica < 90) && this.registroForm.get('cv_ta_sistolica')?.touched) ||
+            (diastolica && (diastolica >= 90 || diastolica < 50) && this.registroForm.get('cv_ta_diastolica')?.touched) ||
+            (pulso && (pulso > 100 || pulso < 50) && this.registroForm.get('cv_pulso')?.touched) ||
+            (frecuencia && (frecuencia > 20 || frecuencia < 12) && this.registroForm.get('cv_frecuencia_respiratoria')?.touched) ||
+            (temperatura && (temperatura > 38.5 || temperatura < 34.9) && this.registroForm.get('cv_temperatura')?.touched) ||
+            (saturacion && saturacion < 94 && this.registroForm.get('cv_saturacion_oxigeno')?.touched);
+    }
+    openConfirmation() {
+        this.displayConfirmation = true;
+    }
+
+    closeConfirmation() {
+        this.displayConfirmation = false;
+    }
+    closeAndSendConfirmation(){
+        this.displayConfirmation = false;
+        this.alertsChecked = true;
+        this.onSubmit(this.alertsChecked);
     }
 }
