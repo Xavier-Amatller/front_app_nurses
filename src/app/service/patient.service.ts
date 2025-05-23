@@ -29,8 +29,8 @@ export class PatientService {
         });
     }
 
-    updatePatient(pacId: string, data: any): Observable<any> {
-      return this.http.patch(`${this.apiUrl}/pacientes/${pacId}`, data, {
+    updatePatient(pac_id: string, data: any): Observable<any> {
+      return this.http.put(`${this.apiUrl}/pacientes/${pac_id}`, data, {
           headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('authToken')}`
