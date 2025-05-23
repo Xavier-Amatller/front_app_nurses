@@ -377,6 +377,8 @@ export class InsideRooms implements OnInit {
                                 reg_hora: hora
                             };
                         });
+
+                        this.historyData = this.historyData.reverse();
                     },
                     error: (err) => {
                         if (err.status === 404) {
