@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 @Injectable()
 export class DietsService {
     constructor(
@@ -24,6 +24,18 @@ export class DietsService {
     }
     getDiet(dietId: string) {
         return this.http.get('http://127.0.0.1:8000/api/dieta/' + dietId, { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }).pipe(
+            catchError((error) => {
+                if (error.status === 401 || error.status === 403) {
+                    localStorage.removeItem('authToken');
+                    this.router.navigate(['/login']);
+                    return throwError(() => new Error('No autorizado. Redirigiendo al login...'));
+                }
+                return throwError(() => error);
+            })
+        );
+    }
+    getDietsHistory(pac_id: string) {
+        return this.http.get('http://127.0.0.1:8000/api/dieta/history/' + pac_id, { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }).pipe(
             catchError((error) => {
                 if (error.status === 401 || error.status === 403) {
                     localStorage.removeItem('authToken');

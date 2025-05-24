@@ -2,51 +2,77 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+
 @Injectable()
 export class AuthService {
-    private token = 'authToken';
-    private auxIdKey = 'auxId';
+  private tokenKey = 'authToken';
+  private auxIdKey = 'auxId';
+  private roleKey = 'role'; // Nueva clave para el rol
 
-    constructor(
-        private readonly router: Router,
-        private readonly http: HttpClient
-    ) { }
+  constructor(
+    private readonly router: Router,
+    private readonly http: HttpClient
+  ) {}
 
-    login(aux_num_trabajador: string, aux_password: string): Observable<any> {
-        let data = {
-            'aux_num_trabajador': aux_num_trabajador,
-            'aux_password': aux_password
-        }
-        return this.http.post('http://127.0.0.1:8000/api/login', data, {
-            headers: {
-                "Content-type": "application/json"
-            }
-        });
-    }
+  login(aux_num_trabajador: string, aux_password: string): Observable<any> {
+    const data = {
+      aux_num_trabajador,
+      aux_password
+    };
+    return this.http.post('http://127.0.0.1:8000/api/login', data, {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    });
+  }
 
-    getToken(): string | null {
-        return localStorage.getItem(this.token);
-    }
+  // Procesar la respuesta del login y guardar token, userId y role
+  setAuthData(response: any): void {
+    const { token, userId, roles } = response; // Ajusta según la estructura de la respuesta del backend
+    this.setToken(token);
+    this.setAuxiliarId(userId);
+    this.setRole(roles);
+  }
 
-    setToken(token: string) {
-        localStorage.setItem("authToken", token)
-    }
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
 
-    isAuthenticated(): boolean {
-        return this.getToken() !== null;
-    }
+  setToken(token: string): void {
+    localStorage.setItem(this.tokenKey, token);
+  }
 
-    logout() {
-        localStorage.removeItem(this.token);
-        this.router.navigate(['/login']);
-    }
+  isAuthenticated(): boolean {
+    return this.getToken() !== null;
+  }
 
-    setAuxiliarId(auxId: string): void {
-        localStorage.setItem(this.auxIdKey, auxId);
-        console.log(localStorage.getItem(this.auxIdKey));
-    }
+  logout(): void {
+    localStorage.removeItem(this.auxIdKey);
+    localStorage.removeItem(this.roleKey);
+    localStorage.removeItem(this.tokenKey);
 
-    getAuxiliarId(): string | null {
-        return localStorage.getItem(this.auxIdKey);
-    }
+    this.router.navigate(['/login']);
+  }
+
+  setAuxiliarId(auxId: string): void {
+    localStorage.setItem(this.auxIdKey, auxId);
+  }
+
+  getAuxiliarId(): string | null {
+    return localStorage.getItem(this.auxIdKey);
+  }
+
+  setRole(role: string): void {
+    console.log('Setting role:', role);
+    
+    localStorage.setItem(this.roleKey, role);
+  }
+
+  getRole(): string | null {
+    return localStorage.getItem(this.roleKey);
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'ROLE_ADMIN'; 
+  }
 }

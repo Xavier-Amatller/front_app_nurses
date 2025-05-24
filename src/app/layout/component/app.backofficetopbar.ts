@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AuthService } from '../../service/auth.service';
 import { LayoutService } from '../service/layout.service';
 import { AppConfigurator } from './app.configurator';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
-    selector: 'app-topbar',
+    selector: 'app-backoffice-topbar',
     standalone: true,
     imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, ButtonModule],
     template: `
@@ -33,7 +33,7 @@ import { ButtonModule } from 'primeng/button';
                 </div>
 
                 <div class="layout-topbar-actions layout-topbar-actions-bg">
-                    <p-button *ngIf="this.isAdmin()" (click)="backoffice()">Administracion</p-button>
+                    <p-button *ngIf="this.isAdmin()" (click)="campus()">Anar al campus</p-button>
 
                     <div class="layout-config-menu">
                         <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
@@ -77,7 +77,7 @@ import { ButtonModule } from 'primeng/button';
         </div>
     `
 })
-export class AppTopbar {
+export class AppBackOfficeTopbar {
     constructor(
         public layoutService: LayoutService,
         private readonly AuthService: AuthService,
@@ -95,7 +95,6 @@ export class AppTopbar {
             command: () => this.AuthService.logout()
         }
     ];
-
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
     }
@@ -107,5 +106,8 @@ export class AppTopbar {
     }
     isAdmin() {
         return this.AuthService.isAdmin();
+    }
+    campus(): void {
+        this.router.navigate(['/tauler']);
     }
 }

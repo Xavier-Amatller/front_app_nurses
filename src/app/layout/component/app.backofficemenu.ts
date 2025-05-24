@@ -5,7 +5,7 @@ import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
 
 @Component({
-    selector: 'app-menu',
+    selector: 'app-backoffice-menu',
     standalone: true,
     imports: [CommonModule, AppMenuitem, RouterModule],
     template: `<ul class="layout-menu">
@@ -15,7 +15,7 @@ import { AppMenuitem } from './app.menuitem';
         </ng-container>
     </ul> `
 })
-export class AppMenu {
+export class AppBackOfficeMenu {
     model: MenuItem[] = [];
 
     ngOnInit() {
@@ -23,9 +23,9 @@ export class AppMenu {
             {
                 label: 'Patients',
                 items: [
-                    { label: 'Tauler', icon: 'pi pi-fw pi-th-large', routerLink: ['/tauler'] },
-                    { label: 'Habitacions', icon: 'pi pi-fw pi-building', routerLink: ['/habitacions'] },
-                    { label: 'Dietes', icon: 'pi pi-fw pi-face-smile', routerLink: ['/dietes'] },
+                    { label: 'Auxiliars', icon: 'pi pi-fw pi-th-large', routerLink: ['/backoffice/auxiliars'] },
+                    { label: 'Pacients', icon: 'pi pi-fw pi-building', routerLink: ['/backoffice/pacients'] },
+                    { label: 'Habitacions', icon: 'pi pi-fw pi-face-smile', routerLink: ['/backoffice/habitacions'] },
                 ]
             },
         ];
