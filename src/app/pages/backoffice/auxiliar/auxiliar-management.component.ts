@@ -44,7 +44,7 @@ import { AuxiliarService } from '../../../service/auxiliar.service';
 
       <h2 class="text-xl font-semibold mb-4">{{ isEditing ? 'Modificar Auxiliar' : 'Crear Auxiliar' }}</h2>
       <form [formGroup]="auxiliarForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-        <div class="flex flex-col gap-2">
+        <div *ngIf="!isEditing" class="flex flex-col gap-2">
           <label for="aux_num_trabajador">Número de Trabajador</label>
           <input
             type="text"

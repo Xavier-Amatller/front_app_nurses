@@ -60,6 +60,15 @@ export class RoomsService {
             {
                 headers: this.getHeaders()
             }
+        ).pipe(
+            catchError((error) => {
+                if (error.status === 401 || error.status === 403) {
+                    localStorage.removeItem('authToken');
+                    this.router.navigate(['/login']);
+                    return throwError(() => new Error('No autorizado. Redirigiendo al login...'));
+                }
+                return throwError(() => error);
+            })
         );
     }
 
@@ -82,5 +91,18 @@ export class RoomsService {
                     return throwError(() => error);
                 })
             );
+    }
+
+    getPatients(page: number = 1, limit: number = 10): Observable<any> {
+        return this.http.get(this.apiURL.concat(`/pacientes?page=${page}&limit=${limit}`), { headers: this.getHeaders() }).pipe(
+            catchError((error) => {
+                if (error.status === 401 || error.status === 403) {
+                    localStorage.removeItem('authToken');
+                    this.router.navigate(['/login']);
+                    return throwError(() => new Error('No autorizado. Redirigiendo al login...'));
+                }
+                return throwError(() => error);
+            })
+        );
     }
 }
