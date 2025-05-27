@@ -36,7 +36,7 @@ import { DropdownModule } from 'primeng/dropdown';
         MessageModule,
         NgIf,
         RoomCardComponent,
-        DropdownModule // Añadir DropdownModule
+        DropdownModule
     ],
     providers: [MessageService],
     template: `
@@ -47,20 +47,7 @@ import { DropdownModule } from 'primeng/dropdown';
                 <div>
                     <input [(ngModel)]="hab_id" pInputText id="numRoom" type="text" placeholder="Num habitació" [class.ng-invalid]="!hab_id" />
                     <p-button class="ml-3" (onClick)="searchHabitacio()" [loading]="loading" [disabled]="!hab_id" label="Trobar habitacio" [fluid]="false"></p-button>
-                </div>
-                <div *ngIf="room && !room?.paciente" class="flex items-center gap-2">
-                    <p-dropdown
-                        [(ngModel)]="patient_id"
-                        [options]="patients"
-                        optionLabel="pac_nombre"
-                        optionValue="pac_id"
-                        placeholder="Selecciona un paciente"
-                        [filter]="true"
-                        [showClear]="true"
-                        [class.ng-invalid]="!patient_id && patients.length > 0"
-                    ></p-dropdown>
-                    <p-button (onClick)="assignPatient()" [loading]="asignmentloading" [disabled]="!patient_id || room.paciente" label="Donar de alta" [fluid]="false"></p-button>
-                </div>
+                </div>              
                 <p-button *ngIf="room?.paciente" (onClick)="unassignPatient()" [loading]="asignmentloading" [disabled]="!room?.paciente" label="Donar de baixa" [fluid]="false"></p-button>
             </div>
             <br />
@@ -84,21 +71,7 @@ export class RoomManagementComponent implements OnInit {
         private messageService: MessageService
     ) {}
 
-    ngOnInit(): void {
-        this.loadPatients();
-    }
-
-    loadPatients() {
-        this.rs.getPatients().subscribe({
-            next: (data: any) => {
-                this.patients = data.patients;
-            },
-            error: (error: Error) => {
-                console.error('Error al cargar los pacientes:', error);
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los pacientes.' });
-            }
-        });
-    }
+    ngOnInit(): void {}
 
     searchHabitacio() {
         if (!this.hab_id) {
@@ -138,30 +111,6 @@ export class RoomManagementComponent implements OnInit {
             },
             complete: () => {
                 this.asignmentloading = false;
-                this.searchHabitacio();
-            }
-        });
-    }
-
-    assignPatient() {
-        if (!this.hab_id || !this.patient_id) {
-            this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Por favor, selecciona un paciente.' });
-            return;
-        }
-        this.asignmentloading = true;
-
-        this.rs.assignPatient(this.hab_id, this.patient_id).subscribe({
-            next: (data: any) => {
-                this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Paciente asignado correctamente.' });
-            },
-            error: (error: Error) => {
-                console.error('Error al donar de alta el pacient:', error);
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al asignar el paciente.' });
-                this.asignmentloading = false;
-            },
-            complete: () => {
-                this.asignmentloading = false;
-                this.patient_id = ''; // Resetear la selección
                 this.searchHabitacio();
             }
         });

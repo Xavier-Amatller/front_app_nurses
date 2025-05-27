@@ -31,15 +31,8 @@ import { AuthService } from '../../service/auth.service';
                             <input pInputText id="aux_number" type="text" placeholder="Nº Auxiliar" class="w-full md:w-[30rem] mb-8" [(ngModel)]="aux_number" required />
 
                             <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contrasenya</label>
-                            <p-password id="password" [(ngModel)]="password" placeholder="Contrasenya" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false" required></p-password>
+                            <p-password id="password" [(ngModel)]="password" placeholder="Contrasenya" [toggleMask]="true" styleClass="mb-14" [fluid]="true" [feedback]="false" required></p-password>
 
-                            <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                                <!-- <div class="flex items-center">
-                                    <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
-                                    <label for="rememberme1">Recorda'm</label>
-                                </div> -->
-                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Has oblidat la teva contrasenya?</span>
-                            </div>
                             <div *ngIf="isLoginError" class="text-red-500 text-center mb-4">Credencials incorrectes. Torna-ho a intentar.</div>
                             <p-button [loading]="loading" label="Inicia sessió" styleClass="w-full" (onClick)="login()"></p-button>
                         </div>

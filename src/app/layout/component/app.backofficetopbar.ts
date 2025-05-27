@@ -19,7 +19,7 @@ import { AppConfigurator } from './app.configurator';
                     <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
                         <i class="pi pi-bars"></i>
                     </button>
-                    <a class="layout-topbar-logo" routerLink="/">
+                    <a class="layout-topbar-logo" routerLink="/backoffice">
                         <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M300 500C189.543 500 100 410.457 100 300V300H300V500V500Z" fill="#8847C4" />
                             <path d="M0 300C0 189.543 89.5431 100 200 100V100V300H0V300Z" fill="#FF3D31" />

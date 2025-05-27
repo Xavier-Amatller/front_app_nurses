@@ -116,7 +116,7 @@ import { PatientService } from '../../../service/patient.service';
                     <textarea
                         id="pac_antecedentes"
                         formControlName="pac_antecedentes"
-                        pInputTextarea
+                        pTextarea
                         class="border-gray-300"
                         [ngClass]="{
                             'border-red-500': patientForm.get('pac_antecedentes')?.invalid && patientForm.get('pac_antecedentes')?.touched
@@ -129,7 +129,7 @@ import { PatientService } from '../../../service/patient.service';
                     <textarea
                         id="pac_alergias"
                         formControlName="pac_alergias"
-                        pInputTextarea
+                        pTextarea
                         class="border-gray-300"
                         [ngClass]="{
                             'border-red-500': patientForm.get('pac_alergias')?.invalid && patientForm.get('pac_alergias')?.touched
