@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
     template: `
         <div class="card grid gap-8">
             <div class="h-[42rem]">
-                <h1>Benvinguts al Nursing assistant app</h1>
+                <h1>Benvinguts a "TCAI Plataforma Educativa"</h1>
             </div>
 
             <!-- <app-stats-widget class="contents" />

@@ -21,7 +21,7 @@ export class AppBackOfficeMenu {
     ngOnInit() {
         this.model = [
             {
-                label: 'Patients',
+                label: 'Administració',
                 items: [
                     { label: 'Auxiliars', icon: 'pi pi-fw pi-th-large', routerLink: ['/backoffice/auxiliars'] },
                     { label: 'Pacients', icon: 'pi pi-fw pi-building', routerLink: ['/backoffice/pacients'] },

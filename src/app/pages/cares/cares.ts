@@ -18,6 +18,7 @@ import { Toast } from 'primeng/toast';
 import { RegistroResponse, TipoDieta, TipoDrenaje, TipoTextura } from '../../models/interfaces';
 import { AuthService } from '../../service/auth.service';
 import { RegistroService } from '../../service/registro.service';
+
 @Component({
     selector: 'app-cares',
     standalone: true,
