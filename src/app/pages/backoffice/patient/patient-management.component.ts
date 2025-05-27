@@ -16,21 +16,7 @@ import { PatientService } from '../../../service/patient.service';
 @Component({
     selector: 'app-patient-management',
     standalone: true,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        InputTextModule,
-        ButtonModule,
-        CalendarModule,
-        FluidModule,
-        SelectModule,
-        FormsModule,
-        TextareaModule,
-        CheckboxModule,
-        MultiSelectModule,
-        ToastModule,
-        NgIf
-    ],
+    imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, CalendarModule, FluidModule, SelectModule, FormsModule, TextareaModule, CheckboxModule, MultiSelectModule, ToastModule, NgIf],
     providers: [MessageService], // Añadir MessageService como proveedor
     template: `
         <p-toast></p-toast>
@@ -42,7 +28,7 @@ import { PatientService } from '../../../service/patient.service';
 
             <h2 class="text-xl font-semibold mb-4">{{ isEditing ? 'Modificar Paciente' : 'Crear Paciente' }}</h2>
             <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-                <div class="flex flex-col gap-2">
+                <div *ngIf="!isEditing" class="flex flex-col gap-2">
                     <label for="pac_num_historial">Número de Historial</label>
                     <input
                         type="number"
@@ -130,7 +116,7 @@ import { PatientService } from '../../../service/patient.service';
                     <textarea
                         id="pac_antecedentes"
                         formControlName="pac_antecedentes"
-                        pInputTextarea
+                        pTextarea
                         class="border-gray-300"
                         [ngClass]="{
                             'border-red-500': patientForm.get('pac_antecedentes')?.invalid && patientForm.get('pac_antecedentes')?.touched
@@ -143,7 +129,7 @@ import { PatientService } from '../../../service/patient.service';
                     <textarea
                         id="pac_alergias"
                         formControlName="pac_alergias"
-                        pInputTextarea
+                        pTextarea
                         class="border-gray-300"
                         [ngClass]="{
                             'border-red-500': patientForm.get('pac_alergias')?.invalid && patientForm.get('pac_alergias')?.touched

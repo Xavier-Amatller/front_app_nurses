@@ -36,12 +36,12 @@ import { FieldsetModule } from 'primeng/fieldset';
                     </p>
                 </p-fieldset>
                 <div *ngIf="room.paciente !== null" class="flex gap-5 max-h-[40px] min-h-[40px]">
-                    <p-button iconPos="right" icon="pi pi-arrow-right" label="Entrar" size="large" class="w-1/4 flex justify-between" (click)="openRoom()" />
+                    <p-button iconPos="right" icon="pi pi-arrow-right" label="Entrar" size="large" class="flex justify-between" (click)="openRoom()" />
                     <div class="p-3 border border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-1/4 truncate"><b>Edat</b> | {{ room.paciente.pac_edad }}</div>
                     <div class="p-3 border border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-2/4 truncate"><b>Nom</b> | {{ room.paciente.pac_nombre }} {{ room.paciente.pac_apellidos }}</div>
                 </div>
                 <div *ngIf="room.paciente === null" class="flex gap-5 max-h-[40px] min-h-[40px]">
-                    <p-button [disabled]="true" iconPos="right" icon="pi pi-arrow-right" label="Entrar" size="large" class="w-1/4 flex justify-between" />
+                    <p-button [disabled]="true" iconPos="right" icon="pi pi-arrow-right" label="Entrar" size="large" class=" flex justify-between" />
                     <div class="p-3 border border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-1/4 truncate"><b>Edat</b> |</div>
                     <div class="p-3 border border-[var(--p-fieldset-border-color)] rounded-[var(--content-border-radius)] w-2/4 truncate"><b>Nom</b> |</div>
                 </div>

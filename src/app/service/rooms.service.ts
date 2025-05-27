@@ -52,16 +52,25 @@ export class RoomsService {
             })
         );
     }
-
-    assignPatient(roomId: string, patientId: string): Observable<any> {
-        return this.http.post(
-            this.apiURL.concat(`/rooms/${roomId}/assign`),
-            { patientId },
-            {
-                headers: this.getHeaders()
-            }
-        );
-    }
+    //  TODO: Implementar assignPatient
+    // assignPatient(roomId: string, patientId: string): Observable<any> {
+    //     return this.http.post(
+    //         this.apiURL.concat(`/rooms/${roomId}/assign`),
+    //         { patientId },
+    //         {
+    //             headers: this.getHeaders()
+    //         }
+    //     ).pipe(
+    //         catchError((error) => {
+    //             if (error.status === 401 || error.status === 403) {
+    //                 localStorage.removeItem('authToken');
+    //                 this.router.navigate(['/login']);
+    //                 return throwError(() => new Error('No autorizado. Redirigiendo al login...'));
+    //             }
+    //             return throwError(() => error);
+    //         })
+    //     );
+    // }
 
     unassignPatient(roomId: string): Observable<any> {
         return this.http
@@ -83,4 +92,5 @@ export class RoomsService {
                 })
             );
     }
+
 }

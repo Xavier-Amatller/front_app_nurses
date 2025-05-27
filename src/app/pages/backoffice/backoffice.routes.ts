@@ -10,7 +10,7 @@ export const backofficeRoutes: Routes = [
 
         canActivate: [AdminGuard],
         children: [
-            { path: '', redirectTo: 'auxiliares', pathMatch: 'full' },
+            { path: '', redirectTo: 'auxiliars', pathMatch: 'full' },
             { path: 'auxiliars', loadComponent: () => import('./auxiliar/auxiliar-management.component').then((m) => m.AuxiliarManagementComponent) },
             { path: 'pacients', loadComponent: () => import('./patient/patient-management.component').then((m) => m.PatientManagementComponent) },
             { path: 'habitacions', loadComponent: () => import('./room/room-management.component').then((m) => m.RoomManagementComponent) }
