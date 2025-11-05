@@ -33,10 +33,10 @@ import { RegistroService } from '../../service/registro.service';
                 <div class="md:w-1/2">
                     <!-- Constantes Vitales -->
                     <div class="card flex flex-col gap-4">
-                        <div class="font-semibold text-xl">Constantes Vitales</div>
+                        <div class="font-semibold text-xl">Constants Vitals</div>
                         <div class="flex flex-col gap-2">
                             <label for="cv_ta_sistolica" class="h-6 flex gap-6">
-                                <p class="flex flex-col justify-center">Tensión Arterial Sistólica</p>
+                                <p class="flex flex-col justify-center">Tensió Arterial Sistólica</p>
                                 <span
                                     @tagAnimation
                                     *ngIf="registroForm.get('cv_ta_sistolica')?.value && (registroForm.get('cv_ta_sistolica')?.value > 140 || registroForm.get('cv_ta_sistolica')?.value < 90) && registroForm.get('cv_ta_sistolica')?.touched"
@@ -58,7 +58,7 @@ import { RegistroService } from '../../service/registro.service';
                         </div>
                         <div class="flex flex-col gap-2">
                             <label for="cv_ta_diastolica" class="h-6 flex gap-6">
-                                <p class="flex flex-col justify-center">Tensión Arterial Diastólica</p>
+                                <p class="flex flex-col justify-center">Tensió Arterial Diastólica</p>
                                 <span
                                     @tagAnimation
                                     *ngIf="registroForm.get('cv_ta_diastolica')?.value && (registroForm.get('cv_ta_diastolica')?.value >= 90 || registroForm.get('cv_ta_diastolica')?.value < 50) && registroForm.get('cv_ta_diastolica')?.touched"
@@ -80,7 +80,7 @@ import { RegistroService } from '../../service/registro.service';
                         </div>
                         <div class="flex flex-col gap-2">
                             <label for="cv_pulso" class="h-6 flex gap-6">
-                                <p class="flex flex-col justify-center">Pulso</p>
+                                <p class="flex flex-col justify-center">Pols</p>
                                 <span @tagAnimation *ngIf="registroForm.get('cv_pulso')?.value && (registroForm.get('cv_pulso')?.value > 100 || registroForm.get('cv_pulso')?.value < 50) && registroForm.get('cv_pulso')?.touched">
                                     <p-tag class="h-6" icon="pi pi-times" severity="danger" value="Perill"></p-tag>
                                 </span>
@@ -99,7 +99,7 @@ import { RegistroService } from '../../service/registro.service';
                         </div>
                         <div class="flex flex-col gap-2">
                             <label for="cv_frecuencia_respiratoria" class="h-6 flex gap-6">
-                                <p class="flex flex-col justify-center">Frecuencia Respiratoria</p>
+                                <p class="flex flex-col justify-center">Freqüència Respiratòria</p>
                                 <span
                                     @tagAnimation
                                     *ngIf="
@@ -148,7 +148,7 @@ import { RegistroService } from '../../service/registro.service';
                         </div>
                         <div class="flex flex-col gap-2">
                             <label for="cv_saturacion_oxigeno" class="h-6 flex gap-6">
-                                <p class="flex flex-col justify-center">Saturación de Oxígeno (%)</p>
+                                <p class="flex flex-col justify-center">Saturació d'Oxigen (%)</p>
                                 <span @tagAnimation *ngIf="registroForm.get('cv_saturacion_oxigeno')?.value && registroForm.get('cv_saturacion_oxigeno')?.value < 94 && registroForm.get('cv_saturacion_oxigeno')?.touched">
                                     <p-tag class="h-6" icon="pi pi-times" severity="danger" value="Perill"></p-tag>
                                 </span>
@@ -169,9 +169,9 @@ import { RegistroService } from '../../service/registro.service';
 
                     <!-- Movilizaciones -->
                     <div class="card flex flex-col gap-4">
-                        <div class="font-semibold text-xl">Movilizaciones</div>
+                        <div class="font-semibold text-xl">Mobilitzacions</div>
                         <div class="flex flex-col gap-2">
-                            <label for="mov_sedestacion">Sedestación</label>
+                            <label for="mov_sedestacion">Sedestació</label>
                             <p-checkbox
                                 formControlName="mov_sedestacion"
                                 [binary]="true"
@@ -182,7 +182,7 @@ import { RegistroService } from '../../service/registro.service';
                             />
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label for="mov_ajuda_deambulacion">Ayuda para Deambulación</label>
+                            <label for="mov_ajuda_deambulacion">Ajuda per a Deambulació</label>
                             <p-checkbox
                                 formControlName="mov_ajuda_deambulacion"
                                 [binary]="true"
@@ -193,7 +193,7 @@ import { RegistroService } from '../../service/registro.service';
                             />
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label for="mov_ajuda_descripcion">Descripción de la Ayuda</label>
+                            <label for="mov_ajuda_descripcion">Descripció de l'Ajuda</label>
                             <textarea
                                 formControlName="mov_ajuda_descripcion"
                                 rows="3"
@@ -204,7 +204,7 @@ import { RegistroService } from '../../service/registro.service';
                             ></textarea>
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label for="mov_cambios">Cambios Posturales</label>
+                            <label for="mov_cambios">Canvis Posturals</label>
                             <textarea
                                 formControlName="mov_cambios"
                                 rows="3"
@@ -215,7 +215,7 @@ import { RegistroService } from '../../service/registro.service';
                             ></textarea>
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label for="mov_decubitos">Decúbitos</label>
+                            <label for="mov_decubitos">Decúbits</label>
                             <input
                                 type="text"
                                 formControlName="mov_decubitos"
@@ -231,9 +231,9 @@ import { RegistroService } from '../../service/registro.service';
                 <div class="md:w-1/2">
                     <!-- Diagnóstico -->
                     <div class="card flex flex-col gap-4">
-                        <div class="font-semibold text-xl">Diagnóstico</div>
+                        <div class="font-semibold text-xl">Diagnòstic</div>
                         <div class="flex flex-col gap-2">
-                            <label for="dia_diagnostico">Diagnóstico</label>
+                            <label for="dia_diagnostico">Diagnòstic</label>
                             <textarea
                                 formControlName="dia_diagnostico"
                                 rows="3"
@@ -244,7 +244,7 @@ import { RegistroService } from '../../service/registro.service';
                             ></textarea>
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label for="dia_motivo">Motivo del Diagnóstico</label>
+                            <label for="dia_motivo">Motiu del Diagnòstic</label>
                             <textarea
                                 formControlName="dia_motivo"
                                 rows="3"
@@ -258,9 +258,9 @@ import { RegistroService } from '../../service/registro.service';
 
                     <!-- Drenajes -->
                     <div class="card flex flex-col gap-4">
-                        <div class="font-semibold text-xl">Drenajes</div>
+                        <div class="font-semibold text-xl">Drenatges</div>
                         <div class="flex flex-col gap-2">
-                            <label for="dre_debito">Débito del Drenaje</label>
+                            <label for="dre_debito">Dèbit del Drenatge</label>
                             <textarea
                                 formControlName="dre_debito"
                                 rows="3"
@@ -271,13 +271,13 @@ import { RegistroService } from '../../service/registro.service';
                             ></textarea>
                         </div>
                         <div class="flex flex-col gap-2">
-                            <label for="tdre_id">Tipo de Drenaje</label>
+                            <label for="tdre_id">Tipus de Drenatge</label>
                             <p-dropdown
                                 formControlName="tdre_id"
                                 [options]="tiposDrenajes"
                                 optionLabel="tdre_desc"
                                 optionValue="id"
-                                placeholder="Selecciona un tipo de drenaje"
+                                placeholder="Selecciona el tipus de drenatge"
                                 [showClear]="true"
                                 [ngClass]="{
                                     'border-red-500': registroForm.get('tdre_id')?.invalid && registroForm.get('tdre_id')?.touched
@@ -285,12 +285,11 @@ import { RegistroService } from '../../service/registro.service';
                             />
                         </div>
                     </div>
-
                     <!-- Fecha del Registro -->
                     <div class="card flex flex-col gap-4">
-                        <div class="font-semibold text-xl">Información del Registro</div>
+                        <div class="font-semibold text-xl">Informació del Registre</div>
                         <div class="flex flex-col gap-2">
-                            <label for="Reg_Obs">Observaciones</label>
+                            <label for="Reg_Obs">Observacions</label>
                             <textarea
                                 formControlName="Reg_Obs"
                                 rows="3"

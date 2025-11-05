@@ -33,11 +33,11 @@ interface SelectOption {
         <p-fluid>
             <p-toast position="top-right"></p-toast>
             <div class="card flex flex-col items-center gap-4">
-                <div class="font-semibold text-xl">Introdueix un num d'habitació</div>
+                <div class="font-semibold text-xl">Introdueix un número d'habitació</div>
                 <div class="flex flex-wrap items-center gap-6">
                     <div class="field">
                         <label for="numRoom" class="sr-only"></label>
-                        <input [(ngModel)]="id" pInputText id="numRoom" type="text" placeholder="Num habitació" [class.ng-invalid]="!id && submitted" [class.ng-dirty]="submitted" />
+                        <input [(ngModel)]="id" pInputText id="numRoom" type="text" placeholder="Número habitació" [class.ng-invalid]="!id && submitted" [class.ng-dirty]="submitted" />
                         <p-message *ngIf="!id && submitted" severity="error" text="El número d'habitació és obligatori"></p-message>
                     </div>
                     <p-button (onClick)="searchDiet()" [loading]="loading" [disabled]="!id" label="Trobar dieta" [fluid]="false"></p-button>
