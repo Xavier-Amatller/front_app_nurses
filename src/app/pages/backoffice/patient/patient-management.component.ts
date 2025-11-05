@@ -22,14 +22,14 @@ import { PatientService } from '../../../service/patient.service';
         <p-toast></p-toast>
         <div class="card">
             <div class="mb-4">
-                <input [(ngModel)]="pac_id" pInputText id="numPac" type="text" placeholder="ID del pacient" />
+                <input [(ngModel)]="pac_id" pInputText id="numPac" type="text" placeholder="Número del pacient" />
                 <p-button class="ml-3" (onClick)="searchPacient()" [loading]="loading" [disabled]="!pac_id" label="Trobar pacient" [fluid]="false"></p-button>
             </div>
 
             <h2 class="text-xl font-semibold mb-4">{{ isEditing ? 'Modificar Paciente' : 'Crear Paciente' }}</h2>
             <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
                 <div *ngIf="!isEditing" class="flex flex-col gap-2">
-                    <label for="pac_num_historial">Número de Historial</label>
+                    <label for="pac_num_historial">Número d'Historial</label>
                     <input
                         type="number"
                         id="pac_num_historial"
@@ -40,10 +40,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_num_historial')?.invalid && patientForm.get('pac_num_historial')?.touched
                         }"
                     />
-                    <small *ngIf="patientForm.get('pac_num_historial')?.invalid && patientForm.get('pac_num_historial')?.touched" class="text-red-500">El número de historial es obligatorio.</small>
+                    <small *ngIf="patientForm.get('pac_num_historial')?.invalid && patientForm.get('pac_num_historial')?.touched" class="text-red-500">El número d'historial és obligatori.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_nombre">Nombre</label>
+                    <label for="pac_nombre">Nom</label>
                     <input
                         type="text"
                         id="pac_nombre"
@@ -54,10 +54,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_nombre')?.invalid && patientForm.get('pac_nombre')?.touched
                         }"
                     />
-                    <small *ngIf="patientForm.get('pac_nombre')?.invalid && patientForm.get('pac_nombre')?.touched" class="text-red-500">El nombre es obligatorio.</small>
+                    <small *ngIf="patientForm.get('pac_nombre')?.invalid && patientForm.get('pac_nombre')?.touched" class="text-red-500">El nom és obligatori.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_apellidos">Apellidos</label>
+                    <label for="pac_apellidos">Cognoms</label>
                     <input
                         type="text"
                         id="pac_apellidos"
@@ -68,10 +68,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_apellidos')?.invalid && patientForm.get('pac_apellidos')?.touched
                         }"
                     />
-                    <small *ngIf="patientForm.get('pac_apellidos')?.invalid && patientForm.get('pac_apellidos')?.touched" class="text-red-500">Los apellidos son obligatorios.</small>
+                    <small *ngIf="patientForm.get('pac_apellidos')?.invalid && patientForm.get('pac_apellidos')?.touched" class="text-red-500">Els cognoms són obligatoris.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_fecha_nacimiento">Fecha de Nacimiento</label>
+                    <label for="pac_fecha_nacimiento">Data de Naixement</label>
                     <p-calendar
                         id="pac_fecha_nacimiento"
                         formControlName="pac_fecha_nacimiento"
@@ -81,10 +81,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_fecha_nacimiento')?.invalid && patientForm.get('pac_fecha_nacimiento')?.touched
                         }"
                     />
-                    <small *ngIf="patientForm.get('pac_fecha_nacimiento')?.invalid && patientForm.get('pac_fecha_nacimiento')?.touched" class="text-red-500">La fecha de nacimiento es obligatoria.</small>
+                    <small *ngIf="patientForm.get('pac_fecha_nacimiento')?.invalid && patientForm.get('pac_fecha_nacimiento')?.touched" class="text-red-500">La data de naixement és obligatòria.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_direccion_completa">Dirección Completa</label>
+                    <label for="pac_direccion_completa">Direcció Completa</label>
                     <input
                         type="text"
                         id="pac_direccion_completa"
@@ -95,10 +95,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_direccion_completa')?.invalid && patientForm.get('pac_direccion_completa')?.touched
                         }"
                     />
-                    <small *ngIf="patientForm.get('pac_direccion_completa')?.invalid && patientForm.get('pac_direccion_completa')?.touched" class="text-red-500">La dirección es obligatoria.</small>
+                    <small *ngIf="patientForm.get('pac_direccion_completa')?.invalid && patientForm.get('pac_direccion_completa')?.touched" class="text-red-500">La direcció és obligatòria.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_lengua_materna">Lengua Materna</label>
+                    <label for="pac_lengua_materna">Llengua Materna</label>
                     <input
                         type="text"
                         id="pac_lengua_materna"
@@ -109,10 +109,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_lengua_materna')?.invalid && patientForm.get('pac_lengua_materna')?.touched
                         }"
                     />
-                    <small *ngIf="patientForm.get('pac_lengua_materna')?.invalid && patientForm.get('pac_lengua_materna')?.touched" class="text-red-500">La lengua materna es obligatoria.</small>
+                    <small *ngIf="patientForm.get('pac_lengua_materna')?.invalid && patientForm.get('pac_lengua_materna')?.touched" class="text-red-500">La llengua materna és obligatòria.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_antecedentes">Antecedentes</label>
+                    <label for="pac_antecedentes">Antecedents</label>
                     <textarea
                         id="pac_antecedentes"
                         formControlName="pac_antecedentes"
@@ -122,10 +122,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_antecedentes')?.invalid && patientForm.get('pac_antecedentes')?.touched
                         }"
                     ></textarea>
-                    <small *ngIf="patientForm.get('pac_antecedentes')?.invalid && patientForm.get('pac_antecedentes')?.touched" class="text-red-500">Los antecedentes son obligatorios.</small>
+                    <small *ngIf="patientForm.get('pac_antecedentes')?.invalid && patientForm.get('pac_antecedentes')?.touched" class="text-red-500">Els antecedents són obligatoris.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_alergias">Alergias</label>
+                    <label for="pac_alergias">Al·lèrgies</label>
                     <textarea
                         id="pac_alergias"
                         formControlName="pac_alergias"
@@ -135,10 +135,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_alergias')?.invalid && patientForm.get('pac_alergias')?.touched
                         }"
                     ></textarea>
-                    <small *ngIf="patientForm.get('pac_alergias')?.invalid && patientForm.get('pac_alergias')?.touched" class="text-red-500">Las alergias son obligatorias.</small>
+                    <small *ngIf="patientForm.get('pac_alergias')?.invalid && patientForm.get('pac_alergias')?.touched" class="text-red-500">Les al·lèrgies són obligatòries.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_nombre_cuidador">Nombre del Cuidador</label>
+                    <label for="pac_nombre_cuidador">Nom del Cuidador</label>
                     <input
                         type="text"
                         id="pac_nombre_cuidador"
@@ -149,10 +149,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_nombre_cuidador')?.invalid && patientForm.get('pac_nombre_cuidador')?.touched
                         }"
                     />
-                    <small *ngIf="patientForm.get('pac_nombre_cuidador')?.invalid && patientForm.get('pac_nombre_cuidador')?.touched" class="text-red-500">El nombre del cuidador es obligatorio.</small>
+                    <small *ngIf="patientForm.get('pac_nombre_cuidador')?.invalid && patientForm.get('pac_nombre_cuidador')?.touched" class="text-red-500">El nom del cuidador és obligatori.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_telefono_cuidador">Teléfono del Cuidador</label>
+                    <label for="pac_telefono_cuidador">Telèfon del Cuidador</label>
                     <input
                         type="text"
                         id="pac_telefono_cuidador"
@@ -163,10 +163,10 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_telefono_cuidador')?.invalid && patientForm.get('pac_telefono_cuidador')?.touched
                         }"
                     />
-                    <small *ngIf="patientForm.get('pac_telefono_cuidador')?.invalid && patientForm.get('pac_telefono_cuidador')?.touched" class="text-red-500">El teléfono del cuidador es obligatorio y debe tener 9 dígitos.</small>
+                    <small *ngIf="patientForm.get('pac_telefono_cuidador')?.invalid && patientForm.get('pac_telefono_cuidador')?.touched" class="text-red-500">El telèfon del cuidador és obligatori i ha de tenir 9 dígits.</small>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="pac_fecha_ingreso">Fecha de Ingreso</label>
+                    <label for="pac_fecha_ingreso">Data d'ingrés</label>
                     <p-calendar
                         id="pac_fecha_ingreso"
                         formControlName="pac_fecha_ingreso"
@@ -176,11 +176,11 @@ import { PatientService } from '../../../service/patient.service';
                             'border-red-500': patientForm.get('pac_fecha_ingreso')?.invalid && patientForm.get('pac_fecha_ingreso')?.touched
                         }"
                     />
-                    <small *ngIf="patientForm.get('pac_fecha_ingreso')?.invalid && patientForm.get('pac_fecha_ingreso')?.touched" class="text-red-500">La fecha de ingreso es obligatoria.</small>
+                    <small *ngIf="patientForm.get('pac_fecha_ingreso')?.invalid && patientForm.get('pac_fecha_ingreso')?.touched" class="text-red-500">La data d'ingrés és obligatòria.</small>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <p-button label="Cancelar" (onClick)="resetForm()" severity="secondary" />
-                    <p-button [label]="isEditing ? 'Modificar Paciente' : 'Crear Paciente'" type="submit" [disabled]="patientForm.invalid" />
+                    <p-button label="Cancel·lar" (onClick)="resetForm()" severity="secondary" />
+                    <p-button [label]="isEditing ? 'Modificar Pacient' : 'Crear Pacient'" type="submit" [disabled]="patientForm.invalid" />
                 </div>
             </form>
         </div>
@@ -217,7 +217,7 @@ export class PatientManagementComponent implements OnInit {
 
     searchPacient() {
         if (!this.pac_id) {
-            this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Por favor, introduce un ID de paciente.' });
+            this.messageService.add({ severity: 'warn', summary: 'Advertiment', detail: 'Si us plau, introdueix el número del pacient.' });
             return;
         }
         this.loading = true;
@@ -246,11 +246,11 @@ export class PatientManagementComponent implements OnInit {
                     pac_fecha_ingreso: fechaIngreso
                 });
 
-                this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Paciente encontrado.' });
+                this.messageService.add({ severity: 'success', summary: 'Èxit', detail: 'Pacient trobat.' });
             },
             error: (error: Error) => {
                 console.error('Error al buscar el paciente:', error);
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Paciente no encontrado.' });
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Pacient no trobat.' });
                 this.loading = false;
             },
             complete: () => {
@@ -283,24 +283,24 @@ export class PatientManagementComponent implements OnInit {
                 // Modificar paciente
                 this.patientService.updatePatient(this.pac_id, patientData).subscribe({
                     next: (response) => {
-                        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Paciente modificado con éxito.' });
+                        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Pacient modificat amb èxit.' });
                         this.resetForm();
                     },
                     error: (error) => {
                         console.error('Error al modificar el paciente', error);
-                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al modificar el paciente.' });
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error en modificar el pacient.' });
                     }
                 });
             } else {
                 // Crear paciente
                 this.patientService.createPatient(patientData).subscribe({
                     next: (response) => {
-                        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Paciente creado con éxito.' });
+                        this.messageService.add({ severity: 'success', summary: 'Èxit', detail: 'Pacient creat amb èxit.' });
                         this.resetForm();
                     },
                     error: (error) => {
                         console.error('Error al crear el paciente', error);
-                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al crear el paciente.' });
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error en crear el pacient.' });
                     }
                 });
             }

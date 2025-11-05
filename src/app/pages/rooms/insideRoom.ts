@@ -144,7 +144,7 @@ Chart.register(annotationPlugin);
                                         <p-knob [(ngModel)]="constantes.saturacion_oxigeno" [readonly]="true" [step]="10" [min]="0" [max]="100" valueTemplate="{value}%" />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
-                                        <div class="font-semibold text-xl text-center">Frequencia respiratoria</div>
+                                        <div class="font-semibold text-xl text-center">Frequencia respiratòria</div>
                                         <p-knob [(ngModel)]="constantes.frequencia_respiratoria" [readonly]="true" [step]="10" [min]="0" [max]="80" valueTemplate="{value}" />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">

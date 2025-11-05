@@ -42,11 +42,11 @@ import { DropdownModule } from 'primeng/dropdown';
     template: `
         <p-toast></p-toast>
         <div class="card">
-            <h2 class="text-xl font-semibold mb-4">Asignar Habitaciones</h2>
+            <h2 class="text-xl font-semibold mb-4">Assignar Habitacions</h2>
             <div class="flex justify-between">
                 <div>
-                    <input [(ngModel)]="hab_id" pInputText id="numRoom" type="text" placeholder="Num habitació" [class.ng-invalid]="!hab_id" />
-                    <p-button class="ml-3" (onClick)="searchHabitacio()" [loading]="loading" [disabled]="!hab_id" label="Trobar habitacio" [fluid]="false"></p-button>
+                    <input [(ngModel)]="hab_id" pInputText id="numRoom" type="text" placeholder="Número d'habitació" [class.ng-invalid]="!hab_id" />
+                    <p-button class="ml-3" (onClick)="searchHabitacio()" [loading]="loading" [disabled]="!hab_id" label="Trobar habitació" [fluid]="false"></p-button>
                 </div>              
                 <p-button *ngIf="room?.paciente" (onClick)="unassignPatient()" [loading]="asignmentloading" [disabled]="!room?.paciente" label="Donar de baixa" [fluid]="false"></p-button>
             </div>
@@ -75,7 +75,7 @@ export class RoomManagementComponent implements OnInit {
 
     searchHabitacio() {
         if (!this.hab_id) {
-            this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Por favor, introduce un ID de habitación.' });
+            this.messageService.add({ severity: 'warn', summary: 'Advertiment', detail: 'Si us plau, introdueix un ID habitació.' });
             return;
         }
         this.loading = true;
@@ -87,7 +87,7 @@ export class RoomManagementComponent implements OnInit {
             },
             error: (error: Error) => {
                 console.error('Error al buscar la habitación:', error);
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Habitación no encontrada.' });
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Habitación no trobada.' });
                 this.loading = false;
             }
         });
@@ -95,18 +95,18 @@ export class RoomManagementComponent implements OnInit {
 
     unassignPatient() {
         if (!this.hab_id) {
-            this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Por favor, introduce un ID de habitación.' });
+            this.messageService.add({ severity: 'warn', summary: 'Advertiment', detail: 'Si us plau, introdueix un ID habitació.' });
             return;
         }
         this.asignmentloading = true;
 
         this.rs.unassignPatient(this.hab_id).subscribe({
             next: (data: any) => {
-                this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Paciente desasignado correctamente.' });
+                this.messageService.add({ severity: 'success', summary: 'Èxit', detail: 'Pacient donat de baixa correctament.' });
             },
             error: (error: Error) => {
                 console.error('Error al donar de baixa el pacient:', error);
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al desasignar el paciente.' });
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error en donar de baixa al pacient.' });
                 this.asignmentloading = false;
             },
             complete: () => {
