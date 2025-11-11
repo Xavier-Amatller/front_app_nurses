@@ -40,14 +40,15 @@ import { DropdownModule } from 'primeng/dropdown';
     ],
     providers: [MessageService],
     template: `
-        <p-toast></p-toast>
+        <p-toast position="top-center" [life]="6000" [baseZIndex]="99999"></p-toast>
         <div class="card">
             <h2 class="text-xl font-semibold mb-4">Assignar Habitacions</h2>
             <div class="flex justify-between">
                 <div>
                     <input [(ngModel)]="hab_id" pInputText id="numRoom" type="text" placeholder="Número d'habitació" [class.ng-invalid]="!hab_id" />
                     <p-button class="ml-3" (onClick)="searchHabitacio()" [loading]="loading" [disabled]="!hab_id" label="Trobar habitació" [fluid]="false"></p-button>
-                </div>              
+                </div>
+                
                 <p-button *ngIf="room?.paciente" (onClick)="unassignPatient()" [loading]="asignmentloading" [disabled]="!room?.paciente" label="Donar de baixa" [fluid]="false"></p-button>
             </div>
             <br />
@@ -71,7 +72,39 @@ export class RoomManagementComponent implements OnInit {
         private messageService: MessageService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        const style = document.createElement('style');
+        style.innerHTML = `
+    /* Centrar el toast */
+    .p-toast.p-toast-top-center {
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+    }
+
+    /* Estilo base del mensaje */
+    .p-toast .p-toast-message {
+      font-size: 1.3rem !important;
+      font-weight: bold !important;
+      text-align: center !important;
+      padding: 1rem 1.5rem !important;
+      border-radius: 10px !important;
+      color: white !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Éxito → verde */
+    .p-toast-message-success {
+      background-color: #89e791ff !important;
+    }
+
+    /* Error → rojo */
+    .p-toast-message-error {
+      background-color: #ee818cff !important;
+    }
+  `;
+        document.head.appendChild(style);
+    }
 
     searchHabitacio() {
         if (!this.hab_id) {
@@ -82,12 +115,12 @@ export class RoomManagementComponent implements OnInit {
 
         this.rs.getRoom(this.hab_id).subscribe({
             next: (data: any) => {
-                this.room = data[0];
+                this.room = data;
                 this.loading = false;
             },
             error: (error: Error) => {
                 console.error('Error al buscar la habitación:', error);
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Habitación no trobada.' });
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Habitació no trobada.' });
                 this.loading = false;
             }
         });
@@ -103,6 +136,8 @@ export class RoomManagementComponent implements OnInit {
         this.rs.unassignPatient(this.hab_id).subscribe({
             next: (data: any) => {
                 this.messageService.add({ severity: 'success', summary: 'Èxit', detail: 'Pacient donat de baixa correctament.' });
+                this.asignmentloading = false;
+                this.searchHabitacio();
             },
             error: (error: Error) => {
                 console.error('Error al donar de baixa el pacient:', error);
@@ -111,7 +146,6 @@ export class RoomManagementComponent implements OnInit {
             },
             complete: () => {
                 this.asignmentloading = false;
-                this.searchHabitacio();
             }
         });
     }
