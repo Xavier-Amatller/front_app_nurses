@@ -354,7 +354,13 @@ export class InsideRooms implements OnInit {
 
         this.rs.getRoom(this.room_id).subscribe({
             next: (data: any) => {
-                this.room = data;
+                console.log('Datos recibidos del backend:', data);
+                this.room = [data];
+                if (!this.room || this.room.length === 0 || !this.room[0]?.paciente) {
+                    console.error('No se encontraron datos de la habitación');
+                    this.loading = false;
+                    return;
+                }
                 this.paciente = {
                     pac_alergias: this.room[0].paciente.pac_alergias,
                     pac_antecedentes: this.room[0].paciente.pac_antecedentes,

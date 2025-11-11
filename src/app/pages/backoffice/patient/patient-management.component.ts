@@ -19,7 +19,7 @@ import { PatientService } from '../../../service/patient.service';
     imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, CalendarModule, FluidModule, SelectModule, FormsModule, TextareaModule, CheckboxModule, MultiSelectModule, ToastModule, NgIf],
     providers: [MessageService], // Añadir MessageService como proveedor
     template: `
-        <p-toast></p-toast>
+        <p-toast position="top-center" [life]="6000" [baseZIndex]="99999"></p-toast>
         <div class="card">
             <div class="mb-4">
                 <input [(ngModel)]="pac_id" pInputText id="numPac" type="text" placeholder="Número del pacient" />
@@ -213,7 +213,39 @@ export class PatientManagementComponent implements OnInit {
         });
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        const style = document.createElement('style');
+        style.innerHTML = `
+    /* Centrar el toast */
+    .p-toast.p-toast-top-center {
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+    }
+
+    /* Estilo base del mensaje */
+    .p-toast .p-toast-message {
+      font-size: 1.3rem !important;
+      font-weight: bold !important;
+      text-align: center !important;
+      padding: 1rem 1.5rem !important;
+      border-radius: 10px !important;
+      color: white !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Éxito → verde */
+    .p-toast-message-success {
+      background-color: #89e791ff !important;
+    }
+
+    /* Error → rojo */
+    .p-toast-message-error {
+      background-color: #ee818cff !important;
+    }
+  `;
+        document.head.appendChild(style);
+    }
 
     searchPacient() {
         if (!this.pac_id) {
@@ -224,6 +256,7 @@ export class PatientManagementComponent implements OnInit {
 
         this.patientService.getPatient(this.pac_id).subscribe({
             next: (data: any) => {
+              
                 this.patient = data.paciente;
                 this.isEditing = true;
 
@@ -246,11 +279,11 @@ export class PatientManagementComponent implements OnInit {
                     pac_fecha_ingreso: fechaIngreso
                 });
 
-                this.messageService.add({ severity: 'success', summary: 'Èxit', detail: 'Pacient trobat.' });
+                this.messageService.add({ severity: 'success', summary: 'Èxit', detail: 'Pacient trobat.', sticky: false });
             },
             error: (error: Error) => {
                 console.error('Error al buscar el paciente:', error);
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Pacient no trobat.' });
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Pacient no trobat.', sticky: false });
                 this.loading = false;
             },
             complete: () => {
