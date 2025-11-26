@@ -132,28 +132,89 @@ Chart.register(annotationPlugin);
                             <p-tabpanels>
                                 <p-tabpanel value="0" class="flex flex-wrap gap-12 mt-4">
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
-                                        <div class="font-semibold text-xl text-center">Puls</div>
-                                        <p-knob [(ngModel)]="constantes.pulso" [readonly]="true" [step]="10" [min]="0" [max]="220" valueTemplate="{value}" />
+                                        <div class="font-semibold text-xl text-center">Pols</div>
+                                        <p-knob
+                                            [(ngModel)]="constantes.pulso"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="220"
+                                            valueTemplate="{value}"
+                                            [valueColor]="knobColor(constantes.pulso, 50, 100).valueColor"
+                                            [rangeColor]="knobColor(constantes.pulso, 50, 100).rangeColor"
+                                            [textColor]="knobColor(constantes.pulso, 50, 100).textColor"
+                                        />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                         <div class="font-semibold text-xl text-center">Temperatura</div>
-                                        <p-knob [(ngModel)]="constantes.temperatura" [readonly]="true" [step]="10" [min]="0" [max]="42" valueTemplate="{value}°C" />
+                                        <p-knob
+                                            [(ngModel)]="constantes.temperatura"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="42"
+                                            valueTemplate="{value}°C"
+                                            [valueColor]="knobColor(constantes.temperatura, 34.9, 38.5).valueColor"
+                                            [rangeColor]="knobColor(constantes.temperatura, 34.9, 38.5).rangeColor"
+                                            [textColor]="knobColor(constantes.temperatura, 34.9, 38.5).textColor"
+                                        />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                         <div class="font-semibold text-xl text-center">Saturació d'oxigen</div>
-                                        <p-knob [(ngModel)]="constantes.saturacion_oxigeno" [readonly]="true" [step]="10" [min]="0" [max]="100" valueTemplate="{value}%" />
+                                        <p-knob
+                                            [(ngModel)]="constantes.saturacion_oxigeno"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="100"
+                                            valueTemplate="{value}%"
+                                            [valueColor]="knobColor(constantes.saturacion_oxigeno, 94, 100).valueColor"
+                                            [rangeColor]="knobColor(constantes.saturacion_oxigeno, 94, 100).rangeColor"
+                                            [textColor]="knobColor(constantes.saturacion_oxigeno, 94, 100).textColor"
+                                        />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                         <div class="font-semibold text-xl text-center">Frequencia respiratòria</div>
-                                        <p-knob [(ngModel)]="constantes.frequencia_respiratoria" [readonly]="true" [step]="10" [min]="0" [max]="80" valueTemplate="{value}" />
+                                        <p-knob
+                                            [(ngModel)]="constantes.frequencia_respiratoria"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="80"
+                                            valueTemplate="{value}"
+                                            [valueColor]="knobColor(constantes.frequencia_respiratoria, 12, 20).valueColor"
+                                            [rangeColor]="knobColor(constantes.frequencia_respiratoria, 12, 20).rangeColor"
+                                            [textColor]="knobColor(constantes.frequencia_respiratoria, 12, 20).textColor"
+                                        />
+                                        
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                         <div class="font-semibold text-xl text-center">TA sistólica</div>
-                                        <p-knob [(ngModel)]="constantes.ta_sistolica" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                        <p-knob
+                                            [(ngModel)]="constantes.ta_sistolica"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="180"
+                                            valueTemplate="{value}"
+                                            [valueColor]="knobColor(constantes.ta_sistolica, 90, 140).valueColor"
+                                            [rangeColor]="knobColor(constantes.ta_sistolica, 90, 140).rangeColor"
+                                            [textColor]="knobColor(constantes.ta_sistolica, 90, 140).textColor"
+                                        />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                         <div class="font-semibold text-xl text-center">TA diastólica</div>
-                                        <p-knob [(ngModel)]="constantes.ta_diastolica" [readonly]="true" [step]="10" [min]="0" [max]="120" valueTemplate="{value}" />
+                                        <p-knob
+                                            [(ngModel)]="constantes.ta_diastolica"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="120"
+                                            valueTemplate="{value}"
+                                            [valueColor]="knobColor(constantes.ta_diastolica, 50, 90).valueColor"
+                                            [rangeColor]="knobColor(constantes.ta_diastolica, 50, 90).rangeColor"
+                                            [textColor]="knobColor(constantes.ta_diastolica, 50, 90).textColor"
+                                        />
                                     </div>
                                 </p-tabpanel>
                                 <p-tabpanel value="1">
@@ -283,6 +344,20 @@ export class InsideRooms implements OnInit {
     loading: boolean = true; // Added loading state
     room_id: string | null = null;
     room: any[] = [];
+
+    isOut(value: number | null, min: number, max: number): boolean {
+        const v = value ?? 0;
+        return v < min || v > max;
+    }
+
+    knobColor(value: number | null, min: number, max: number): any {
+        const out = this.isOut(value, min, max);
+        return {
+            valueColor: out ? '#f54a4aff' : '#A07AF7',
+            rangeColor: out ? '#ffcccc' : '#cdbdf3ff',
+            textColor: out ? '#b91c1c' : '#6346a6ff'
+        };
+    }
 
     paciente: Paciente = {
         pac_alergias: '',
@@ -881,7 +956,7 @@ export class InsideRooms implements OnInit {
             labels: chartLabels,
             datasets: [
                 {
-                    label: 'Puls',
+                    label: 'Pols',
                     data: chartDataPulso,
                     fill: false,
                     backgroundColor: '#FF6384',
@@ -953,7 +1028,7 @@ export class InsideRooms implements OnInit {
 
                         console.log(legendItem.text.toLowerCase());
 
-                        if (legendItem.text.toLowerCase().includes('puls')) {
+                        if (legendItem.text.toLowerCase().includes('pols')) {
                             console.log(legendItem.text);
                             annotationPlugin.annotations.pulsMax.display = isVisible;
                             annotationPlugin.annotations.pulsMin.display = isVisible;
