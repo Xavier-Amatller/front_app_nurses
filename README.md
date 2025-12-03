@@ -1,59 +1,118 @@
-# Sakai19
+# 🏥 TCAI Hospital
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+## 📋 Overview
 
-## Development server
+TCAI Hospital is a hospital information system developed with Angular, specifically designed for educational purposes for nursing students and web application development. This project simulates a real hospital environment where patients, auxiliary staff, rooms, and medical records can be managed through a modern, responsive front-end interface.
 
-To start a local development server, run:
+It demostrates Angular concepts such as components, services, routing, forms, and HTTP communication with API's, providing a hands-on learninng experience for students and developers.
 
-```bash
-ng serve
+---
+
+## 🚀 Installation Requirements
+
+Before starting, make sure the following tools are installed:
+
+### 1. **Node.js**
+Angular requires Node.js to function.
+- Download and install from: https://nodejs.org/
+- Verify the installation:
+  ```
+  node -v
+  npm -v
+  ```
+
+### 2. **TypeScript**
+Angular is built on TypeScript, although Angular CLI already includes its compiler.
+- Install globally (optional but recommended):
+  ```
+  npm install -g typescript
+  ```
+- Verify installation:
+  ```
+  tsc -v
+  ```
+
+### 3. **Angular CLI**
+The official tool for creating, compiling, and running Angular projects.
+
+Install:
+```
+npm install -g @angular/cli
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+Verify installation:
+```
+ng version
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
+## 📥 Clone the Repository
+To download the project to your machine:
+
+```
+git clone https://github.com/Stucom-Pelai/MP0616_Angular_Hospital_TCAI.git
 ```
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
+Enter the project directory:
+```
+cd MP0616_Angular_Hospital_TCAI
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+Install project dependencies:
+```
+npm install
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## ▶️ Run the Project
+To start the development server, run:
 
-```bash
-ng e2e
+```
+ng serve -o
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The **-o** parameter will automatically open the browser.
 
-## Additional Resources
+The application will typically be available at:
+```
+http://localhost:4200/
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## 🗂️ Project Structure
+Below is an overview of the main structure of the Angular project:
+
+```
+MP0616_Angular_Hospital_TCAI/
+│
+├── src/
+│   ├── app/                # Main application code
+│   │   ├── components/     # Reusable components (forms, views...)
+│   │   ├── services/       # Business logic and HTTP service calls
+│   │   ├── models/         # Data models and interfaces
+│   │   ├── pages/          # Complete system pages or views
+│   │   ├── app.module.ts   # Main application module
+│   │   └── app.component.* # Root component
+│   │
+│   ├── assets/             # Images, icons, and static files
+│   ├── environments/       # Environment configurations (dev and prod)
+│   ├── index.html          # Main HTML file
+│   └── main.ts             # Application entry point
+│
+├── package.json            # NPM dependencies and scripts
+├── angular.json            # Global Angular project configuration
+└── tsconfig.json           # TypeScript configuration
+```
+
+---
+
+## 📌 Final Notes
+- Always run dependency installation after cloning the project.
+- You can generate new components with:
+  ```
+  ng generate component name
+  ```
+- If you modify the backend or API, check the routes defined in your services.
