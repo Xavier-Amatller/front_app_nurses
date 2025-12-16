@@ -19,7 +19,7 @@ export class AuthService {
       aux_num_trabajador,
       aux_password
     };
-    return this.http.post('http://127.0.0.1:8000/api/login', data, {
+    return this.http.post('http://10.30.8.5:8000/api/login', data, {
       headers: {
         'Content-type': 'application/json'
       }

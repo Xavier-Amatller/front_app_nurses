@@ -11,7 +11,7 @@ export class DietsService {
     ) {}
 
     getOptions() {
-        return this.http.get('http://127.0.0.1:8000/api/dieta/options', { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }).pipe(
+        return this.http.get('http://10.30.8.5:8000/api/dieta/options', { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }).pipe(
             catchError((error) => {
                 if (error.status === 401 || error.status === 403) {
                     localStorage.removeItem('authToken');
@@ -23,7 +23,7 @@ export class DietsService {
         );
     }
     getDiet(dietId: string) {
-        return this.http.get('http://127.0.0.1:8000/api/dieta/' + dietId, { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }).pipe(
+        return this.http.get('http://10.30.8.5:8000/api/dieta/' + dietId, { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }).pipe(
             catchError((error) => {
                 if (error.status === 401 || error.status === 403) {
                     localStorage.removeItem('authToken');
@@ -35,7 +35,7 @@ export class DietsService {
         );
     }
     getDietsHistory(pac_id: string) {
-        return this.http.get('http://127.0.0.1:8000/api/dieta/history/' + pac_id, { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }).pipe(
+        return this.http.get('http://10.30.8.5:8000/api/dieta/history/' + pac_id, { headers: { Authorization: 'Bearer ' + localStorage.getItem('authToken') } }).pipe(
             catchError((error) => {
                 if (error.status === 401 || error.status === 403) {
                     localStorage.removeItem('authToken');
@@ -49,7 +49,7 @@ export class DietsService {
     insertDiet(pac_id: string, textureId: string, dietTypes: Array<string>, autonomy: boolean, prosthesis: boolean, aux_number: number) {
         return this.http
             .post(
-                'http://127.0.0.1:8000/api/dieta/new',
+                'http://10.30.8.5:8000/api/dieta/new',
                 {
                     pac_id,
                     textureId,
