@@ -8,7 +8,7 @@ import { Habitacion } from '../models/interfaces';
     providedIn: 'root'
 })
 export class RoomsService {
-    private apiURL = 'http://127.0.0.1:8000/api';
+    private apiURL = 'http://10.30.8.5:8000/api';
 
     constructor(
         private readonly http: HttpClient,

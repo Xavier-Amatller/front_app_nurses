@@ -9,7 +9,7 @@ import { RegistroResponse, TipoDieta, TipoDrenaje, TipoTextura } from '../models
     providedIn: 'root'
 })
 export class RegistroService {
-    private apiUrl = 'http://127.0.0.1:8000/api';
+    private apiUrl = 'http://10.30.8.5:8000/api';
 
     constructor(
         private readonly http: HttpClient,
