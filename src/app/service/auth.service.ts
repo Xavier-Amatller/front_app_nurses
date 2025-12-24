@@ -2,9 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment/environment';
 
 @Injectable()
 export class AuthService {
+  private apiUrl = environment.apiBaseUrl;
   private tokenKey = 'authToken';
   private auxIdKey = 'auxId';
   private roleKey = 'role'; // Nueva clave para el rol
@@ -19,7 +21,7 @@ export class AuthService {
       aux_num_trabajador,
       aux_password
     };
-    return this.http.post('http://10.30.8.5:8000/api/login', data, {
+    return this.http.post(`${this.apiUrl}/login`, data, {
       headers: {
         'Content-type': 'application/json'
       }

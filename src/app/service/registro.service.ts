@@ -4,12 +4,14 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RegistroResponse, TipoDieta, TipoDrenaje, TipoTextura } from '../models/interfaces';
+import { environment } from '../../environment/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RegistroService {
-    private apiUrl = 'http://10.30.8.5:8000/api';
+    private apiUrl = environment.apiBaseUrl;
+    
 
     constructor(
         private readonly http: HttpClient,
