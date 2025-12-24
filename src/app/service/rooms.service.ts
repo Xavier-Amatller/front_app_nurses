@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Habitacion } from '../models/interfaces';
+import { environment } from '../../environment/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RoomsService {
-    private apiURL = 'http://10.30.8.5:8000/api';
+    private apiURL = environment.apiBaseUrl;
 
     constructor(
         private readonly http: HttpClient,
