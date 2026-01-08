@@ -28,7 +28,7 @@ import { RegistroService } from '../../service/registro.service';
 
     template: `
         <div>
-            <p-toast position="top-right"></p-toast>
+            <p-toast position="top-center" [life]="6000" [baseZIndex]="99999"></p-toast>
             <form class="flex flex-col-2 gap-8" [formGroup]="registroForm" (ngSubmit)="onSubmit(this.alertsChecked)">
                 <div class="md:w-1/2">
                     <!-- Constantes Vitales -->
@@ -362,7 +362,34 @@ export class Cares implements OnInit {
         });
     }
 
-    ngOnInit(): void {
+    ngOnInit(): void {    
+        const style = document.createElement('style');
+  style.innerHTML = `
+    .p-toast.p-toast-top-center {
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+    }
+
+    .p-toast .p-toast-message {
+      font-size: 1.3rem !important;
+      font-weight: bold !important;
+      text-align: center !important;
+      padding: 1rem 1.5rem !important;
+      border-radius: 10px !important;
+      color: white !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .p-toast-message-success {
+      background-color: #89e791ff !important;
+    }
+
+    .p-toast-message-error {
+      background-color: #ee818cff !important;
+    }
+  `;
+  document.head.appendChild(style);
         this.auxiliarId = this.AuthService.getAuxiliarId();
         if (!this.auxiliarId) {
             this.router.navigate(['/login']);
