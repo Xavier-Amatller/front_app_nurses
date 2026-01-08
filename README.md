@@ -65,22 +65,41 @@ npm install
 ```
 
 ---
+## ⚙️ Environment Configuration (API Base URL)
 
-## ▶️ Run the Project
-To start the development server, run:
+This project uses Angular environment configuration files to define the API base URL depending on the execution mode (local development or production).
+
+This approach allows you to easily switch between different backend IPs without changing the application code.
+
+## 🧪 Local Environment (Development)
+File: `src/environments/environment.ts`
+
+```ts
+export const environment = {
+  production: false,
+  apiBaseUrl: 'http://localhost:8000/api'
+};
+```
+Run the project locally with:
 
 ```
-ng serve -o
+ng serve
 ```
 
-The **-o** parameter will automatically open the browser.
+## 🚀 Production Environment
 
-The application will typically be available at:
+File: `src/environments/environment.prod.ts`
 ```
-http://localhost:4200/
+export const environment = {
+  production: true,
+  apiBaseUrl: 'http://10.30.8.5:8000/api'
+};
 ```
+Build the project for production with:
 
----
+```
+ng build --configuration production
+```
 
 ## 🗂️ Project Structure
 Below is an overview of the main structure of the Angular project:
@@ -99,6 +118,8 @@ MP0616_Angular_Hospital_TCAI/
 │   │
 │   ├── assets/             # Images, icons, and static files
 │   ├── environments/       # Environment configurations (dev and prod)
+│       ├── environment.ts        # Local development
+│       └── environment.prod.ts   # Production
 │   ├── index.html          # Main HTML file
 │   └── main.ts             # Application entry point
 │
