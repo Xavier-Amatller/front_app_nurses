@@ -292,11 +292,11 @@ Chart.register(annotationPlugin);
                         <div class="font-semibold text-xl mb-4">Informació del pacient</div>
                         <label for="pac_motiu_ingrees" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Motiu d'ingrés: </label>
                         <div class="col-span-12 md:col-span-9 md:mb-4">
-                            <input [(ngModel)]="this.diagnostico.dia_motivo" pInputText [disabled]="true" id="pac_motiu_ingrees" type="text" class="w-full min-h-20" />
+                            <input [(ngModel)]="diagnostico.dia_motivo" pInputText [disabled]="true" id="pac_motiu_ingrees" type="text" class="w-full min-h-20" />
                         </div>
                         <label for="pac_diagnostic" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Diagnostic: </label>
                         <div class="col-span-12 md:col-span-9">
-                            <input [(ngModel)]="this.diagnostico.dia_diagnostico" pInputText [disabled]="true" id="pac_diagnostic" type="text" class="w-full min-h-20" />
+                            <input [(ngModel)]="diagnostico.dia_diagnostico" pInputText [disabled]="true" id="pac_diagnostic" type="text" class="w-full min-h-20" />
                         </div>
                         <hr />
                         <div class="grid grid-cols-2 gap-4">
@@ -519,16 +519,20 @@ export class InsideRooms implements OnInit {
                         } catch (error) {
                             console.log('No hay registros: drenajes');
                         }
-
                         try {
+                            const dia = data?.lastRegistro?.dia ?? {};
                             this.diagnostico = {
-                                dia_diagnostico: data.lastRegistro.dia.dia_diagnostico ?? null,
-                                dia_motivo: data.lastRegistro.dia.dia_motivo ?? null
+                                dia_diagnostico: dia.dia_diagnostico ?? '',
+                                dia_motivo: dia.dia_motivo ?? ''
                             };
+                            console.log('Diagnóstico cargado:', this.diagnostico);
                         } catch (error) {
                             console.log('No hay registros: diagnostico');
+                            this.diagnostico = {
+                            dia_diagnostico: '',
+                            dia_motivo: ''
+                            };
                         }
-
                         this.loading = false; // Set loading to false after all data is fetched
                     },
                     error: (err) => {
