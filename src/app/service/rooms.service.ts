@@ -53,30 +53,29 @@ export class RoomsService {
             })
         );
     }
-    //  TODO: Implementar assignPatient
-    // assignPatient(roomId: string, patientId: string): Observable<any> {
-    //     return this.http.post(
-    //         this.apiURL.concat(`/rooms/${roomId}/assign`),
-    //         { patientId },
-    //         {
-    //             headers: this.getHeaders()
-    //         }
-    //     ).pipe(
-    //         catchError((error) => {
-    //             if (error.status === 401 || error.status === 403) {
-    //                 localStorage.removeItem('authToken');
-    //                 this.router.navigate(['/login']);
-    //                 return throwError(() => new Error('No autorizado. Redirigiendo al login...'));
-    //             }
-    //             return throwError(() => error);
-    //         })
-    //     );
-    // }
+    assign(roomId: string, patientId: string): Observable<any> {
+        return this.http.post(
+            this.apiURL.concat(`/rooms/${roomId}/assign`),
+            { patientId },
+            {
+                headers: this.getHeaders()
+            }
+        ).pipe(
+            catchError((error) => {
+                if (error.status === 401 || error.status === 403) {
+                    localStorage.removeItem('authToken');
+                    this.router.navigate(['/login']);
+                    return throwError(() => new Error('No autorizado. Redirigiendo al login...'));
+                }
+                return throwError(() => error);
+            })
+        );
+    }
 
-    unassignPatient(roomId: string): Observable<any> {
+    discharge(roomId: string): Observable<any> {
         return this.http
             .put(
-                this.apiURL.concat(`/rooms/${roomId}/unsubscribe`),
+                this.apiURL.concat(`/rooms/${roomId}/discharge`),
                 {},
                 {
                     headers: this.getHeaders()
