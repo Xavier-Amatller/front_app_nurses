@@ -62,6 +62,18 @@ import { DropdownModule } from 'primeng/dropdown';
             [fluid]="false"
           ></p-button>
         </div>
+<div *ngIf="room && !room.paciente" class="mt-2">
+          <p-dropdown
+            [options]="patients"
+            [(ngModel)]="patient_id"
+            optionLabel="fullName"
+            optionValue="id"
+            placeholder="Selecciona un pacient"
+            [filter]="true"
+            filterBy="fullName"
+            [showClear]="true"
+          ></p-dropdown>
+        </div>
 
         <p-button
           *ngIf="room"
@@ -84,7 +96,7 @@ import { DropdownModule } from 'primeng/dropdown';
 })
 export class RoomManagementComponent implements OnInit {
   hab_id: string = '';
-  patient_id: string = '';
+  patient_id: number | null = null;
   loading = false;
   asignmentloading = false;
   room: Habitacion | null = null;
@@ -145,7 +157,11 @@ export class RoomManagementComponent implements OnInit {
       next: (data: any) => {
         this.room = data;
         this.loading = false;
+        if (this.room && !this.room.paciente) {
+          this.loadAvailablePatients();
+        }
       },
+      
       error: (error: Error) => {
         console.error('Error al buscar la habitación:', error);
         this.messageService.add({
@@ -157,7 +173,23 @@ export class RoomManagementComponent implements OnInit {
       }
     });
   }
-
+loadAvailablePatients() {
+    this.rs.getAvailablePatients().subscribe({
+      next: (patients: any[]) => {
+        this.patients = patients.map((p) => ({
+          ...p,
+          fullName: `${p.pac_nombre} ${p.pac_apellidos}`
+        }));
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No s’han pogut carregar els pacients disponibles.'
+        });
+      }
+    });
+  }
   discharge() {
     if (!this.hab_id) {
       this.messageService.add({
@@ -178,6 +210,7 @@ export class RoomManagementComponent implements OnInit {
         });
         this.asignmentloading = false;
         this.searchHabitacio();
+        this.loadAvailablePatients();
       },
       error: (error: Error) => {
         console.error('Error al donar de baixa el pacient:', error);
@@ -205,8 +238,7 @@ export class RoomManagementComponent implements OnInit {
     }
 
     this.asignmentloading = true;
-
-    this.rs.assign(this.hab_id, this.patient_id).subscribe({
+    this.rs.assign(this.hab_id, String(this.patient_id)).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',
@@ -214,6 +246,7 @@ export class RoomManagementComponent implements OnInit {
           detail: 'Pacient assignat correctament.'
         });
         this.searchHabitacio();
+        this.loadAvailablePatients();
       },
       error: () => {
         this.messageService.add({
@@ -225,7 +258,6 @@ export class RoomManagementComponent implements OnInit {
       }
     });
   }
-
   handleRoomAction() {
     if (!this.room) return;
 
@@ -235,4 +267,5 @@ export class RoomManagementComponent implements OnInit {
       this.assign();
     }
   }
+  
 }
