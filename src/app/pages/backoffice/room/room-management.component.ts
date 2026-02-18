@@ -79,7 +79,7 @@ import { DropdownModule } from 'primeng/dropdown';
           *ngIf="room"
           (onClick)="handleRoomAction()"
           [loading]="asignmentloading"
-          [label]="room.paciente ? 'Donar de alta' : 'Donar de baixa'"
+          [label]="room.paciente ? 'Donar d´'+'alta el pacient' : 'Donar de baixa el pacient'"
           [severity]="room.paciente ? 'danger' : 'success'"
           [fluid]="false"
         ></p-button>
