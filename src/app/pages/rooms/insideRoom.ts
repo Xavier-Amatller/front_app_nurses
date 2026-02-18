@@ -598,12 +598,12 @@ export class InsideRooms implements OnInit {
                     const chartLabels = data.map((item: any) => item.label);
 
                     const chartData = data.map((item: any) => ({
-                        ta_sistolica: item.ta_sistolica ? parseInt(item.ta_sistolica) : null,
-                        ta_diastolica: item.ta_diastolica ? parseInt(item.ta_diastolica) : null,
-                        frecuencia_respiratoria: item.frecuencia_respiratoria ? parseInt(item.frecuencia_respiratoria) : null,
-                        pulso: item.pulso ? parseInt(item.pulso) : null,
-                        temperatura: item.temperatura ? parseFloat(item.temperatura) : null,
-                        saturacion_oxigeno: item.saturacion_oxigeno ? parseInt(item.saturacion_oxigeno) : null
+                        ta_sistolica: item.ta_sistolica ? parseInt(item.ta_sistolica) :0,
+                        ta_diastolica: item.ta_diastolica ? parseInt(item.ta_diastolica) : 0,
+                        frecuencia_respiratoria: item.frecuencia_respiratoria ? parseInt(item.frecuencia_respiratoria) : 0,
+                        pulso: item.pulso ? parseInt(item.pulso) : 0,
+                        temperatura: item.temperatura ? parseFloat(item.temperatura) : 0,
+                        saturacion_oxigeno: item.saturacion_oxigeno ? parseInt(item.saturacion_oxigeno) : 0
                     }));
 
                     this.initChart(chartLabels, chartData);
