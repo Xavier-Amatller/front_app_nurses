@@ -92,5 +92,10 @@ export class RoomsService {
                 })
             );
     }
-
+        getAvailablePatients(): Observable<any[]> {
+  return this.http.get<any[]>(
+    this.apiURL.concat('/pacientes/available'),
+    { headers: this.getHeaders() }
+  );
+}
 }

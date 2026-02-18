@@ -412,12 +412,13 @@ export class InsideRooms implements OnInit {
         dia_diagnostico: null,
         dia_motivo: null
     };
-    habitacion: Habitacion={
-        id: 0,
-        hab_id: '',
-        hab_obs: '',
-        paciente: null,
-    }
+   habitacion: Habitacion = {
+  id: 0,
+  hab_id: '',
+  hab_obs: 'Sense observacions',
+  paciente: null,
+};
+
     lineData: any;
     lineOptions: any;
     lineOptionsDialog: any;
@@ -550,14 +551,11 @@ export class InsideRooms implements OnInit {
                             dia_motivo: ''
                             };
                         }
-                        //  try {
-                        //         this.habitacion = {
-                                
-                        //         hab_obs: data.lastRegistro.hab_obs.hab_obs ?? null
-                        //     };
-                        // } catch (error) {
-                        //     console.log('No hay observaciones: obs');
-                        // }
+                         try {
+                            this.habitacion.hab_obs = data?.lastRegistro?.reg_obs ?? 'Sense observacions';
+                        } catch (error) {
+                            console.log('No hay observaciones: obs');
+                        }
                         this.loading = false; // Set loading to false after all data is fetched
                     },
                     error: (err) => {
