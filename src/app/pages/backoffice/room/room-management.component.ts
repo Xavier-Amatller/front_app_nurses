@@ -59,12 +59,14 @@ import { DropdownModule } from 'primeng/dropdown';
     `
 })
 export class RoomManagementComponent implements OnInit {
-    hab_id: string = '';
-    patient_id: string = '';
-    loading = false;
-    asignmentloading = false;
-    room: Habitacion | null = null;
-    patients: any[] = []; // Lista de pacientes para el dropdown
+
+  hab_id: string = '';
+  hab_obs:string = '';
+  patient_id: number | null = null;
+  loading = false;
+  asignmentloading = false;
+  room: Habitacion | null = null;
+  patients: any[] = [];
 
     constructor(
         private fb: FormBuilder,
@@ -132,6 +134,29 @@ export class RoomManagementComponent implements OnInit {
             return;
         }
         this.asignmentloading = true;
+    this.asignmentloading = true;
+    this.rs.assign(this.hab_id, String(this.patient_id), this.hab_obs).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Èxit',
+          detail: 'Pacient assignat correctament.'
+        });
+        this.searchHabitacio();
+        this.loadAvailablePatients();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error en assignar el pacient.'
+        });
+        this.asignmentloading = false;
+      }
+    });
+  }
+  handleRoomAction() {
+    if (!this.room) return;
 
         this.rs.unassignPatient(this.hab_id).subscribe({
             next: (data: any) => {
