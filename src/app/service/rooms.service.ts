@@ -73,11 +73,10 @@ export class RoomsService {
         );
     }
 
-
-    unassignPatient(roomId: string): Observable<any> {
+    discharge(roomId: string): Observable<any> {
         return this.http
             .put(
-                this.apiURL.concat(`/rooms/${roomId}/unsubscribe`),
+                this.apiURL.concat(`/rooms/${roomId}/discharge`),
                 {},
                 {
                     headers: this.getHeaders()
@@ -94,5 +93,10 @@ export class RoomsService {
                 })
             );
     }
-
+        getAvailablePatients(): Observable<any[]> {
+  return this.http.get<any[]>(
+    this.apiURL.concat('/pacientes/available'),
+    { headers: this.getHeaders() }
+  );
+}
 }

@@ -89,7 +89,7 @@ ng serve
 ## 🚀 Production Environment
 
 File: `src/environments/environment.prod.ts`
-```
+```ts
 export const environment = {
   production: true,
   apiBaseUrl: 'http://10.30.8.5:8000/api'
@@ -98,7 +98,7 @@ export const environment = {
 Build the project for production with:
 
 ```
-ng build --configuration production
+ng serve --configuration production --host 0.0.0.0
 ```
 
 ## 🗂️ Project Structure

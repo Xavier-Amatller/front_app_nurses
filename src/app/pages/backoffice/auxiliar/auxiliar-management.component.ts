@@ -307,7 +307,7 @@ export class AuxiliarManagementComponent implements OnInit {
             this.messageService.add({
               severity: 'success',
               summary: 'Èxit',
-              detail: 'Auxiliar creado con éxito.'
+              detail: 'Auxiliar creat amb éxito.'
             });
             this.resetForm();
           },

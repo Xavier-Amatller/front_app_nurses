@@ -18,7 +18,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TabsModule } from 'primeng/tabs';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from '../../layout/service/layout.service';
-import { Constantes, Diagnostico, Drenajes, HistoryData, Movilizaciones, Paciente } from '../../models/interfaces';
+import { Constantes, Diagnostico, Drenajes, Habitacion, HistoryData, Movilizaciones, Paciente } from '../../models/interfaces';
 import { RegistroService } from '../../service/registro.service';
 import { RoomsService } from '../../service/rooms.service';
 
@@ -331,6 +331,17 @@ Chart.register(annotationPlugin);
                             </div>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="font-semibold text-xl mb-4">Informació del Registre</div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-12 gap-4">
+                                <label for="pac_nombre_cuidador" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-0">Observacions: </label>
+                                <div class="col-span-12 md:col-span-9">
+                                    <input pInputText [disabled]="true" id="pac_nombre_cuidador" type="text" [(ngModel)]="paciente.pac_nombre_cuidador" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </ng-template>
             </div>
         </div>
@@ -401,6 +412,13 @@ export class InsideRooms implements OnInit {
         dia_diagnostico: null,
         dia_motivo: null
     };
+   habitacion: Habitacion = {
+  id: 0,
+  hab_id: '',
+  hab_obs: 'Sense observacions',
+  paciente: null,
+};
+
     lineData: any;
     lineOptions: any;
     lineOptionsDialog: any;
@@ -533,6 +551,11 @@ export class InsideRooms implements OnInit {
                             dia_motivo: ''
                             };
                         }
+                         try {
+                            this.habitacion.hab_obs = data?.lastRegistro?.reg_obs ?? 'Sense observacions';
+                        } catch (error) {
+                            console.log('No hay observaciones: obs');
+                        }
                         this.loading = false; // Set loading to false after all data is fetched
                     },
                     error: (err) => {
@@ -575,12 +598,12 @@ export class InsideRooms implements OnInit {
                     const chartLabels = data.map((item: any) => item.label);
 
                     const chartData = data.map((item: any) => ({
-                        ta_sistolica: item.ta_sistolica ? parseInt(item.ta_sistolica) : null,
-                        ta_diastolica: item.ta_diastolica ? parseInt(item.ta_diastolica) : null,
-                        frecuencia_respiratoria: item.frecuencia_respiratoria ? parseInt(item.frecuencia_respiratoria) : null,
-                        pulso: item.pulso ? parseInt(item.pulso) : null,
-                        temperatura: item.temperatura ? parseFloat(item.temperatura) : null,
-                        saturacion_oxigeno: item.saturacion_oxigeno ? parseInt(item.saturacion_oxigeno) : null
+                        ta_sistolica: item.ta_sistolica ? parseInt(item.ta_sistolica) :0,
+                        ta_diastolica: item.ta_diastolica ? parseInt(item.ta_diastolica) : 0,
+                        frecuencia_respiratoria: item.frecuencia_respiratoria ? parseInt(item.frecuencia_respiratoria) : 0,
+                        pulso: item.pulso ? parseInt(item.pulso) : 0,
+                        temperatura: item.temperatura ? parseFloat(item.temperatura) : 0,
+                        saturacion_oxigeno: item.saturacion_oxigeno ? parseInt(item.saturacion_oxigeno) : 0
                     }));
 
                     this.initChart(chartLabels, chartData);
