@@ -96,6 +96,7 @@ import { DropdownModule } from 'primeng/dropdown';
 })
 export class RoomManagementComponent implements OnInit {
   hab_id: string = '';
+  hab_obs:string = '';
   patient_id: number | null = null;
   loading = false;
   asignmentloading = false;

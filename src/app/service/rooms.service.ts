@@ -53,10 +53,11 @@ export class RoomsService {
             })
         );
     }
-    assign(roomId: string, patientId: string): Observable<any> {
+
+    assign(roomId: string, patientId: string,hab_obs: string): Observable<any> {
         return this.http.post(
             this.apiURL.concat(`/rooms/${roomId}/assign`),
-            { patientId },
+            { patientId, hab_obs },
             {
                 headers: this.getHeaders()
             }
