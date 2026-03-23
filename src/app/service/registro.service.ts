@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RegistroResponse, TipoDieta, TipoDrenaje, TipoTextura } from '../models/interfaces';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environment/environment.prod';
 
 @Injectable({
     providedIn: 'root'

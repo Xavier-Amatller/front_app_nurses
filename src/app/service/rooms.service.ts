@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Habitacion } from '../models/interfaces';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environment/environment.prod';
 
 @Injectable({
     providedIn: 'root'
