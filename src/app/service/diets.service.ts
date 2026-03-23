@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environment/environment.prod';
 @Injectable()
 export class DietsService {
     private apiUrl = environment.apiBaseUrl;
