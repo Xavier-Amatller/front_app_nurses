@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuxiliarService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
-
+  private apiUrl = environment.apiBaseUrl;
   constructor(private http: HttpClient) {}
 
   createAuxiliar(data: any): Observable<any> {

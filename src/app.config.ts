@@ -8,12 +8,14 @@ import { appRoutes } from './app.routes';
 import { AuthGuard } from './app/pages/auth/guards/auth.guard';
 import { AuthService } from './app/service/auth.service';
 import { DietsService } from './app/service/diets.service';
+import { MessageService } from 'primeng/api';
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(appRoutes, withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
         provideHttpClient(withFetch()),
         provideAnimationsAsync(),
         providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
+        MessageService,
         AuthGuard,
         AuthService,
         DietsService,

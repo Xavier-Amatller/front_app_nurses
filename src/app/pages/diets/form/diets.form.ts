@@ -31,13 +31,13 @@ interface SelectOption {
 
     template: `
         <p-fluid>
-            <p-toast position="top-right"></p-toast>
+            <p-toast position="top-center"></p-toast>
             <div class="card flex flex-col items-center gap-4">
-                <div class="font-semibold text-xl">Introdueix un num d'habitació</div>
+                <div class="font-semibold text-xl">Introdueix un número d'habitació</div>
                 <div class="flex flex-wrap items-center gap-6">
                     <div class="field">
                         <label for="numRoom" class="sr-only"></label>
-                        <input [(ngModel)]="id" pInputText id="numRoom" type="text" placeholder="Num habitació" [class.ng-invalid]="!id && submitted" [class.ng-dirty]="submitted" />
+                        <input [(ngModel)]="id" pInputText id="numRoom" type="text" placeholder="Número habitació" [class.ng-invalid]="!id && submitted" [class.ng-dirty]="submitted" />
                         <p-message *ngIf="!id && submitted" severity="error" text="El número d'habitació és obligatori"></p-message>
                     </div>
                     <p-button (onClick)="searchDiet()" [loading]="loading" [disabled]="!id" label="Trobar dieta" [fluid]="false"></p-button>
@@ -221,6 +221,42 @@ export class DietsFormComponent implements OnInit {
         if (this.id) {
             this.searchDiet();
         }
+        const style = document.createElement('style');
+        style.innerHTML = `
+/* Centrar todos los toasts */
+.p-toast.p-toast-top-center {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    position: fixed !important;
+    z-index: 9999 !important;
+}
+
+/* Mensajes dentro del toast */
+.p-toast .p-toast-message {
+    font-size: 1.3rem !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    padding: 1rem 1.5rem !important;
+    border-radius: 10px !important;
+    color: white !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.p-toast.p-toast-top-center .p-toast-message-success {
+    background-color: #89e791 !important;
+    color: white !important;
+}
+.p-toast.p-toast-top-center .p-toast-message-error {
+    background-color: #ee818c !important;
+    color: white !important;
+}
+.p-toast.p-toast-top-center .p-toast-message-warn {
+    background-color: #facc15 !important;
+    color: black !important;
+}
+`;
+        document.head.appendChild(style);
     }
 
     searchDiet() {
@@ -243,7 +279,7 @@ export class DietsFormComponent implements OnInit {
                     this.historyDiet = [];
                     this.messageService.add({
                         severity: 'warn',
-                        summary: 'Advertència',
+                        summary: 'Advertiment',
                         detail: 'Aquest pacient no té dieta assignada'
                     });
                 } else {

@@ -28,7 +28,7 @@ import { AppConfigurator } from './app.configurator';
                             <rect x="200" y="100" width="100" height="300" fill="white" />
                             <rect x="400" y="200" width="100" height="300" transform="rotate(90 400 200)" fill="white" />
                         </svg>
-                        <span>Stucom</span>
+                        <span>Stucai</span>
                     </a>
                 </div>
 
@@ -63,7 +63,7 @@ import { AppConfigurator } from './app.configurator';
                         <div class="layout-topbar-menu-content">
                             <button type="button" class="layout-topbar-action">
                                 <i class="pi pi-user"></i>
-                                <span>Profile</span>
+                                <span>Perfil</span>
                             </button>
 
                             <button type="button" class="layout-topbar-action transition-all hover:bg-red-400" (click)="logOut()">

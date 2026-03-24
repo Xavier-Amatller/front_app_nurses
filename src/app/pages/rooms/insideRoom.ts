@@ -10,6 +10,7 @@ import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Dialog } from 'primeng/dialog';
+import { FieldsetModule } from 'primeng/fieldset';
 import { Drawer } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { KnobModule } from 'primeng/knob';
@@ -18,7 +19,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TabsModule } from 'primeng/tabs';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from '../../layout/service/layout.service';
-import { Constantes, Diagnostico, Drenajes, HistoryData, Movilizaciones, Paciente } from '../../models/interfaces';
+import { Constantes, Diagnostico, Drenajes, Habitacion, HistoryData, Movilizaciones, Paciente } from '../../models/interfaces';
 import { RegistroService } from '../../service/registro.service';
 import { RoomsService } from '../../service/rooms.service';
 
@@ -27,7 +28,7 @@ Chart.register(annotationPlugin);
 @Component({
     selector: 'app-inside-room',
     standalone: true,
-    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button, Drawer, Dialog],
+    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button, Drawer, Dialog, FieldsetModule],
     animations: [trigger('fadeAnimation', [transition(':enter', [style({ opacity: 0 }), animate('600ms ease-in', style({ opacity: 1 }))]), transition(':leave', [animate('400ms ease-out', style({ opacity: 0 }))])])],
 
     template: `
@@ -132,28 +133,89 @@ Chart.register(annotationPlugin);
                             <p-tabpanels>
                                 <p-tabpanel value="0" class="flex flex-wrap gap-12 mt-4">
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
-                                        <div class="font-semibold text-xl text-center">Puls</div>
-                                        <p-knob [(ngModel)]="constantes.pulso" [readonly]="true" [step]="10" [min]="0" [max]="220" valueTemplate="{value}" />
+                                        <div class="font-semibold text-xl text-center">Pols</div>
+                                        <p-knob
+                                            [(ngModel)]="constantes.pulso"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="220"
+                                            valueTemplate="{value}"
+                                            [valueColor]="knobColor(constantes.pulso, 50, 100).valueColor"
+                                            [rangeColor]="knobColor(constantes.pulso, 50, 100).rangeColor"
+                                            [textColor]="knobColor(constantes.pulso, 50, 100).textColor"
+                                        />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                         <div class="font-semibold text-xl text-center">Temperatura</div>
-                                        <p-knob [(ngModel)]="constantes.temperatura" [readonly]="true" [step]="10" [min]="0" [max]="42" valueTemplate="{value}°C" />
+                                        <p-knob
+                                            [(ngModel)]="constantes.temperatura"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="42"
+                                            valueTemplate="{value}°C"
+                                            [valueColor]="knobColor(constantes.temperatura, 34.9, 38.5).valueColor"
+                                            [rangeColor]="knobColor(constantes.temperatura, 34.9, 38.5).rangeColor"
+                                            [textColor]="knobColor(constantes.temperatura, 34.9, 38.5).textColor"
+                                        />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                         <div class="font-semibold text-xl text-center">Saturació d'oxigen</div>
-                                        <p-knob [(ngModel)]="constantes.saturacion_oxigeno" [readonly]="true" [step]="10" [min]="0" [max]="100" valueTemplate="{value}%" />
+                                        <p-knob
+                                            [(ngModel)]="constantes.saturacion_oxigeno"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="100"
+                                            valueTemplate="{value}%"
+                                            [valueColor]="knobColor(constantes.saturacion_oxigeno, 94, 100).valueColor"
+                                            [rangeColor]="knobColor(constantes.saturacion_oxigeno, 94, 100).rangeColor"
+                                            [textColor]="knobColor(constantes.saturacion_oxigeno, 94, 100).textColor"
+                                        />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
-                                        <div class="font-semibold text-xl text-center">Frequencia respiratoria</div>
-                                        <p-knob [(ngModel)]="constantes.frequencia_respiratoria" [readonly]="true" [step]="10" [min]="0" [max]="80" valueTemplate="{value}" />
+                                        <div class="font-semibold text-xl text-center">Frequencia respiratòria</div>
+                                        <p-knob
+                                            [(ngModel)]="constantes.frequencia_respiratoria"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="80"
+                                            valueTemplate="{value}"
+                                            [valueColor]="knobColor(constantes.frequencia_respiratoria, 12, 20).valueColor"
+                                            [rangeColor]="knobColor(constantes.frequencia_respiratoria, 12, 20).rangeColor"
+                                            [textColor]="knobColor(constantes.frequencia_respiratoria, 12, 20).textColor"
+                                        />
+                                        
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                         <div class="font-semibold text-xl text-center">TA sistólica</div>
-                                        <p-knob [(ngModel)]="constantes.ta_sistolica" [readonly]="true" [step]="10" [min]="0" [max]="180" valueTemplate="{value}" />
+                                        <p-knob
+                                            [(ngModel)]="constantes.ta_sistolica"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="180"
+                                            valueTemplate="{value}"
+                                            [valueColor]="knobColor(constantes.ta_sistolica, 90, 140).valueColor"
+                                            [rangeColor]="knobColor(constantes.ta_sistolica, 90, 140).rangeColor"
+                                            [textColor]="knobColor(constantes.ta_sistolica, 90, 140).textColor"
+                                        />
                                     </div>
                                     <div class="flex flex-col justify-center items-center gap-2 w-1/4">
                                         <div class="font-semibold text-xl text-center">TA diastólica</div>
-                                        <p-knob [(ngModel)]="constantes.ta_diastolica" [readonly]="true" [step]="10" [min]="0" [max]="120" valueTemplate="{value}" />
+                                        <p-knob
+                                            [(ngModel)]="constantes.ta_diastolica"
+                                            [readonly]="true"
+                                            [step]="10"
+                                            [min]="0"
+                                            [max]="120"
+                                            valueTemplate="{value}"
+                                            [valueColor]="knobColor(constantes.ta_diastolica, 50, 90).valueColor"
+                                            [rangeColor]="knobColor(constantes.ta_diastolica, 50, 90).rangeColor"
+                                            [textColor]="knobColor(constantes.ta_diastolica, 50, 90).textColor"
+                                        />
                                     </div>
                                 </p-tabpanel>
                                 <p-tabpanel value="1">
@@ -231,11 +293,11 @@ Chart.register(annotationPlugin);
                         <div class="font-semibold text-xl mb-4">Informació del pacient</div>
                         <label for="pac_motiu_ingrees" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Motiu d'ingrés: </label>
                         <div class="col-span-12 md:col-span-9 md:mb-4">
-                            <input [(ngModel)]="this.diagnostico.dia_motivo" pInputText [disabled]="true" id="pac_motiu_ingrees" type="text" class="w-full min-h-20" />
+                            <input [(ngModel)]="diagnostico.dia_motivo" pInputText [disabled]="true" id="pac_motiu_ingrees" type="text" class="w-full min-h-20" />
                         </div>
                         <label for="pac_diagnostic" class="flex items-center col-span-12 mb-2 md:col-span-3 md:mb-4">Diagnostic: </label>
                         <div class="col-span-12 md:col-span-9">
-                            <input [(ngModel)]="this.diagnostico.dia_diagnostico" pInputText [disabled]="true" id="pac_diagnostic" type="text" class="w-full min-h-20" />
+                            <input [(ngModel)]="diagnostico.dia_diagnostico" pInputText [disabled]="true" id="pac_diagnostic" type="text" class="w-full min-h-20" />
                         </div>
                         <hr />
                         <div class="grid grid-cols-2 gap-4">
@@ -270,6 +332,15 @@ Chart.register(annotationPlugin);
                             </div>
                         </div>
                     </div>
+                    <div class="card">
+                        <p-fieldset legend="Observacions" [toggleable]="false" class="!m-0 !p-4">
+                            <p class="h-auto overflow-hidden break-words text-base whitespace-pre-wrap">
+                                {{ room[0]?.hab_obs ?? 'Sense observacions' }}
+                            </p>
+                        </p-fieldset>
+                                </div>
+                   
+
                 </ng-template>
             </div>
         </div>
@@ -283,6 +354,20 @@ export class InsideRooms implements OnInit {
     loading: boolean = true; // Added loading state
     room_id: string | null = null;
     room: any[] = [];
+
+    isOut(value: number | null, min: number, max: number): boolean {
+        const v = value ?? 0;
+        return v < min || v > max;
+    }
+
+    knobColor(value: number | null, min: number, max: number): any {
+        const out = this.isOut(value, min, max);
+        return {
+            valueColor: out ? '#f54a4aff' : '#A07AF7',
+            rangeColor: out ? '#ffcccc' : '#cdbdf3ff',
+            textColor: out ? '#b91c1c' : '#6346a6ff'
+        };
+    }
 
     paciente: Paciente = {
         pac_alergias: '',
@@ -326,6 +411,13 @@ export class InsideRooms implements OnInit {
         dia_diagnostico: null,
         dia_motivo: null
     };
+   habitacion: Habitacion = {
+  id: 0,
+  hab_id: '',
+  hab_obs: '',
+  paciente: null,
+};
+
     lineData: any;
     lineOptions: any;
     lineOptionsDialog: any;
@@ -354,7 +446,13 @@ export class InsideRooms implements OnInit {
 
         this.rs.getRoom(this.room_id).subscribe({
             next: (data: any) => {
-                this.room = data;
+                console.log('Datos recibidos del backend:', data);
+                this.room = [data];
+                if (!this.room || this.room.length === 0 || !this.room[0]?.paciente) {
+                    console.error('No se encontraron datos de la habitación');
+                    this.loading = false;
+                    return;
+                }
                 this.paciente = {
                     pac_alergias: this.room[0].paciente.pac_alergias,
                     pac_antecedentes: this.room[0].paciente.pac_antecedentes,
@@ -438,16 +536,27 @@ export class InsideRooms implements OnInit {
                         } catch (error) {
                             console.log('No hay registros: drenajes');
                         }
-
                         try {
+                            const dia = data?.lastRegistro?.dia ?? {};
                             this.diagnostico = {
-                                dia_diagnostico: data.lastRegistro.dia.dia_diagnostico ?? null,
-                                dia_motivo: data.lastRegistro.dia.dia_motivo ?? null
+                                dia_diagnostico: dia.dia_diagnostico ?? '',
+                                dia_motivo: dia.dia_motivo ?? ''
                             };
+                            console.log('Diagnóstico cargado:', this.diagnostico);
                         } catch (error) {
                             console.log('No hay registros: diagnostico');
+                            this.diagnostico = {
+                            dia_diagnostico: '',
+                            dia_motivo: ''
+                            };
                         }
+                         try {
 
+                            this.habitacion.hab_obs = data?.lastRegistro?.reg_obs ?? '';
+
+                        } catch (error) {
+                            console.log('No hay observaciones: obs');
+                        }
                         this.loading = false; // Set loading to false after all data is fetched
                     },
                     error: (err) => {
@@ -490,12 +599,12 @@ export class InsideRooms implements OnInit {
                     const chartLabels = data.map((item: any) => item.label);
 
                     const chartData = data.map((item: any) => ({
-                        ta_sistolica: item.ta_sistolica ? parseInt(item.ta_sistolica) : null,
-                        ta_diastolica: item.ta_diastolica ? parseInt(item.ta_diastolica) : null,
-                        frecuencia_respiratoria: item.frecuencia_respiratoria ? parseInt(item.frecuencia_respiratoria) : null,
-                        pulso: item.pulso ? parseInt(item.pulso) : null,
-                        temperatura: item.temperatura ? parseFloat(item.temperatura) : null,
-                        saturacion_oxigeno: item.saturacion_oxigeno ? parseInt(item.saturacion_oxigeno) : null
+                        ta_sistolica: item.ta_sistolica ? parseInt(item.ta_sistolica) :0,
+                        ta_diastolica: item.ta_diastolica ? parseInt(item.ta_diastolica) : 0,
+                        frecuencia_respiratoria: item.frecuencia_respiratoria ? parseInt(item.frecuencia_respiratoria) : 0,
+                        pulso: item.pulso ? parseInt(item.pulso) : 0,
+                        temperatura: item.temperatura ? parseFloat(item.temperatura) : 0,
+                        saturacion_oxigeno: item.saturacion_oxigeno ? parseInt(item.saturacion_oxigeno) : 0
                     }));
 
                     this.initChart(chartLabels, chartData);
@@ -875,7 +984,7 @@ export class InsideRooms implements OnInit {
             labels: chartLabels,
             datasets: [
                 {
-                    label: 'Puls',
+                    label: 'Pols',
                     data: chartDataPulso,
                     fill: false,
                     backgroundColor: '#FF6384',
@@ -947,7 +1056,7 @@ export class InsideRooms implements OnInit {
 
                         console.log(legendItem.text.toLowerCase());
 
-                        if (legendItem.text.toLowerCase().includes('puls')) {
+                        if (legendItem.text.toLowerCase().includes('pols')) {
                             console.log(legendItem.text);
                             annotationPlugin.annotations.pulsMax.display = isVisible;
                             annotationPlugin.annotations.pulsMin.display = isVisible;

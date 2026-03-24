@@ -23,7 +23,7 @@ import { AuxiliarService } from '../../../service/auxiliar.service';
   ],
   providers: [MessageService],
   template: `
-    <p-toast></p-toast>
+    <p-toast position="top-center" [life]="6000" [baseZIndex]="99999"></p-toast>
     <div class="card">
       <div class="mb-4">
         <input
@@ -31,7 +31,7 @@ import { AuxiliarService } from '../../../service/auxiliar.service';
           pInputText
           id="aux_num_trabajador_search"
           type="text"
-          placeholder="Número de Trabajador"
+          placeholder="Número de Treballador"
         />
         <p-button
           class="ml-3"
@@ -45,7 +45,7 @@ import { AuxiliarService } from '../../../service/auxiliar.service';
       <h2 class="text-xl font-semibold mb-4">{{ isEditing ? 'Modificar Auxiliar' : 'Crear Auxiliar' }}</h2>
       <form [formGroup]="auxiliarForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
         <div *ngIf="!isEditing" class="flex flex-col gap-2">
-          <label for="aux_num_trabajador">Número de Trabajador</label>
+          <label for="aux_num_trabajador">Número de Treballador</label>
           <input
             type="text"
             id="aux_num_trabajador"
@@ -61,11 +61,11 @@ import { AuxiliarService } from '../../../service/auxiliar.service';
             *ngIf="auxiliarForm.get('aux_num_trabajador')?.invalid && auxiliarForm.get('aux_num_trabajador')?.touched"
             class="text-red-500"
           >
-            El número de trabajador es obligatorio.
+            El número de treballador és obligatori.
           </small>
         </div>
         <div class="flex flex-col gap-2">
-          <label for="aux_nombre">Nombre</label>
+          <label for="aux_nombre">Nom</label>
           <input
             type="text"
             id="aux_nombre"
@@ -80,11 +80,11 @@ import { AuxiliarService } from '../../../service/auxiliar.service';
             *ngIf="auxiliarForm.get('aux_nombre')?.invalid && auxiliarForm.get('aux_nombre')?.touched"
             class="text-red-500"
           >
-            El nombre es obligatorio.
+            El nom és obligatori.
           </small>
         </div>
         <div class="flex flex-col gap-2">
-          <label for="aux_apellidos">Apellidos</label>
+          <label for="aux_apellidos">Cognoms</label>
           <input
             type="text"
             id="aux_apellidos"
@@ -99,11 +99,11 @@ import { AuxiliarService } from '../../../service/auxiliar.service';
             *ngIf="auxiliarForm.get('aux_apellidos')?.invalid && auxiliarForm.get('aux_apellidos')?.touched"
             class="text-red-500"
           >
-            Los apellidos son obligatorios.
+            Els cognoms són obligatoris.
           </small>
         </div>
         <div class="flex flex-col gap-2">
-          <label for="aux_password">Contraseña</label>
+          <label for="aux_password">Contrasenya</label>
           <p-password
             id="aux_password"
             formControlName="aux_password"
@@ -118,7 +118,7 @@ import { AuxiliarService } from '../../../service/auxiliar.service';
             *ngIf="auxiliarForm.get('aux_password')?.invalid && auxiliarForm.get('aux_password')?.touched"
             class="text-red-500"
           >
-            La contraseña es obligatoria y debe tener al menos 6 caracteres.
+            La contrasenya és obligatòria i ha de tenir almenys 6 caràcters.
           </small>
         </div>
         <div class="flex justify-end gap-2">
@@ -155,6 +155,37 @@ export class AuxiliarManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.updatePasswordValidators();
+    const style = document.createElement('style');
+  style.innerHTML = `
+    /* Centrar el toast */
+    .p-toast.p-toast-top-center {
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+    }
+
+    /* Estilo base del mensaje */
+    .p-toast .p-toast-message {
+      font-size: 1.3rem !important;
+      font-weight: bold !important;
+      text-align: center !important;
+      padding: 1rem 1.5rem !important;
+      border-radius: 10px !important;
+      color: white !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Éxito → verde */
+    .p-toast-message-success {
+      background-color: #89e791ff !important;
+    }
+
+    /* Error → rojo */
+    .p-toast-message-error {
+      background-color: #ee818cff !important;
+    }
+  `;
+  document.head.appendChild(style);
   }
 
   private updatePasswordValidators(): void {
@@ -171,8 +202,8 @@ export class AuxiliarManagementComponent implements OnInit {
     if (!this.aux_num_trabajador) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Advertencia',
-        detail: 'Por favor, introduce un número de trabajador.'
+        summary: 'Advertiment',
+        detail: 'Si us plau, introdueix un número de treballador.'
       });
       return;
     }
@@ -182,7 +213,7 @@ export class AuxiliarManagementComponent implements OnInit {
       next: (data: any) => {
         this.auxiliar = data;
         this.isEditing = true;
-        console.log('Auxiliar encontrado:', this.auxiliar);
+        console.log('Auxiliar trobat:', this.auxiliar);
         // Bind the fetched data to the form inputs
         this.auxiliarForm.patchValue({
           aux_num_trabajador: this.auxiliar.aux_num_trabajador || '',
@@ -196,16 +227,17 @@ export class AuxiliarManagementComponent implements OnInit {
 
         this.messageService.add({
           severity: 'success',
-          summary: 'Éxito',
-          detail: 'Auxiliar encontrado.'
+          summary: 'Èxit',
+          detail: 'Auxiliar trobat.',
+          sticky: false 
         });
       },
       error: (error: any) => {
-        console.error('Error al buscar el auxiliar:', error);
+        console.error('Error al buscar auxiliar:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: error.status === 404 ? 'Auxiliar no encontrado.' : 'Error al buscar el auxiliar.'
+          detail: error.status === 404 ? 'Auxiliar no trobat.' : 'Error en buscar auxiliar.'
         });
         this.loading = false;
       },
@@ -249,8 +281,8 @@ export class AuxiliarManagementComponent implements OnInit {
             next: (response) => {
               this.messageService.add({
                 severity: 'success',
-                summary: 'Éxito',
-                detail: 'Auxiliar modificado con éxito.'
+                summary: 'Èxit',
+                detail: 'Auxiliar modificat amb èxit.'
               });
               this.resetForm();
             },
@@ -261,9 +293,9 @@ export class AuxiliarManagementComponent implements OnInit {
                 severity: 'error',
                 summary: 'Error',
                 detail: error.status === 400
-                  ? `Error en los datos enviados: ${error.error?.message || 'Verifique los datos.'}`
+                  ? `Error en les dades enviades: ${error.error?.message || 'Verifiqui les dades.'}`
                   : error.status === 404
-                  ? 'Auxiliar no encontrado.'
+                  ? 'Auxiliar no trobat.'
                   : 'Error al modificar el auxiliar.'
               });
             }
@@ -274,8 +306,8 @@ export class AuxiliarManagementComponent implements OnInit {
           next: (response) => {
             this.messageService.add({
               severity: 'success',
-              summary: 'Éxito',
-              detail: 'Auxiliar creado con éxito.'
+              summary: 'Èxit',
+              detail: 'Auxiliar creat amb éxito.'
             });
             this.resetForm();
           },
@@ -286,8 +318,8 @@ export class AuxiliarManagementComponent implements OnInit {
               severity: 'error',
               summary: 'Error',
               detail: error.status === 400
-                ? `Error en los datos enviados: ${error.error?.message || 'Verifique los datos.'}`
-                : 'Error al crear el auxiliar.'
+                ? `Error en les dades enviades: ${error.error?.message || 'Verifiqui les dades.'}`
+                : 'Error en crear auxiliar.'
             });
           }
         });
