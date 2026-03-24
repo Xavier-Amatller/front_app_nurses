@@ -333,7 +333,7 @@ Chart.register(annotationPlugin);
                         </div>
                     </div>
                     <div class="card">
-                        <p-fieldset legend="Observacions de la habitació" [toggleable]="false" class="!m-0 !p-4">
+                        <p-fieldset legend="Observacions" [toggleable]="false" class="!m-0 !p-4">
                             <p class="h-auto overflow-hidden break-words text-base whitespace-pre-wrap">
                                 {{ room[0]?.hab_obs ?? 'Sense observacions' }}
                             </p>
