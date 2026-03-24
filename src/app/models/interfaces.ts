@@ -25,9 +25,9 @@ export interface TipoDieta {
 
 export interface Habitacion {
   id: number;
-  hab_id: number;
+  hab_id: string;
   hab_obs: string | null;
-  paciente: Paciente | null;
+  paciente: any | null;
 }
 
 export interface Paciente {

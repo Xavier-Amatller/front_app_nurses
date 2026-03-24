@@ -340,6 +340,7 @@ Chart.register(annotationPlugin);
                         </p-fieldset>
                                 </div>
                    
+
                 </ng-template>
             </div>
         </div>
@@ -550,7 +551,9 @@ export class InsideRooms implements OnInit {
                             };
                         }
                          try {
+
                             this.habitacion.hab_obs = data?.lastRegistro?.reg_obs ?? '';
+
                         } catch (error) {
                             console.log('No hay observaciones: obs');
                         }
