@@ -240,6 +240,7 @@ loadAvailablePatients() {
 
     this.asignmentloading = true;
     this.rs.assign(this.hab_id, String(this.patient_id), this.hab_obs).subscribe({
+
       next: () => {
         this.messageService.add({
           severity: 'success',
