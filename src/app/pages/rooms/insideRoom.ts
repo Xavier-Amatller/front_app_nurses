@@ -10,6 +10,7 @@ import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Dialog } from 'primeng/dialog';
+import { FieldsetModule } from 'primeng/fieldset';
 import { Drawer } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { KnobModule } from 'primeng/knob';
@@ -18,7 +19,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TabsModule } from 'primeng/tabs';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from '../../layout/service/layout.service';
-import { Constantes, Diagnostico, Drenajes, HistoryData, Movilizaciones, Paciente } from '../../models/interfaces';
+import { Constantes, Diagnostico, Drenajes, Habitacion, HistoryData, Movilizaciones, Paciente } from '../../models/interfaces';
 import { RegistroService } from '../../service/registro.service';
 import { RoomsService } from '../../service/rooms.service';
 
@@ -27,7 +28,7 @@ Chart.register(annotationPlugin);
 @Component({
     selector: 'app-inside-room',
     standalone: true,
-    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button, Drawer, Dialog],
+    imports: [PaginatorModule, CommonModule, SkeletonModule, CardModule, ChartModule, FormsModule, InputTextModule, TabsModule, KnobModule, CheckboxModule, Button, Drawer, Dialog, FieldsetModule],
     animations: [trigger('fadeAnimation', [transition(':enter', [style({ opacity: 0 }), animate('600ms ease-in', style({ opacity: 1 }))]), transition(':leave', [animate('400ms ease-out', style({ opacity: 0 }))])])],
 
     template: `
@@ -331,6 +332,14 @@ Chart.register(annotationPlugin);
                             </div>
                         </div>
                     </div>
+                    <div class="card">
+                        <p-fieldset legend="Observacions de la habitació" [toggleable]="false" class="!m-0 !p-4">
+                            <p class="h-auto overflow-hidden break-words text-base whitespace-pre-wrap">
+                                {{ room[0]?.hab_obs ?? 'Sense observacions' }}
+                            </p>
+                        </p-fieldset>
+                                </div>
+                   
                 </ng-template>
             </div>
         </div>
@@ -401,6 +410,13 @@ export class InsideRooms implements OnInit {
         dia_diagnostico: null,
         dia_motivo: null
     };
+   habitacion: Habitacion = {
+  id: 0,
+  hab_id: '',
+  hab_obs: '',
+  paciente: null,
+};
+
     lineData: any;
     lineOptions: any;
     lineOptionsDialog: any;
@@ -533,6 +549,11 @@ export class InsideRooms implements OnInit {
                             dia_motivo: ''
                             };
                         }
+                         try {
+                            this.habitacion.hab_obs = data?.lastRegistro?.reg_obs ?? '';
+                        } catch (error) {
+                            console.log('No hay observaciones: obs');
+                        }
                         this.loading = false; // Set loading to false after all data is fetched
                     },
                     error: (err) => {
@@ -575,12 +596,12 @@ export class InsideRooms implements OnInit {
                     const chartLabels = data.map((item: any) => item.label);
 
                     const chartData = data.map((item: any) => ({
-                        ta_sistolica: item.ta_sistolica ? parseInt(item.ta_sistolica) : null,
-                        ta_diastolica: item.ta_diastolica ? parseInt(item.ta_diastolica) : null,
-                        frecuencia_respiratoria: item.frecuencia_respiratoria ? parseInt(item.frecuencia_respiratoria) : null,
-                        pulso: item.pulso ? parseInt(item.pulso) : null,
-                        temperatura: item.temperatura ? parseFloat(item.temperatura) : null,
-                        saturacion_oxigeno: item.saturacion_oxigeno ? parseInt(item.saturacion_oxigeno) : null
+                        ta_sistolica: item.ta_sistolica ? parseInt(item.ta_sistolica) :0,
+                        ta_diastolica: item.ta_diastolica ? parseInt(item.ta_diastolica) : 0,
+                        frecuencia_respiratoria: item.frecuencia_respiratoria ? parseInt(item.frecuencia_respiratoria) : 0,
+                        pulso: item.pulso ? parseInt(item.pulso) : 0,
+                        temperatura: item.temperatura ? parseFloat(item.temperatura) : 0,
+                        saturacion_oxigeno: item.saturacion_oxigeno ? parseInt(item.saturacion_oxigeno) : 0
                     }));
 
                     this.initChart(chartLabels, chartData);
